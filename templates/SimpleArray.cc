@@ -12,14 +12,13 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.4 $
-$Author: jason $
-$Date: 2002-03-29 00:07:22 $
+$Revision: 1.5 $
+$Author: bert $
+$Date: 2003-04-16 17:00:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "SimpleArray.h"
-#include "Histogram.h"
 #include "ValueMap.h"
 #include <assert.h>
 #ifdef HAVE_MATLAB
@@ -36,11 +35,6 @@ $State: Exp $
 #include "fcomplex.h"
 #pragma do_not_instantiate SimpleArray<fcomplex>::log
 #endif
-
-#pragma do_not_instantiate SimpleArray<unsigned>::abs
-#pragma do_not_instantiate SimpleArray<char>::abs
-#pragma do_not_instantiate SimpleArray<unsigned char>::abs
-#pragma do_not_instantiate SimpleArray<unsigned short>::abs
 
 /*******************
  * SimpleArray class
@@ -211,20 +205,6 @@ SimpleArray<Type>::loadAscii(istream& is, unsigned n, unsigned start)
     is >> (*this)++;
 
   return is;
-}
-
-template <class Type> 
-ostream& 
-operator << (ostream& os, const SimpleArray<Type>& A) 
-{
-  return A.saveAscii(os); 
-}
-
-template <class Type> 
-istream& 
-operator >> (istream& is, SimpleArray<Type>& A) 
-{
-  return A.loadAscii(is); 
 }
 
 #ifdef HAVE_MATLAB
@@ -628,6 +608,20 @@ SimpleArray<Type>::common(const SimpleArray<Type>& array) const
   return common;
 }
 
+#if HAVE_FINITE
+#ifndef finite
+extern int finite(double);
+#endif /* finite() not defined (as macro) */
+#define FINITE(x) finite(x)
+#elif HAVE_ISFINITE
+#ifndef isfinite
+extern int isfinite(double);
+#endif /* isfinite() not defined (as macro) */
+#define FINITE(x) isfinite(x)
+#else
+#error "Neither finite() nor isfinite() is defined on your system"
+#endif /* HAVE_ISFINITE */
+
 template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::prune()
@@ -635,7 +629,7 @@ SimpleArray<Type>::prune()
   unsigned i,j;
   for (i = 0, j = 0; i < _size; i++) {
     double value = double(getElConst(i));
-    if (finite(value)) {
+    if (FINITE(value)) {
       if (i != j)
 	setEl(j, Type(value));
       j++;
@@ -646,45 +640,6 @@ SimpleArray<Type>::prune()
 
   return *this;
 }
-
-#ifdef USE_COMPMAT
-SimpleArray<dcomplex>&
-SimpleArray<dcomplex>::prune()
-{
-  unsigned i, j;
-  for (i = 0, j = 0; i < _size; i++) {
-    dcomplex value = getElConst(i);
-    if (finite(real(value)) && finite(imag(value))) {
-      if (i != j)
-	setEl(j, value);
-      j++;
-    }
-  }
-
-  newSize(j);
-
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-SimpleArray<fcomplex>&
-SimpleArray<fcomplex>::prune()
-{
-  for (unsigned i = 0, j = 0; i < _size; i++) {
-    fcomplex value = getElConst(i);
-    if (finite(real(value)) && finite(imag(value))) {
-      if (i != j)
-	setEl(j, value);
-      j++;
-    }
-  }
-
-  newSize(j);
-
-  return *this;
-}
-#endif
 
 template <class Type>
 SimpleArray<Type>&
@@ -963,8 +918,6 @@ SimpleArray<Type>::median() const
 
   SimpleArray<Type> array(*this);
 
-  cout << "DEBUG: in median" << endl;
-
   return array.medianVolatile();
 }
 
@@ -973,8 +926,6 @@ Type
 SimpleArray<Type>::medianVolatile()
 {
   assert(_size);
-  cout << "DEBUG: _size in medianVolatile: " << _size << endl;
-  cout << "DEBUG: _size in medianVolatile: " << this->size() << endl;
 
   return _randomizedSelect(0, _size - 1, (_size % 2) ? (_size+1)/2 : _size/2);
 }
@@ -1411,60 +1362,6 @@ SimpleArray<Type>::round(unsigned n) const
   return result;
 }
 
-#ifdef USE_COMPMAT
-SimpleArray<dcomplex>
-SimpleArray<dcomplex>::round(unsigned n) const 
-{
-  SimpleArray<dcomplex> result(_size);
-
-  const dcomplex *sourcePtr = _contents;
-  dcomplex       *destPtr   = result.contents();
-  if (n) {
-    unsigned factor = (unsigned) pow(10.0, double(n));
-    for (unsigned i = _size; i; i--) {
-      *destPtr++ = dcomplex(ROUND(factor*(real(*sourcePtr)))/factor,
-			   ROUND(factor*(imag(*sourcePtr)))/factor);
-      sourcePtr++;
-    }
-  }
-  else
-    for (unsigned i = _size; i; i--) {
-      *destPtr++ = dcomplex(ROUND(real(*sourcePtr)),
-			   ROUND(imag(*sourcePtr)));
-      sourcePtr++;
-    }
-  
-  return result;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-SimpleArray<fcomplex>
-SimpleArray<fcomplex>::round(unsigned n) const 
-{
-  SimpleArray<fcomplex> result(_size);
-
-  const fcomplex *sourcePtr = _contents;
-  fcomplex       *destPtr   = result.contents();
-  if (n) {
-    unsigned factor = (unsigned) pow(10.0, double(n));
-    for (unsigned i = _size; i; i--) {
-      *destPtr++ = dcomplex(ROUND(factor*(real(*sourcePtr)))/factor,
-			   ROUND(factor*(imag(*sourcePtr)))/factor);
-      sourcePtr++;
-    }
-  }
-  else
-    for (unsigned i = _size; i; i--) {
-      *destPtr++ = dcomplex(ROUND(real(*sourcePtr)),
-			   ROUND(imag(*sourcePtr)));
-      sourcePtr++;
-    }
-  
-  return result;
-}
-#endif
-
 template <class Type> 
 SimpleArray<Type>
 SimpleArray<Type>::sqr() const
@@ -1490,7 +1387,7 @@ SimpleArray<Type>::sqrt() const
   Type *resultPtr = result.contents();
 
   for (unsigned i = _size; i; i--, sourcePtr++)
-    *resultPtr++ = ::sqrt(*sourcePtr);
+    *resultPtr++ = Type(::sqrt(asDouble(*sourcePtr))); // (bert) fix casting
 
   return result;
 }
@@ -1520,7 +1417,7 @@ SimpleArray<Type>::ln() const
   Type *resultPtr = result.contents();
 
   for (unsigned i = _size; i; i--)
-    *resultPtr++ = Type(::log(*sourcePtr++));
+    *resultPtr++ = Type(::log(asDouble(*sourcePtr++)));	// (bert) fix casting
 
   return result;
 }
@@ -1776,32 +1673,6 @@ SimpleArray<Type>::_partition(int p, int r)
   }      
 }
 
-#ifdef USE_COMPMAT
-SimpleArray<dcomplex> 
-operator ^ (double base, const SimpleArray<dcomplex>& array) {
-  unsigned N = array.size();
-  SimpleArray<dcomplex> result(N);
-  const dcomplex *sourcePtr = array.contents();
-  dcomplex *resultPtr = result.contents();
-  for (unsigned i = N; i != 0; i--)
-    *resultPtr++ = dcomplex(pow(base, *sourcePtr++));
-  return result;
-} 
-#endif
-
-#ifdef USE_FCOMPMAT
-SimpleArray<fcomplex> 
-operator ^ (double base, const SimpleArray<fcomplex>& array) {
-  unsigned N = array.size();
-  SimpleArray<fcomplex> result(N);
-  const fcomplex *sourcePtr = array.contents();
-  fcomplex *resultPtr = result.contents();
-  for (unsigned i = N; i != 0; i--)
-    *resultPtr++ = fcomplex(pow(base, *sourcePtr++));
-  return result;
-} 
-#endif
-
 template <class Type>
 SimpleArray<Type> 
 operator ^ (double base, const SimpleArray<Type>& array) {
@@ -1816,37 +1687,39 @@ operator ^ (double base, const SimpleArray<Type>& array) {
   return result;
 } 
 
-// ERROR: won't compile. Reenable def to make work as before
-
-//#undef __GNUC__
-
 #ifdef __GNUC__
+#include "SimpleArraySpec.cc"
+
 #define _INSTANTIATE_SIMPLEARRAY(Type)                       \
             template class SimpleArray<Type>;                \
             template class IndexStruct<Type>;                \
-            template SimpleArray<Type> operator ^(double,    \
-                                       SimpleArray<Type> const &);   \
             template ostream& operator << (ostream&, const SimpleArray<Type>&); \
             template istream& operator >> (istream&, SimpleArray<Type>&); \
             template SimpleArray<double> asDblArray(const SimpleArray<Type>&);\
-            unsigned SimpleArray<Type>::_rangeErrorCount = 25; \
-//            template unsigned int size(SimpleArray<Type> const &); 
-/* For some reason this does not compile as part of the above macro
-//            template unsigned size(SimpleArray<Type> const &); \
-*/
+            unsigned SimpleArray<Type>::_rangeErrorCount = 25;
 
 _INSTANTIATE_SIMPLEARRAY(char);
 _INSTANTIATE_SIMPLEARRAY(unsigned char);
 _INSTANTIATE_SIMPLEARRAY(short);
+_INSTANTIATE_SIMPLEARRAY(unsigned short);
 _INSTANTIATE_SIMPLEARRAY(int);
 _INSTANTIATE_SIMPLEARRAY(unsigned int);
 _INSTANTIATE_SIMPLEARRAY(float);
 _INSTANTIATE_SIMPLEARRAY(double);
 
+template SimpleArray<char> operator^(double, SimpleArray<char> const&);
+template SimpleArray<short> operator^(double, SimpleArray<short> const&);
+template SimpleArray<unsigned short> operator^(double, SimpleArray<unsigned short> const&);
+template SimpleArray<int> operator^(double, SimpleArray<int> const&);
+template SimpleArray<unsigned int> operator^(double, SimpleArray<unsigned int> const&);
+template SimpleArray<float> operator^(double, SimpleArray<float> const&);
+template SimpleArray<double> operator^(double, SimpleArray<double> const&);
+
 #ifdef USE_COMPMAT
 _INSTANTIATE_SIMPLEARRAY(dcomplex);
-#endif
+#endif // USE_COMPMAT
 #ifdef USE_FCOMPMAT
 _INSTANTIATE_SIMPLEARRAY(fcomplex);
-#endif
-#endif
+#endif // USE_FCOMPMAT
+#endif // __GNUC__
+
