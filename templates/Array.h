@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Array.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 15:01:10 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /*
@@ -28,9 +28,11 @@ $State: Exp $
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include <iostream.h>
+#include <iostream>
 #include "trivials.h"
 #include "MTypes.h"
+
+using namespace std;
 
 const int DEFAULT_SIZE   = 0;
 const int SIZE_INCREMENT = 32;
@@ -71,7 +73,9 @@ public:
 
   // Access functions
   inline Type&       operator [] (unsigned i);
+  inline Type&       operator [] (int i);
   inline const Type& operator [] (unsigned i) const;
+  inline const Type& operator [] (int i) const;
 
   inline virtual Type& getEl(unsigned i);
   inline virtual const Type& getEl(unsigned i) const;
@@ -152,5 +156,142 @@ unsigned size(const Array<Type>& array);
 
 template <class Type> 
 ostream& operator << (ostream& os, const Array<Type>& array);
+
+template <class Type>
+Type&
+Array<Type>::operator [] (unsigned i) 
+{ 
+  return getEl(i); 
+}
+
+template <class Type>
+Type&
+Array<Type>::operator [] (int i) 
+{ 
+  return getEl((unsigned)i); 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::operator [] (unsigned i) const 
+{ 
+  return getElConst(i); 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::operator [] (int i) const 
+{ 
+  return getElConst(i); 
+}
+
+//
+// Access functions
+//
+
+template <class Type>
+Type& 
+Array<Type>::getEl(unsigned i) 
+{
+  if (i >= _size)_rangeError(i); 
+  return _contents[i]; 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::getEl(unsigned i) const
+{
+  return getElConst(i); 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::getElConst(unsigned i) const
+{ 
+  if (i >= _size) _rangeError(i); 
+  return _contents[i]; 
+}
+ 
+template <class Type>
+void
+Array<Type>::setEl(unsigned i, Type value)  
+{ 
+  if (i >= _size) _rangeError(i); 
+  _contents[i] = value; 
+}
+
+template <class Type>
+Type& 
+Array<Type>::current()
+{ 
+  return _contents[_itIndex]; 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::current() const  
+{ 
+  return _contents[_itIndex]; 
+}
+
+// Prefix ascending iterators
+template <class Type>
+Type& 
+Array<Type>::operator ++()          
+{ 
+  return _contents[++_itIndex]; 
+}
+
+template <class Type>
+const Type&  
+Array<Type>::operator ++() const 
+{
+  return _contents[++_self->_itIndex]; 
+}
+
+// Postfix ascending iterators
+template <class Type>
+Type& 
+Array<Type>::operator ++(int)       
+{ 
+  return _contents[_itIndex++]; 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::operator ++(int) const 
+{ 
+  return _contents[_self->_itIndex++]; 
+}
+
+// Prefix descending iterators
+template <class Type>
+Type& 
+Array<Type>::operator --()
+{ 
+  return _contents[--_itIndex]; 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::operator --() const 
+{ 
+  return _contents[--_self->_itIndex]; 
+}
+
+// Postfix descending iterators
+template <class Type>
+Type& 
+Array<Type>::operator --(int)
+{ 
+  return _contents[_itIndex--]; 
+}
+
+template <class Type>
+const Type& 
+Array<Type>::operator --(int) const 
+{ 
+  return _contents[_self->_itIndex--]; 
+}
 
 #endif

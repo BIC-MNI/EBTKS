@@ -12,18 +12,19 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Array.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 15:01:10 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "Array.h"
 #include "dcomplex.h"
 #include <assert.h>
-#include <iostream.h>
+#include <iostream>		// (bert) changed from iostream.h
 #include <math.h>
-#include <string.h>
+//#include <string>		// (bert) changed from string.h
+using namespace std;		// (bert) added
 
 /******************
  * Array base class
@@ -145,55 +146,6 @@ Array<Type>::~Array ()
 }
 
 //
-// Access functions
-//
-
-template <class Type>
-Type&
-Array<Type>::operator [] (unsigned i) 
-{ 
-  return getEl(i); 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::operator [] (unsigned i) const 
-{ 
-  return getElConst(i); 
-}
-
-template <class Type>
-Type& 
-Array<Type>::getEl(unsigned i) 
-{
-  if (i >= _size)_rangeError(i); 
-  return _contents[i]; 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::getEl(unsigned i) const
-{
-  return getElConst(i); 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::getElConst(unsigned i) const
-{ 
-  if (i >= _size) _rangeError(i); 
-  return _contents[i]; 
-}
- 
-template <class Type>
-void
-Array<Type>::setEl(unsigned i, Type value)  
-{ 
-  if (i >= _size) _rangeError(i); 
-  _contents[i] = value; 
-}
-
-//
 // Iterator functions
 //
 /*
@@ -221,80 +173,6 @@ Array<Type>::resetIterator(unsigned i) const
   _self->_itIndex = i;
 
   return;
-}
-
-template <class Type>
-Type& 
-Array<Type>::current()
-{ 
-  return _contents[_itIndex]; 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::current() const  
-{ 
-  return _contents[_itIndex]; 
-}
-
-// Prefix ascending iterators
-template <class Type>
-Type& 
-Array<Type>::operator ++()          
-{ 
-  return _contents[++_itIndex]; 
-}
-
-template <class Type>
-const Type&  
-Array<Type>::operator ++() const 
-{
-  return _contents[++_self->_itIndex]; 
-}
-
-// Postfix ascending iterators
-template <class Type>
-Type& 
-Array<Type>::operator ++(int)       
-{ 
-  return _contents[_itIndex++]; 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::operator ++(int) const 
-{ 
-  return _contents[_self->_itIndex++]; 
-}
-
-// Prefix descending iterators
-template <class Type>
-Type& 
-Array<Type>::operator --()
-{ 
-  return _contents[--_itIndex]; 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::operator --() const 
-{ 
-  return _contents[--_self->_itIndex]; 
-}
-
-// Postfix descending iterators
-template <class Type>
-Type& 
-Array<Type>::operator --(int)
-{ 
-  return _contents[_itIndex--]; 
-}
-
-template <class Type>
-const Type& 
-Array<Type>::operator --(int) const 
-{ 
-  return _contents[_self->_itIndex--]; 
 }
 
 template <class Type> 
@@ -850,13 +728,14 @@ operator << (ostream& os, const Array<Type>& array)
          unsigned Array<Type>::_arrayCtr = 0;          \
          Boolean  Array<Type>::_debug = FALSE;         \
          unsigned Array<Type>::_rangeErrorCount = 25;  \
-         unsigned size(const Array<Type> &);                   
+         unsigned size(const Array<Type> &);
 
 _INSTANTIATE_ARRAY(char);
 _INSTANTIATE_ARRAY(unsigned char);
 _INSTANTIATE_ARRAY(short);
 _INSTANTIATE_ARRAY(int);
 _INSTANTIATE_ARRAY(unsigned int);
+_INSTANTIATE_ARRAY(unsigned short);
 _INSTANTIATE_ARRAY(float);
 _INSTANTIATE_ARRAY(double);
 _INSTANTIATE_ARRAY(dcomplex);
