@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Array.cc,v $
-$Revision: 1.2 $
+$Revision: 1.3 $
 $Author: bert $
-$Date: 2003-04-16 15:01:10 $
+$Date: 2004-12-08 16:43:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -725,10 +725,10 @@ operator << (ostream& os, const Array<Type>& array)
 #ifdef __GNUC__
 #define _INSTANTIATE_ARRAY(Type)                       \
          template class Array<Type>;                   \
-         unsigned Array<Type>::_arrayCtr = 0;          \
-         Boolean  Array<Type>::_debug = FALSE;         \
-         unsigned Array<Type>::_rangeErrorCount = 25;  \
-         unsigned size(const Array<Type> &);
+         template<> unsigned Array<Type>::_arrayCtr = 0;          \
+         template<> Boolean  Array<Type>::_debug = FALSE;         \
+         template<> unsigned Array<Type>::_rangeErrorCount = 25;  \
+         template<> unsigned size(const Array<Type> &);
 
 _INSTANTIATE_ARRAY(char);
 _INSTANTIATE_ARRAY(unsigned char);
