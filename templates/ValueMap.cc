@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ValueMap.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:47 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 17:14:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
@@ -29,6 +29,7 @@ $State: Exp $
   template SimpleArray<Type>  mapConst(const SimpleArray<Type>&,const Array<LinearMap>&);
 #endif
 
+#if 0				// moved to header file
 /*************************
  * Abstract ValueMap class
  *************************/
@@ -44,11 +45,12 @@ operator << (ostream& os, const ValueMap& map)
 {
   return map.print(os);
 }
-
+#endif /* 0 */
 /******************
  * Linear map class
  ******************/
 
+#if 0				// moved to header file
 ValueMap& 
 LinearMap::inv() 
 { 
@@ -95,6 +97,7 @@ LinearMap::print(ostream& os) const
   os << "(" << _factor << ", " << _offset << ")"; 
   return os;
 }
+#endif /* 0 */
 
 /********************
  * Lookup table class

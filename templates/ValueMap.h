@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ValueMap.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 17:14:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _VALUE_MAP_H
 #define _VALUE_MAP_H
 
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 #include "SimpleArray.h"
 
 /*************************
@@ -34,7 +35,7 @@ public:
 
   // Map concatenation
   virtual ValueMap& concat(const ValueMap& map) = 0;
-  virtual ValueMap& operator () (const ValueMap& map);
+  virtual ValueMap& operator () (const ValueMap& map) { return concat(map); }
 
   // Evaluate map
   virtual double operator () (double sourceValue) const = 0;
@@ -45,24 +46,31 @@ public:
   virtual ostream& print(ostream&) const = 0;
 };
 
-ostream& operator << (ostream& os, const ValueMap& map);
+inline ostream& operator<< (ostream& os, const ValueMap& map) 
+{ 
+  return map.print(os);
+}
 
 /******************
  * Linear map class
  ******************/
 
 class LinearMap : public ValueMap {
+private:
   double _factor;
   double _offset;
 
 public:
   LinearMap(double factor = 1.0, double offset = 0.0) { 
-    _factor = factor; _offset = offset; }
+    _factor = factor; _offset = offset;
+  }
   LinearMap(const LinearMap& map) { 
-    _factor = map._factor; _offset = map._offset; }
+    _factor = map._factor; _offset = map._offset;
+  }
   LinearMap(double sourceMin, double sourceMax, double destMin, double destMax) {
     _factor = (destMax - destMin)/(sourceMax - sourceMin);
-    _offset = destMin - _factor*sourceMin; }
+    _offset = destMin - _factor*sourceMin;
+  }
   virtual ~LinearMap() { _factor = 1.0; _offset = 0.0; }
 
   double factor() const { return _factor; }
@@ -77,18 +85,46 @@ public:
   LinearMap& operator = (const LinearMap& map) { 
     _factor = map._factor; _offset = map._offset; return *this; }
 
-  ValueMap& inv();
-  ValueMap& concat(const ValueMap& map);
-  ValueMap& concat(const LinearMap& map);
+  ValueMap& inv() {
+      _factor = 1.0/_factor; 
+      _offset = -_offset; 
+      return *this; 
+  }
 
-  LinearMap& operator () (double factor, double offset);
-  LinearMap& operator () (double sourceMin, double sourceMax, double destMin,
-			  double destMax);
-  
+  ValueMap& concat(const ValueMap& map) {
+    cerr << "LinearMap::concat() called but not implemented" << endl;
+    return *this;
+  }
+
+  ValueMap& concat(const LinearMap& map) {
+    _offset += _factor*map._offset; 
+    _factor *= map._factor;
+    return *this;
+  }
+
+  ValueMap& operator () (const ValueMap& map) { return concat(map); }
   double operator () (double sourceValue) const { return _offset+_factor*sourceValue;}
+
+  LinearMap& operator () (double factor, double offset) {
+    _factor = factor; 
+    _offset = offset; 
+    return *this; 
+  }
+  LinearMap& operator () (double sourceMin, double sourceMax, double destMin,
+			  double destMax) {
+    _factor = (destMax - destMin)/(sourceMax - sourceMin);
+    _offset = destMin - _factor*sourceMin;
+    return *this; 
+  }
+
+  
   double reverse(double destValue) const        { return (destValue-_offset)/_factor;}
   
-  ostream& print(ostream& os) const;
+  ostream& print(ostream& os) const {
+    os << "(" << _factor << ", " << _offset << ")"; 
+    return os;
+  }
+
 };
 
 /********************
@@ -97,6 +133,7 @@ public:
 
 template <class Type>
 class LUT : public ValueMap {
+private:
   SimpleArray<Type> _source;
   SimpleArray<Type> _dest;
 
@@ -114,6 +151,7 @@ public:
   ValueMap& concat(const ValueMap& map);
   ValueMap& concat(const LUT& map);
 
+  ValueMap& operator () (const ValueMap& map) { return concat(map); }
   double operator () (double sourceValue) const;
   double reverse(double destValue) const;
   
