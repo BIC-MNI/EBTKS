@@ -1,5 +1,10 @@
-New in release 1.1
+New in release 1.2
+------------------
+Bugfix release.  CachedArray class should now work, and so should N3 and
+inormalize as a result.
 
+New in release 1.1
+------------------
 Bugfix release.  No user-visible changes.
 
 New in release 1.0
