@@ -12,22 +12,23 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: FileIO.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:45 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:41:23 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "FileIO.h"
 #include <assert.h>
-#include <stream.h>
 #include <stdlib.h>
+// #include <stream.h> - (bert) removed unnecessary header
 #include <sys/types.h>
 #include <unistd.h>
 #ifdef HAVE_MATLAB
   #include "Dictionary.h"
 #endif
 
+using namespace std;		// (bert) added
 //
 // Constructors/destructor
 //
@@ -71,8 +72,8 @@ InputFile::attach(const Path& path)
     
     compressed = TRUE;
 
-    const char *tmpPath = tempnam(NULL, "IF-");
-    assert(tmpPath);
+    MString tmpPath(256);
+    assert(get_temp_filename((char *)tmpPath));
 
     int status = system("gunzip -c " + testPath + " > " + tmpPath);
 
@@ -161,10 +162,7 @@ OutputFile::OutputFile(const Path& path, int mode, int compress)
     }
   }
   
-  // ERROR: commented out due to compilation problems. Reenable.
-  //open(_path, mode);
-  cout << "DEBUG: " << _path << endl;
-  open(_path, std::ios_base::out);
+  open(_path, openmode(mode));	// (bert) made this standard(?)
 }
 
 OutputFile::~OutputFile()
@@ -247,6 +245,7 @@ closeFile(FILE *file)
       fclose(file);
 }
 
+
 #ifdef HAVE_MATLAB
 static Dictionary<MATFile *, MString> matFileDict;
 
@@ -321,3 +320,64 @@ closeMatlabFile(MATFile *file)
     unlink(matFileDict[file]);
 }
 #endif
+
+int
+get_temp_filename(char *pathname)
+{
+#ifdef HAVE_MKSTEMP
+  strcpy(pathname, "EBTKSXXXXXX");
+  int fd = mkstemp(pathname);
+  if (fd < 0) {
+    return (0);
+  }
+  close(fd);
+#else
+  char *tmp_ptr = tempnam(NULL, "EBTKS");
+  if (tmp_ptr == NULL) {
+    return (0);			// Error
+  }
+  strcpy(pathname, tmp_ptr);
+  free(tmp_ptr);		// Free result from tempnam()
+#endif
+  return (1);
+}
+
+//
+// FORCED INSTANTIATIONS
+//
+// Needed for SGI, but won't compile under GCC!!
+//
+#if !defined(__GNUC__) && defined(__sgi)
+
+#include "Array.h"
+#include "SimpleArray.h"
+#include "ValueMap.h"
+#include "CachedArray.h"
+
+// From Array.h
+template Array<double>& Array<double>::absorb(Array<double>& array);
+template class Array<Path>;
+template class Array<LinearMap>;
+template unsigned Array<float>::debug(Boolean);
+template Array<float>& Array<float>::append(float);
+
+template int *Array<int>::asCarray(int *) const;
+template double *Array<double>::asCarray(double *) const;
+
+// From SimpleArray.h
+template SimpleArray<double> SimpleArray<double>::operator() (unsigned) const;
+template SimpleArray<double> SimpleArray<double>::operator() (unsigned, unsigned) const;
+template SimpleArray<double>& map(SimpleArray<double>&,const Array<LinearMap>&);
+template int SimpleArray<int>::min(unsigned *) const;
+template SimpleArray<int>::SimpleArray(int, double, int);
+template SimpleArray<float>& SimpleArray<float>::operator/=(const SimpleArray<float> &);
+template SimpleArray<float>& SimpleArray<float>::prune();
+template SimpleArray<float> SimpleArray<float>::log() const;
+template unsigned SimpleArray<char>::occurrencesOf(char, unsigned, unsigned) const;
+template double SimpleArray<float>::sum() const;
+
+// From CachedArray.h
+template class CachedArray<float>;
+
+#endif // __sgi
+
