@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Array.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 15:01:10 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /*
@@ -32,7 +32,6 @@ $State: Exp $
 #include "trivials.h"
 #include "MTypes.h"
 
-using namespace std;
 
 const int DEFAULT_SIZE   = 0;
 const int SIZE_INCREMENT = 32;
@@ -143,7 +142,7 @@ public:
   Array   applyElementWise(Type (*function) (Type)) const;
 
 // I/O
-  virtual ostream& print(ostream& os) const;
+  virtual std::ostream& print(std::ostream& os) const;
 
 protected:
   void _grow(unsigned amount);       // Allocate more space; do not change _size
@@ -155,7 +154,7 @@ template <class Type>
 unsigned size(const Array<Type>& array);
 
 template <class Type> 
-ostream& operator << (ostream& os, const Array<Type>& array);
+std::ostream& operator << (std::ostream& os, const Array<Type>& array);
 
 template <class Type>
 Type&

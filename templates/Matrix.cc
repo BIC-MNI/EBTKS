@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.cc,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 15:08:12 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -26,6 +26,9 @@ $State: Exp $
 #include "matlabSupport.h"
 #endif
 #include "miscTemplateFunc.h"
+
+using namespace std;
+
 
 #ifdef USE_COMPMAT
 #ifdef __GNUC__

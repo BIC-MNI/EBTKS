@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OpTimer.cc,v $
-$Revision: 1.3 $
-$Author: jason $
-$Date: 2002-03-20 22:27:12 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "OpTimer.h"
@@ -23,6 +23,9 @@ $State: Exp $
 #include <string.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+
+using  namespace std;
+
 
 const char *OpTimer::_TIME_STRINGS[] = { "CPU", "SYS", "USR" };
 

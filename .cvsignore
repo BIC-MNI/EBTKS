@@ -9,3 +9,4 @@ stamp-h1
 .deps .libs
 autom4te.cache
 *.lo *.la
+config.guess config.sub depcomp install-sh missing mkinstalldirs

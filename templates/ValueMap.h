@@ -12,16 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ValueMap.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 17:14:51 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _VALUE_MAP_H
 #define _VALUE_MAP_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 #include "SimpleArray.h"
 
 /*************************
@@ -43,10 +42,10 @@ public:
   virtual double reverse(double destValue) const = 0;
 
   // I/O
-  virtual ostream& print(ostream&) const = 0;
+  virtual std::ostream& print(std::ostream&) const = 0;
 };
 
-inline ostream& operator<< (ostream& os, const ValueMap& map) 
+inline std::ostream& operator<< (std::ostream& os, const ValueMap& map) 
 { 
   return map.print(os);
 }
@@ -92,7 +91,7 @@ public:
   }
 
   ValueMap& concat(const ValueMap& map) {
-    cerr << "LinearMap::concat() called but not implemented" << endl;
+      std::cerr << "LinearMap::concat() called but not implemented" << std::endl;
     return *this;
   }
 
@@ -120,7 +119,7 @@ public:
   
   double reverse(double destValue) const        { return (destValue-_offset)/_factor;}
   
-  ostream& print(ostream& os) const {
+  std::ostream& print(std::ostream& os) const {
     os << "(" << _factor << ", " << _offset << ")"; 
     return os;
   }
@@ -155,7 +154,7 @@ public:
   double operator () (double sourceValue) const;
   double reverse(double destValue) const;
   
-  ostream& print(ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
 private:
   void _sort();

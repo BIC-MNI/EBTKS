@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MString.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:44 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MSTRING_H
@@ -120,8 +120,8 @@ friend MString operator + (const char *charPtr, const MString& mString) {
 friend MString operator + (int value, const MString& mString) {
   MString result; result += value; return result += mString; }
 
-friend ostream& operator << (ostream& os, const MString& mString);
-friend istream& operator >> (istream& is, MString& mString);
+friend std::ostream& operator << (std::ostream& os, const MString& mString);
+friend std::istream& operator >> (std::istream& is, MString& mString);
 };
 
 /***********************

@@ -1,3 +1,42 @@
+2003-11-14  Steve ROBBINS  <stever@bic.mni.mcgill.ca>
+
+	* configure.ac: Set version to 1.0.
+
+	* templates/miscTemplateFunc.h: Qualify use of std:: identifiers.
+
+	* templates/ValueMap.h: 
+	* templates/Matrix.h: 
+	* templates/Dictionary.h: 
+	* templates/CachedArray.h: 
+	* templates/Array.h: 
+	* include/OpTimer.h: 
+	* include/MPoint.h: 
+	* include/Histogram.h: 
+	* include/FileIO.h: 
+	* include/fcomplex.h: 
+	* include/dcomplex.h: 
+	* include/backProp.h: Do not import all of namespace std.
+
+	* templates/MatrixSpec.cc: 
+	* src/Histogram.cc:
+	* src/MPoint.cc:
+	* src/MString.cc:
+	* src/OpTimer.cc:
+	* src/Polynomial.cc:
+	* src/Spline.cc:
+	* src/TBSpline.cc:
+	* src/TrainingSet.cc:
+	* src/backProp.cc: Use namespace std.
+
+	* templates/SimpleArray.cc: Do not declare _rangeErrorCount multiple times
+	with __GNUC__.
+
+	* configure.ac: Do not check for volume_io.
+
+	* COPYING: New.  License statement taken from templates/Array.cc.
+
+	* Makefile.am (EXTRA_DIST): Distribute m4/*.m4.
+
 2003-06-17  Steve ROBBINS  <stever@bic.mni.mcgill.ca>
 
 	* autogen.sh: Add libtoolize call.

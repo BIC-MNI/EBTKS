@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 15:02:27 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _CACHED_ARRAY_H
@@ -22,7 +22,6 @@ $State: Exp $
 
 #include "SimpleArray.h"
 #include <fstream>		/* (bert) changed from fstream.h */
-using namespace std;		/* (bert) added */
 
 /********************************************************************
  * CachedArray class
@@ -53,7 +52,7 @@ class CachedArray : public SimpleArray<Type> {
   unsigned           _blockSize;  // # elements in each cache block
   unsigned           _nBlocks;    // Current # of cache blocks
   unsigned           _maxNblocks; // Maximum # cache blocks (= length of block table)
-  fstream            _s;          // The stream associated with the temporary file
+  std::fstream       _s;          // The stream associated with the temporary file
   // Hitrate calculation members
   unsigned           _hits;       // Cache hit counter
   unsigned           _misses;     // Cache miss counter
@@ -73,8 +72,8 @@ public:
   virtual ~CachedArray();
 
   // Binary I/O functions
-  ostream& saveBinary(ostream&, unsigned n = 0, unsigned start = 0) const;
-  istream& loadBinary(istream&, unsigned n = 0, unsigned start = 0);
+  std::ostream& saveBinary(std::ostream&, unsigned n = 0, unsigned start = 0) const;
+  std::istream& loadBinary(std::istream&, unsigned n = 0, unsigned start = 0);
 
   // Matlab I/O functions
 #ifdef HAVE_MATLAB
@@ -237,8 +236,8 @@ public:
   //operator SimpleArray<Type> () const { return SimpleArray<Type>(_contents, _size); }
 
   CacheBlock *addBlock(unsigned ID, unsigned sz);
-  Boolean     read(fstream& s, unsigned ID); // Read new block; flushes existing one 
-  Boolean     write(fstream&) const;
+  Boolean     read(std::fstream& s, unsigned ID); // Read new block; flushes existing one 
+  Boolean     write(std::fstream&) const;
 };
 
 #endif

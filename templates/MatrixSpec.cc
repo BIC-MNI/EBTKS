@@ -5,6 +5,8 @@
  * seems to depend upon the compiler you're using. 
  */
 
+using namespace std;
+
 #ifdef USE_COMPMAT
 template <>
 Mat<dcomplex>& 

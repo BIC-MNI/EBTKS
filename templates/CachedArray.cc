@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.4 $
-$Author: bert $
-$Date: 2003-04-16 15:02:27 $
+$Revision: 1.5 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -24,10 +24,11 @@ $State: Exp $
 #include <stdio.h>
 #include <unistd.h>
 
+using namespace std;
+
 //
 // CachedArray class
 //
-
 
 #ifndef __GNUC__
 template <class Type> const unsigned CachedArray<Type>::_DEFAULT_BLOCK_SIZE = 32768;

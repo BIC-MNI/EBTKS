@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 16:59:37 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SIMPLE_ARRAY_H
@@ -66,16 +66,16 @@ public:
   virtual ~SimpleArray() {}
 
   // Binary I/O functions
-  ostream&         write(ostream& os) const      { saveBinary(os); return os; }
-  virtual ostream& saveBinary(ostream&, unsigned n = 0, unsigned start = 0) const;
-  istream&         read(istream& is)             { loadBinary(is); return is; }
-  virtual istream& loadBinary(istream&, unsigned n = 0, unsigned start = 0);
+  std::ostream&         write(std::ostream& os) const      { saveBinary(os); return os; }
+  virtual std::ostream& saveBinary(std::ostream&, unsigned n = 0, unsigned start = 0) const;
+  std::istream&         read(std::istream& is)             { loadBinary(is); return is; }
+  virtual std::istream& loadBinary(std::istream&, unsigned n = 0, unsigned start = 0);
 
   // ASCII I/O functions
-  ostream&         print(ostream& os) const     { saveAscii(os); return os; }
-  virtual ostream& saveAscii(ostream&, unsigned n = 0, unsigned start = 0) const;
-  istream&         scan(istream& is)            { loadAscii(is); return is; }
-  virtual istream& loadAscii(istream&, unsigned n = 0, unsigned start = 0);
+  std::ostream&         print(std::ostream& os) const     { saveAscii(os); return os; }
+  virtual std::ostream& saveAscii(std::ostream&, unsigned n = 0, unsigned start = 0) const;
+  std::istream&         scan(std::istream& is)            { loadAscii(is); return is; }
+  virtual std::istream& loadAscii(std::istream&, unsigned n = 0, unsigned start = 0);
 
   // Matlab I/O functions
 #ifdef HAVE_MATLAB
@@ -336,12 +336,12 @@ template <class Type>
 SimpleArray<Type> operator ^ (double base, const SimpleArray<Type>& array);
 
 // I/O  
-template <class T> ostream& operator << (ostream& os, const SimpleArray<T>& A) 
+template <class T> std::ostream& operator << (std::ostream& os, const SimpleArray<T>& A) 
 {
   return A.saveAscii(os); 
 }
 
-template <class T> istream& operator >> (istream& is, SimpleArray<T>& A) 
+template <class T> std::istream& operator >> (std::istream& is, SimpleArray<T>& A) 
 {
   return A.loadAscii(is); 
 }

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: FileIO.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 18:02:06 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef FILE_IO_H
@@ -23,7 +23,6 @@ $State: Exp $
 #include <stdio.h>
 #include <iostream>		/* (bert) changed from iostream.h */
 #include <fstream>		/* (bert) changed from fstream.h */
-using namespace std;
 #include "Path.h"
 //#include "popen.h"
 
@@ -35,57 +34,57 @@ extern "C"{
 
 class InputFile {
   //ipopen *_ipipe;
-  istream *_ipipe;
+    std::istream *_ipipe;
   
 public:
 // Constructors/destructor
   InputFile();
   InputFile(const Path& path) { _ipipe = 0; attach(path); }
-  InputFile(istream *pipe)   { _ipipe = pipe; }
+  InputFile(std::istream *pipe)   { _ipipe = pipe; }
   ~InputFile()                { close(); }
 
   operator void *() const;
-  operator istream& () { return *_ipipe; }
+  operator std::istream& () { return *_ipipe; }
 
 // Set functions
   Boolean  attach(const Path&);
-  istream& skip(unsigned nBytes);
+  std::istream& skip(unsigned nBytes);
   Boolean  close();
 
 // Get functions
-  istream& stream()     { return *_ipipe; }
+  std::istream& stream()     { return *_ipipe; }
   Boolean operator ! () { return (!_ipipe || !*_ipipe); }
 
 // Input operators
-  istream& operator >> (char *val) { return *_ipipe >> val; }
-  istream& operator >> (char& val) { return *_ipipe >> val; }
-  istream& operator >> (short& val) { return *_ipipe >> val; }
-  istream& operator >> (int& val) { return *_ipipe >> val; }
-  istream& operator >> (long& val) { return *_ipipe >> val; }
-  istream& operator >> (float& val) { return *_ipipe >> val; }
-  istream& operator >> (double& val) { return *_ipipe >> val; }
-  istream& operator >> (unsigned char *val) { return *_ipipe >> val; }
-  istream& operator >> (unsigned char& val) { return *_ipipe >> val; }
-  istream& operator >> (unsigned short& val) { return *_ipipe >> val; }
-  istream& operator >> (unsigned int& val) { return *_ipipe >> val; }
-  istream& operator >> (unsigned long& val) { return *_ipipe >> val; }
-  istream& operator >> (streambuf *val) { return *_ipipe >> val; }
-  istream& operator >> (istream& (*func)(istream&)) { return *_ipipe >> func; }
-  istream& operator >> (ios& (*func)(ios&)) { return *_ipipe >> func; }
+  std::istream& operator >> (char *val) { return *_ipipe >> val; }
+  std::istream& operator >> (char& val) { return *_ipipe >> val; }
+  std::istream& operator >> (short& val) { return *_ipipe >> val; }
+  std::istream& operator >> (int& val) { return *_ipipe >> val; }
+  std::istream& operator >> (long& val) { return *_ipipe >> val; }
+  std::istream& operator >> (float& val) { return *_ipipe >> val; }
+  std::istream& operator >> (double& val) { return *_ipipe >> val; }
+  std::istream& operator >> (unsigned char *val) { return *_ipipe >> val; }
+  std::istream& operator >> (unsigned char& val) { return *_ipipe >> val; }
+  std::istream& operator >> (unsigned short& val) { return *_ipipe >> val; }
+  std::istream& operator >> (unsigned int& val) { return *_ipipe >> val; }
+  std::istream& operator >> (unsigned long& val) { return *_ipipe >> val; }
+  std::istream& operator >> (std::streambuf *val) { return *_ipipe >> val; }
+  std::istream& operator >> (std::istream& (*func)(std::istream&)) { return *_ipipe >> func; }
+  std::istream& operator >> (std::ios& (*func)(std::ios&)) { return *_ipipe >> func; }
 };
 
 /******************
  * OutputFile class
  ******************/
 
-class OutputFile : public ofstream {
+class OutputFile : public std::ofstream {
   Path _path;
   int  _compress;
 
 public:
   static const Boolean NO_COMPRESS, COMPRESS;
 
-  OutputFile(const Path&, int mode = ios::out, int compress = COMPRESS);
+  OutputFile(const Path&, int mode = std::ios::out, int compress = COMPRESS);
   ~OutputFile();
 
 // Set functions

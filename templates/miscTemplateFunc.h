@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: miscTemplateFunc.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 17:56:57 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MISC_TEMPLATE_FUNC_H
@@ -28,8 +28,8 @@ $State: Exp $
 class Histogram;
 template <class Type> class SimpleArray;
 
-inline double asDouble(dcomplex value) { return sqrt(norm(value)); }
-inline double asDouble(fcomplex value) { return sqrt(norm(value)); }
+inline double asDouble(dcomplex value) { return sqrt(std::norm(value)); }
+inline double asDouble(fcomplex value) { return sqrt(std::norm(value)); }
 inline double asDouble(signed char value) { return double(value); }
 inline double asDouble(unsigned char value) { return double(value); }
 inline double asDouble(short value) { return double(value); }
@@ -43,6 +43,7 @@ inline double asDouble(double value) { return double(value); }
 template <class Type>
 inline void swap(Type& x, Type& y) { Type tmp(x); x = y; y = tmp; }
 #endif /* (bert) end of newly conditionalized code. */
+
 // Power functions
 inline double intPower(double x, int y) {
   if (!y) return(1.0);

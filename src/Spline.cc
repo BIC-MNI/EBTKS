@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Spline.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -23,6 +23,9 @@ $State: Exp $
 #include "MPoint.h"
 #include "trivials.h"
 #include <assert.h>
+
+using namespace std;
+
 
 /*******************
  * Spline base class

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 18:43:53 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.3 2003-04-16 18:43:53 bert Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.4 2003-11-17 04:07:52 stever Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -56,6 +56,9 @@ static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpl
 #ifdef DEBUG_TBSPLINE
 #include <stdio.h>
 #endif
+
+using namespace std;
+
 
 //-----------------------------------------------------------------------
 // LAPACK definitions

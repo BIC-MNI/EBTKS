@@ -12,16 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Dictionary.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 15:03:14 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 #include "MTypes.h"
 #include "trivials.h"
 
@@ -113,7 +112,7 @@ private:
 };
 
 template <class Key, class Value>
-ostream& operator << (ostream& os, const Dictionary<Key, Value>& dict);
+std::ostream& operator << (std::ostream& os, const Dictionary<Key, Value>& dict);
 
 /***************************
  * Dictionary iterator class

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MPoint.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 18:00:45 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MPOINT_H
@@ -23,7 +23,6 @@ $State: Exp $
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 #include "trivials.h"
 #include "MTypes.h"
 #include "Pool.h"
@@ -103,9 +102,9 @@ public:
 
 // Don't know why these can't be implemented as friends to the template class
 // (See also Array.h)
-istream& operator >> (istream& is, MPoint *&point);
-istream& operator >> (istream& is, MPoint& point);
-ostream& operator << (ostream& os, const MPoint& point);
+std::istream& operator >> (std::istream& is, MPoint *&point);
+std::istream& operator >> (std::istream& is, MPoint& point);
+std::ostream& operator << (std::ostream& os, const MPoint& point);
 
 
 /****************

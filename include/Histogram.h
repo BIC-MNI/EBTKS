@@ -12,16 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Histogram.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 18:03:25 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 #include "MTypes.h"
 #include "ValueMap.h"
 #include "SimpleArray.h"
@@ -89,14 +88,14 @@ public:
   LUT<double> equalize(const Histogram& hist) const;
 
 // I/O
-  ostream& printHeadAndTail(ostream& os, unsigned n = 10) const;
+  std::ostream& printHeadAndTail(std::ostream& os, unsigned n = 10) const;
 #ifdef HAVE_MATLAB
   Boolean  saveMatlab(const char *fileName, const char *binVarName = "X", 
 		      const char *countVarName = "N", const char *option = "u") const;
 #endif
 
 // Friends
-  friend ostream&    operator << (ostream& os, const Histogram& hist);
+  friend std::ostream&    operator << (std::ostream& os, const Histogram& hist);
   friend SimpleArray<double> asDblArray(const Histogram& hist);
 };
 

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.5 $
-$Author: bert $
-$Date: 2003-04-16 17:00:45 $
+$Revision: 1.6 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -26,6 +26,9 @@ $State: Exp $
 #endif
 
 #include "trivials.h"
+
+using namespace std;
+
 
 #ifdef USE_COMPMAT
 #include "dcomplex.h"
@@ -39,9 +42,9 @@ $State: Exp $
 /*******************
  * SimpleArray class
  *******************/
-//#ifndef __GNUC__
+#ifndef __GNUC__
 template <class Type> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
-//#endif
+#endif
 
 template <class Type>
 int

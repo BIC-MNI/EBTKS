@@ -12,17 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: dcomplex.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 17:57:56 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _DCOMPLEX_H
 #define _DCOMPLEX_H
 
 #include <complex>		/* (bert) changed from complex.h */
-using namespace std;		/* (bert) added */
-typedef complex<double> dcomplex;
+typedef std::complex<double> dcomplex;
 
 int operator < (const dcomplex&, const dcomplex&);
 int operator <= (const dcomplex&, const dcomplex&);

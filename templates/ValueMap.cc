@@ -12,13 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ValueMap.cc,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 17:14:51 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
 #include "ValueMap.h"
+
+using namespace std;
+
 
 #ifdef __GNUC__
 #define _INSTANTIATE_VALUEMAP(Type) \

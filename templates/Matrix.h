@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.h,v $
-$Revision: 1.4 $
-$Author: bert $
-$Date: 2003-04-16 15:08:12 $
+$Revision: 1.5 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_H
@@ -70,7 +70,6 @@ extern "C" {
 #include <assert.h>
 #include <stddef.h>
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 #include "MTypes.h"
 #include "MatrixSupport.h"
 #include "Histogram.h"
@@ -476,11 +475,11 @@ public:
    unsigned    length() const         { return (_rows > _cols) ? _rows : _cols; }
   
    //Display the contents of the entire ACTIVE Matrix(Mat) object
-   ostream& display(ostream& os) const;
+   std::ostream& display(std::ostream& os) const;
    
    //Display a subsection of the Matrix(Mat) defined by r1 (starting row) to
    //r2(ending row) and c1(starting column) to c2(ending column)
-   ostream& display(ostream& os, unsigned r1, unsigned r2, unsigned c1, unsigned c2) const;
+   std::ostream& display(std::ostream& os, unsigned r1, unsigned r2, unsigned c1, unsigned c2) const;
 
 /**********************Basic Matrix Arithmetic operators***********************/
   // Unary -
@@ -980,10 +979,10 @@ template <class T>
 unsigned length(const Mat<T>& A) { return A.length(); }
 
 template <class T>
-ostream& display(ostream& os, const Mat<T>& A) { return A.display(os); }
+std::ostream& display(std::ostream& os, const Mat<T>& A) { return A.display(os); }
 
 template <class T>
-ostream& display(ostream& os, const Mat<T> A,unsigned r1, unsigned r2, 
+std::ostream& display(std::ostream& os, const Mat<T> A,unsigned r1, unsigned r2, 
 		 unsigned c1, unsigned c2)
 { 
   return A.display(os, r1, r2, c1, c2); 
@@ -1286,7 +1285,7 @@ template <class T>
 Mat<fcomplex> fifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
 #endif /* USE_FCOMPMAT */
 
-template <class T> ostream& operator << (ostream&, const Mat<T>&);
+template <class T> std::ostream& operator << (std::ostream&, const Mat<T>&);
 
 /*******************************Sub classes************************************/
 

@@ -12,15 +12,19 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TrainingSet.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "TrainingSet.h"
 #include <assert.h>
 #include <stdlib.h>
+
+using namespace std;
+
+
 
 const int DEFAULT_TRAINING_SET_SIZE = 250;
 

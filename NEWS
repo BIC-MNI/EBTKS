@@ -1,4 +1,4 @@
-New in release 0.99.1
+New in release 1.0
 
 * Now builds with g++ 3.2, g++ 2.96, and IRIX CC 7.30
 * Substantial restructuring was required to accomplish this, but no

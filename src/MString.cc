@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MString.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:24 $
+$Revision: 1.2 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -23,6 +23,9 @@ $State: Exp $
 #include <ctype.h>
 #include <stdio.h>
 #include "OrderedCltn.h"
+
+using namespace std;
+
 
 unsigned MString::_MAX_LOAD_LENGTH = 512;
 

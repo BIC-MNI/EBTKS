@@ -12,16 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: backProp.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 17:58:52 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef BACKPROP_H
 #define BACKPROP_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 #include <stdio.h>
 #include "Array.h"
 #include "TrainingSet.h"
@@ -70,12 +69,12 @@ class BP_ANN {
 
 public:
   static void default_error_monitor(unsigned cycle, double error) {
-    cout << "Cycle: " << cycle << " error: " << error << endl;
+      std::cout << "Cycle: " << cycle << " error: " << error << std::endl;
   }
 
 // Constructors/destructor
   BP_ANN(const UnsignedArray&, Boolean verbose = FALSE);
-  BP_ANN(istream&, Boolean verbose = FALSE);
+  BP_ANN(std::istream&, Boolean verbose = FALSE);
   ~BP_ANN();
 
 // Get functions
@@ -114,10 +113,10 @@ public:
   unsigned classify(const double *input, double *output = 0);
 
 // I/O
-  int      load(istream&);
-  int      save(ostream&, Boolean includeContents = TRUE);
-  ostream& printWeights(ostream&);
-  ostream& printNodes(ostream&);
+  int      load(std::istream&);
+  int      save(std::ostream&, Boolean includeContents = TRUE);
+  std::ostream& printWeights(std::ostream&);
+  std::ostream& printNodes(std::ostream&);
 
 private:
   void _create(const UnsignedArray&);

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: backProp.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -27,6 +27,9 @@ $State: Exp $
 #include <time.h>
 
 #include "MString.h"
+
+using namespace std;
+
 
 const int   BP_ANN::_LUT_LENGTH    = 1001;  
 // Should be odd, as it will be used for a range of values centered around 0

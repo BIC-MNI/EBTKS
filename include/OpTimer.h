@@ -12,16 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OpTimer.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 18:00:10 $
+$Revision: 1.4 $
+$Author: stever $
+$Date: 2003-11-17 04:07:51 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _OP_TIMER_H
 #define _OP_TIMER_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-using namespace std;		/* (bert) added */
 
 typedef double (*TimeFunc)();
 
@@ -33,7 +32,7 @@ class OpTimer {
   unsigned int _NN;
   unsigned int _interval;
   unsigned int _i;
-  ostream  *_os;
+  std::ostream  *_os;
   TimeFunc  _time;
   
   static const char *_TIME_STRINGS[];
@@ -59,7 +58,7 @@ public:
 
   // Attribute setting functions
   void verbose(char on)          { _verbose = on; }
-  void outputStream(ostream& os) { _os = &os; }
+  void outputStream(std::ostream& os) { _os = &os; }
   void timeType(int timeType);
   void timeFunction(TimeFunc F)  { _time = F; }
 
@@ -73,7 +72,7 @@ private:
   static double _SYStime();
   static double _USRtime();
   void          _newOperation(const char *operation);
-  ostream&      _printTime(double sec) const;
+  std::ostream&      _printTime(double sec) const;
 };
 
 #endif

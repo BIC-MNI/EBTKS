@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TrainingSet.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef TRAINING_SET_H
@@ -41,7 +41,7 @@ struct Example {
   double *inputPtr()  { return input.contents(); }
   double *targetPtr() { return target.contents(); }
 
-friend ostream& operator << (ostream&, Example&);
+    friend std::ostream& operator << (std::ostream&, Example&);
 };
 
 /*******************
@@ -88,7 +88,7 @@ public:
 
 // Misc functions
   void     shuffle();
-  ostream& print(ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
 friend class TrainingSetIterator;
 };

@@ -12,17 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: fcomplex.h,v $
-$Revision: 1.2 $
-$Author: bert $
-$Date: 2003-04-16 17:57:56 $
+$Revision: 1.3 $
+$Author: stever $
+$Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _FCOMPLEX_H
 #define _FCOMPLEX_H
 
 #include <complex>		/* (bert) changed from complex.h */
-using namespace std;		/* (bert) added */
-typedef complex<float> fcomplex;
+typedef std::complex<float> fcomplex;
 #if 0				/* (bert) removed code here */
 
 //Code written by Georges Aboutanos
@@ -184,7 +183,7 @@ int operator < (const fcomplex&, const fcomplex&);
 int operator <= (const fcomplex&, const fcomplex&);
 int operator > (const fcomplex&, const fcomplex&);
 int operator >= (const fcomplex&, const fcomplex&);
-ostream& operator << (ostream& os, fcomplex value);
-istream& operator >> (istream& is, fcomplex&);
+std::ostream& operator << (std::ostream& os, fcomplex value);
+std::istream& operator >> (std::istream& is, fcomplex&);
 #endif
 
