@@ -1,5 +1,7 @@
 SUBDIRS = src templates
 
+AUTOMAKE_OPTIONS = check-news
+
 lib_LTLIBRARIES = libEBTKS.la
 
 libEBTKS_la_LIBADD = \

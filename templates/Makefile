@@ -34,15 +34,15 @@ infodir = ${prefix}/info
 mandir = ${prefix}/man
 includedir = ${prefix}/include
 oldincludedir = /usr/include
-pkgdatadir = $(datadir)/libAZgen
-pkglibdir = $(libdir)/libAZgen
-pkgincludedir = $(includedir)/libAZgen
+pkgdatadir = $(datadir)/libEBTKS
+pkglibdir = $(libdir)/libEBTKS
+pkgincludedir = $(includedir)/libEBTKS
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /usr/people/jason/seconddir/libAZgen/missing --run aclocal
-AUTOCONF = ${SHELL} /usr/people/jason/seconddir/libAZgen/missing --run autoconf
-AUTOMAKE = ${SHELL} /usr/people/jason/seconddir/libAZgen/missing --run automake
-AUTOHEADER = ${SHELL} /usr/people/jason/seconddir/libAZgen/missing --run autoheader
+ACLOCAL = ${SHELL} /usr/people/jason/seconddir/EBTKS/missing --run aclocal
+AUTOCONF = ${SHELL} /usr/people/jason/seconddir/EBTKS/missing --run autoconf
+AUTOMAKE = ${SHELL} /usr/people/jason/seconddir/EBTKS/missing --run automake
+AUTOHEADER = ${SHELL} /usr/people/jason/seconddir/EBTKS/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /usr/local/gnu/bin/install -c
@@ -63,7 +63,7 @@ host_triplet = mips-sgi-irix6.5
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /usr/people/jason/seconddir/libAZgen/missing --run tar
+AMTAR = ${SHELL} /usr/people/jason/seconddir/EBTKS/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = cc
@@ -78,7 +78,7 @@ INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 OBJDUMP = @OBJDUMP@
-PACKAGE = libAZgen
+PACKAGE = libEBTKS
 RANLIB = ranlib
 STRIP = strip
 VERSION = 0.99
@@ -88,7 +88,7 @@ X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 am__include = include
 am__quote = 
-install_sh = /usr/people/jason/seconddir/libAZgen/install-sh
+install_sh = /usr/people/jason/seconddir/EBTKS/install-sh
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
 
