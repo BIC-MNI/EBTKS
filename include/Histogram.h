@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Histogram.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 18:03:25 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 #include "MTypes.h"
 #include "ValueMap.h"
 #include "SimpleArray.h"
@@ -60,7 +61,9 @@ public:
   unsigned  bin(double value) const;
   unsigned  max(unsigned *bin = 0) const;
   double    mean() const;
-  double    median(unsigned *bin = 0, unsigned nBelow = 0, unsigned nAbove = 0) const;
+  double    median(unsigned *bin, unsigned nBelow = 0, unsigned nAbove = 0) const;
+  // (bert) - This median() added just to make the IRIX compiler happier.
+  unsigned  median() const { return SimpleArray<unsigned>::median(); }
   double    majority(unsigned *bin = 0) const;
   double    biModalThreshold() const;
   double    varianceThreshold() const;
@@ -94,12 +97,18 @@ public:
 
 // Friends
   friend ostream&    operator << (ostream& os, const Histogram& hist);
-  friend DblArray    pdf(const Histogram& hist) { return hist.pdf(); }
-  friend DblArray    cdf(const Histogram& hist) { return hist.cdf(); }
-  friend LUT<double> equalize(const Histogram& hist1, const Histogram& hist2) {
-    return hist1.equalize(hist2); }
-
   friend SimpleArray<double> asDblArray(const Histogram& hist);
 };
+
+// (bert) - moved the following three functions from inside class definition:
+//
+inline DblArray pdf(const Histogram& hist) { return hist.pdf(); }
+
+inline DblArray cdf(const Histogram& hist) { return hist.cdf(); }
+
+inline LUT<double> equalize(const Histogram& hist1, const Histogram& hist2)
+{
+  return hist1.equalize(hist2);
+}
 
 #endif
