@@ -12,12 +12,13 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OrderedCltn.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:24 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 18:41:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include <iostream.h>
+#include <iostream>		// (bert) changed from iostream.h
+using namespace std;		// (bert) added
 #include <malloc.h>
 
 #include "OrderedCltn.h"
