@@ -12,16 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MTypes.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:44 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:00:29 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MTYPES_H
 #define MTYPES_H
 
 #include <values.h>
-#include <iostream.h>
 
 typedef unsigned char  Byte;
 //typedef unsigned short Grey;
