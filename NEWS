@@ -1,3 +1,9 @@
+New in release 0.99.1
+
+* Now builds with g++ 3.2, g++ 2.96, and IRIX CC 7.30
+* Substantial restructuring was required to accomplish this, but no
+  significant functional changes should have been made.
+
 New in Release 0.99
 
 * autoconfiscated and builds with (only?) gcc version 3
