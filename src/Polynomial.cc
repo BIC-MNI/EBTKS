@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Polynomial.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -354,7 +354,7 @@ Polynomial::_fit(const FlMat& X, const DblArray& F)
 
   for (unsigned row = 0; row < _nCoef; row++) {
     unsigned exponent = _expComb[0][row];
-    DblArray XrowPower(powers[0][exponent]);
+    DblArray XrowPower(powers[(unsigned int)0][exponent]);
     for (unsigned coord = 1; coord < _nDimensions; coord++) {
       exponent = _expComb[coord][row];
       XrowPower *= powers[coord][exponent];

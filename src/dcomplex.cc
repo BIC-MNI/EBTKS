@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: dcomplex.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
@@ -23,7 +23,7 @@ $State: Exp $
 
 // A few functions that define (bogus) math ops for complex
 
-static _errorCount_dcomplex = 100;
+static int _errorCount_dcomplex = 100;
 
 int operator < (const dcomplex&, const dcomplex&) {
   if (_errorCount_dcomplex) {

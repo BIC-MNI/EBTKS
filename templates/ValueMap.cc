@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: ValueMap.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:47 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
@@ -233,7 +233,7 @@ LUT<Type>::reverse(double destValue) const
   if (!length)
     return 0;
   if (length < 2)
-    return _source[0];
+    return _source[(unsigned int)0];
 
   unsigned index = 0;
   const Type *destPtr = _dest.contents();

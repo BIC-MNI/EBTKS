@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: FileIO.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -161,7 +161,10 @@ OutputFile::OutputFile(const Path& path, int mode, int compress)
     }
   }
   
-  open(_path, mode);
+  // ERROR: commented out due to compilation problems. Reenable.
+  //open(_path, mode);
+  cout << "DEBUG: " << _path << endl;
+  open(_path, std::ios_base::out);
 }
 
 OutputFile::~OutputFile()

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: trivials.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MIN
@@ -49,8 +49,8 @@ $State: Exp $
 const char FALSE = 0;
 const char TRUE  = 1;
 
-const SUCCESS = 1;
-const FAILURE = 0;
+const int SUCCESS = 1;
+const int FAILURE = 0;
 
 //#define NAN -MAXDOUBLE
 

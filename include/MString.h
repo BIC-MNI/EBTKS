@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MString.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MSTRING_H
@@ -59,7 +59,7 @@ public:
   Boolean  contains(char c) const { return SimpleArray<char>::contains(c); }
   Boolean  isPartOf(const MString& string) const { return string.contains(*this); }
 
-  operator ! () const     { return (_size <= 1) || !strlen(_contents); }
+  bool operator ! () const     { return (_size <= 1) || !strlen(_contents); }
   operator void *() const { return (void *) ((_size > 1) && strlen(_contents)); }
   operator char *()       { return ((_size > 1) && strlen(_contents)) ? _contents : 0; }
   operator const char *() const { return ((_size>1) && strlen(_contents)) ? _contents:0;}

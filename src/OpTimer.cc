@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OpTimer.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "OpTimer.h"
@@ -153,7 +153,8 @@ double
 OpTimer::_USRtime()
 {
   struct timeval T;
-  gettimeofday(&T);
+  struct timezone TZ;
+  gettimeofday(&T, &TZ);
   return (double) T.tv_sec + (T.tv_usec / 1.0e6);
 }
 

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:47 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SIMPLE_ARRAY_H
@@ -245,7 +245,7 @@ friend double   mean(const SimpleArray<Type>& array)   { return array.mean(); }
 friend double   prod(const SimpleArray<Type>& array)   { return array.prod(); }
 friend double   prod2(const SimpleArray<Type>& array){ return array.prod2(); }
 friend double   var(const SimpleArray<Type>& array)    { return array.var(); }
-friend double   std(const SimpleArray<Type>& array)    { return array.std(); }
+friend double   stdev(const SimpleArray<Type>& array)    { return array.std(); }
 friend Type     median(const SimpleArray<Type>& array) { return array.median(); }
 friend Type     medianVolatile(SimpleArray<Type>& array){ return array.medianVolatile();}
 friend Type     mode(const SimpleArray<Type>& array, Type binWidth) {

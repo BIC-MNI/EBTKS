@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.1 2001-11-09 16:37:25 jason Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.2 2002-03-20 21:42:45 jason Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -100,7 +100,7 @@ TBSpline::TBSpline(const DblMat &domain,
   _distance = distance;
   _scale = 1.0/(distance*distance*distance);
   _domain = domain;
-  int i;
+  unsigned int i;
   // check that domain bounds are in correct order
   for(i = 0; i < _nDimensions; i++)
     {
@@ -183,7 +183,7 @@ TBSpline::clearDataPoints(void)
 Boolean
 TBSpline::addDataPoint(const float *point, double value)
 {
-  int i,j,k,l;
+  unsigned int i,j,k,l;
   
   // check that point is within domain
   for_each_dimension(i)
@@ -250,8 +250,9 @@ TBSpline::addDataPoint(const float *point, double value)
   AtAel = (double *) *(_AtA.getEl());
   AtFel = (double *) *(_AtF.getEl());
   // start in bottom right corner of block within AtA
-  D = AtAel + _locations[_four-1]*_nProduct + _locations[_four-1];
-  F = AtFel + _locations[_four-1];
+  D = AtAel + _locations[(unsigned int)_four-1]*_nProduct + 
+    _locations[(unsigned int)_four-1];
+  F = AtFel + _locations[(unsigned int)_four-1];
   for(k = _four-1; k >= 0; )
     {
       L = U = D;
@@ -299,7 +300,7 @@ TBSpline::fit(void)
 double 
 TBSpline::operator () (const float *point) const
 {
-  int i;
+  unsigned int i;
   
   if(_fitted == FALSE)
     return 0;
@@ -345,7 +346,7 @@ TBSpline::operator () (const float *point) const
       for_each_dimension(i)   // compute product
 	product *= _terms(subIndex[i],i);
 
-      sum += product*_coef[subIndex.flat()];
+      sum += product*_coef[(unsigned int)subIndex.flat()];
       ++subIndex;
     }
   return sum;
@@ -385,12 +386,12 @@ TBSpline::bendingEnergyTensor(const IntArray &n, DblMat &J)
   int nDimensions = n.size();
   int nProduct = 1;
   IntArray step(nDimensions);  
-  int i,j,k,l,m;
+  unsigned int i,j,k,l,m;
 
   // deal with special case first
   if(nDimensions == 1)
     {
-      J = bendingEnergy(n[0], 2);
+      J = bendingEnergy(n[(unsigned int)0], 2);
       return;
     }
 
@@ -463,7 +464,7 @@ TBSpline::bendingEnergyTensor(const IntArray &n, DblMat &J)
 DblMat 
 TBSpline::bendingEnergy(int size, int order)
 {
-  int i,j,k,l;
+  unsigned int i,j,k,l;
   int interval, offset, region;
   const int spline = 4;  // ie  splines are cubic
 
@@ -492,7 +493,7 @@ TBSpline::bendingEnergy(int size, int order)
   // compute product integral for each pair of segments
   // actually we only compute upper triangle since D will be symmetric
   DblArray C(2*spline-1);
-  int sizeC = C.size();
+  unsigned int sizeC = C.size();
   DblMat D(spline,spline);
   for(i = 0; i < spline; i++)
     for(j = i; j < spline; j++)
@@ -502,13 +503,13 @@ TBSpline::bendingEnergy(int size, int order)
 	  {
 	    C[k] = 0;
 	    for(l = 0; l < MIN(k+1,sizeC-k); l++)
-	      C[k] += B[i][MAX(0,k-spline+1)+l]
+	      C[k] += B[i][(unsigned int)MAX(0,k-spline+1)+l]
 		*B[j][spline-1-l-MAX(0,spline-1-k)];
 	  }
 	// evalute integral on [0,1]
 	D(i,j) = 0;
 	for(k = 0; k < sizeC; k++)
-	  D(i,j) += C[k]/double(sizeC-k);
+	  D(i,j) += C[k]/double((unsigned int)sizeC-k);
       }
 
   // define 6 regions:  [-1,0] [-2,0] [-3,0] [-4,0] [-2,-1] [-3,-1]
@@ -651,11 +652,11 @@ TIndex::TIndex(const IntArray &n)
 
 TIndex::TIndex(const IntArray &index, const IntArray &n)
 {
-  int i;
+  unsigned int i;
   init(n);
 
   _index = index;
-  _flat = _index[0];
+  _flat = _index[(unsigned int)0];
   for(i = 1; i < _nDimensions; i++)
     _flat = _flat*_n[i]+_index[i];
 }
@@ -664,7 +665,7 @@ TIndex::TIndex(const IntArray &index, const IntArray &n)
 void 
 TIndex::init(const IntArray &n)
 {
-  int i, j;
+  unsigned int i, j;
   _nDimensions = n.size();
   _n = n;
   _flat = 0;
@@ -684,7 +685,7 @@ TIndex::init(const IntArray &n)
 void 
 TIndex::operator ++ (void)
 {
-  for(int i = _nDimensions-1; i >= 0; i--)
+  for(unsigned int i = _nDimensions-1; i >= 0; i--)
     {
       if(_index[i] < _n[i]-1)
 	{
@@ -729,7 +730,7 @@ TSubIndex::init(const IntArray &smallN)
   _smallIndex.newSize(_nDimensions);
   _smallIndex.clear(0);
   _smallStep.newSize(_nDimensions);
-  int i, j;
+  unsigned int i, j;
 
   // calculate step sizes for indexing an array as a tensor
   _smallStep.newSize(_nDimensions);  
@@ -744,7 +745,7 @@ TSubIndex::init(const IntArray &smallN)
 void 
 TSubIndex::operator ++ ()
 {
-  int i;
+  unsigned int i;
 
   // increment indices
   for(i = _nDimensions-1; i >= 0 ; i--)
@@ -758,9 +759,9 @@ TSubIndex::operator ++ ()
 	}
       else 
 	{
-	  _smallIndex[i] = 0;
-	  _index[i] -= _smallN[i] - 1;
-	  _flat -= (_smallN[i] - 1)*_step[i];
+	  _smallIndex[(unsigned int)i] = 0;
+	  _index[(unsigned int)i] -= _smallN[(unsigned int)i] - 1;
+	  _flat -= (_smallN[(unsigned int)i] - 1)*_step[(unsigned int)i];
 	}
     }
 }
@@ -918,7 +919,7 @@ TBSplineVolume::createLookup(const double start[VDIM],
       pOffset = _offset[i];
       offsetStep = 1;
       for(j = 0; j < (VDIM - i - 1); j++)
-        offsetStep *= _n[VDIM-j-1];
+        offsetStep *= _n[(unsigned int)VDIM-j-1];
 
       // skip any voxel outside the domain
       if(step[i] > 0) {
@@ -953,8 +954,8 @@ TBSplineVolume::createLookup(const double start[VDIM],
           blockIndex = (int) ceil((x - _zero(i))/_distance) - 1;
           if(blockIndex < 0)
             blockIndex = 0;
-          else if(blockIndex > _n[i] - 4)
-            blockIndex = _n[i] - 4;
+          else if(blockIndex > _n[(unsigned int)i] - 4)
+            blockIndex = _n[(unsigned int)i] - 4;
 
           // set offset into _coef array
           currentOffset = blockIndex*offsetStep;
@@ -1080,12 +1081,12 @@ TBSplineVolume::addDataPoint(int x, int y, int z, double value)
   AtAel = (double *) *(_AtA.getEl());
   AtFel = (double *) *(_AtF.getEl());
   // start in bottom right corner of block within AtA
-  D = AtAel + _locations[_four-1]*_nProduct + _locations[_four-1];
-  F = AtFel + _locations[_four-1];
+  D = AtAel + _locations[(unsigned int)_four-1]*_nProduct + _locations[(unsigned int)_four-1];
+  F = AtFel + _locations[(unsigned int)_four-1];
   for(k = _four-1; k >= 0; )
     {
       U = D;  // L = 
-      value_k = _values[k];
+      value_k = _values[(unsigned int)k];
       *F += value*value_k;
       l = k-1;
       pValue = _values.contents() + l;

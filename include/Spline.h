@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Spline.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SPLINE_3D_H
@@ -101,7 +101,7 @@ public:
     return fit(coord2FlMat(coord), values); }
 #endif
 
-  operator ! () const      { return !_fitted; }
+  int operator ! () const      { return !_fitted; }
   operator double () const { return operator () (_tempPoint); }
 
   virtual double operator () (const float *point = 0) const = 0;

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: miscTemplateFunc.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:47 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "miscTemplateFunc.h"
@@ -25,13 +25,13 @@ $State: Exp $
 double
 asDouble(dcomplex value) 
 {
-  return ::sqrt(::norm(value));
+  return sqrt(norm(value));
 }
 
 double
 asDouble(fcomplex value) 
 {
-  return ::sqrt(::norm(value));
+  return sqrt(norm(value));
 }
 
 template <class Type>

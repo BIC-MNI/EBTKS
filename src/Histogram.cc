@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Histogram.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -436,8 +436,8 @@ Histogram::pctThreshold(double pct) const
   }
   else {
     for (int i = _size - 1; i >= 0; i--)
-      if (cdf[i] <= fraction)
-	return binStart(i + 1);
+      if (cdf[(unsigned int)i] <= fraction)
+        return binStart(i + 1);
     return binStart(0);
   }
 }
@@ -504,7 +504,7 @@ Histogram::equalize(const Histogram& hist) const
   int j = 0;
   for (unsigned i = 0; i < _size; i++) {
     double wxi = wx[i];
-    while ((wy[j] < wxi) && (j < len))
+    while ((wy[(unsigned int)j] < wxi) && (j < len))
       j++;
     
 	lut.add(binCenter(i), hist.binCenter(j));
@@ -524,7 +524,7 @@ Histogram::printHeadAndTail(ostream& os, unsigned n) const
   n = MIN(n, _size/2);
   SimpleArray<unsigned> temp((*this)(n));
   temp.print(os);
-  if (_size > 2*n)
+ if (_size > 2*n)
     os << " ... ";
   else
     os << " ";

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MTypes.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MTYPES_H
@@ -31,10 +31,10 @@ typedef long  Full;
 
 typedef char  Boolean; // In accordance with X's definition
 
-const BYTE_MIN = 0;
-const BYTE_MAX = 255;
-const GREY_MIN = -MAXSHORT;
-const GREY_MAX = MAXSHORT;
+const int BYTE_MIN = 0;
+const int BYTE_MAX = 255;
+const int GREY_MIN = -MAXSHORT;
+const int GREY_MAX = MAXSHORT;
 
 inline Byte 
 clipByte(double value) { 

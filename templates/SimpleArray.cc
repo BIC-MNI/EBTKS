@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:47 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -45,9 +45,9 @@ $State: Exp $
 /*******************
  * SimpleArray class
  *******************/
-#ifndef __GNUC__
+//#ifndef __GNUC__
 template <class Type> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
-#endif
+//#endif
 
 template <class Type>
 int
@@ -1678,7 +1678,7 @@ min(const SimpleArray<Type>& array1, const SimpleArray<Type>& array2)
 {
   unsigned n = size(array1);
 
-  If (size(array2) != n) {
+  if (size(array2) != n) {
     cerr << "min(SimpleArray, SimpleArray): arrays not of equal size" << endl;
     return SimpleArray<Type>(0);
   }
@@ -1808,13 +1808,17 @@ operator ^ (double base, const SimpleArray<Type>& array) {
   return result;
 } 
 
+// ERROR: won't compile. Reenable def to make work as before
+
+//#undef __GNUC__
+
 #ifdef __GNUC__
 #define _INSTANTIATE_SIMPLEARRAY(Type)                       \
             template class SimpleArray<Type>;                \
             template class IndexStruct<Type>;                \
             template SimpleArray<Type> operator ^(double,    \
                                        SimpleArray<Type> const &);   \
-            template unsigned size(SimpleArray<Type> const &); \
+//            template unsigned size(SimpleArray<Type> const &); \
             template ostream& operator << (ostream&, const SimpleArray<Type>&); \
             template istream& operator >> (istream&, SimpleArray<Type>&); \
             template SimpleArray<double> asDblArray(const SimpleArray<Type>&);\
@@ -1827,6 +1831,7 @@ _INSTANTIATE_SIMPLEARRAY(int);
 _INSTANTIATE_SIMPLEARRAY(unsigned int);
 _INSTANTIATE_SIMPLEARRAY(float);
 _INSTANTIATE_SIMPLEARRAY(double);
+
 #ifdef USE_COMPMAT
 _INSTANTIATE_SIMPLEARRAY(dcomplex);
 #endif

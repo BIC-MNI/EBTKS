@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Path.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:24 $
+$Date: 2002-03-20 21:42:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -104,7 +104,7 @@ Path::expanded() const
 
   if (firstChar() != '~') {
     MString *dirString = dir();
-    if (dirString->isEmpty() || ((*this)[0] == '.')) {
+    if (dirString->isEmpty() || ((*this)[(unsigned int)0] == '.')) {
       char *pwdPtr = getenv("PWD");
       if (pwdPtr == NULL) {
 	cerr << "Couldn't get PWD environment variable!" << endl;
@@ -117,7 +117,7 @@ Path::expanded() const
 	if (slashIndex >= 0)
 	  newPath = pwd(0, slashIndex) + (*this)(2);
       }
-      else if ((*this)[0] == '.')               // Expand . to full path
+      else if ((*this)[(unsigned int)0] == '.')               // Expand . to full path
 	newPath = pwd + (*this)(1);
       else
 	newPath = Path(pwd, *this);
@@ -125,7 +125,7 @@ Path::expanded() const
     delete dirString;
   }
   else {
-    if ((*this)[1] == '/') {                    // Expand ~ to full path
+    if ((*this)[(unsigned int)1] == '/') {                    // Expand ~ to full path
       char *home;
       if ((home = getenv("HOME")) != NULL)
 	newPath = Path(MString(home) + (*this)(1));

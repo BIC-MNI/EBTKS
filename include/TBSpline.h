@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,8 +28,11 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : April 21, 1996 (John G. Sled)
 @MODIFIED   : $Log: TBSpline.h,v $
-@MODIFIED   : Revision 1.1  2001-11-09 16:37:25  jason
-@MODIFIED   : Initial revision
+@MODIFIED   : Revision 1.2  2002-03-20 21:42:44  jason
+@MODIFIED   : Now compiles with gcc 3
+@MODIFIED   :
+@MODIFIED   : Revision 1.1.1.1  2001/11/09 16:37:25  jason
+@MODIFIED   : First, non-compiling import
 @MODIFIED   :
 @MODIFIED   : Revision 1.4  1997/02/06 15:56:29  jgsled
 @MODIFIED   : Optimized using lookup tables.
@@ -62,7 +65,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.1 2001-11-09 16:37:25 jason Exp $";
+static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.2 2002-03-20 21:42:44 jason Exp $";
 #endif
 
 #ifndef TBSPLINE_H

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MatrixConv.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:47 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "Matrix.h"
@@ -90,6 +90,9 @@ Mat<fcomplex> asFcompMat(const Mat<Type>& Re, const Mat<Type>& Im)
 }
 #endif
 
+// ERROR: re-enable def to work as before
+
+#undef __GNUC__
 
 #ifdef __GNUC__
 template Mat<dcomplex> asCompMat(Mat<double> const &);

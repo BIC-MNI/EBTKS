@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/FileIO.cc])
-AM_INIT_AUTOMAKE(libEBTKS, 0.99)
+AM_INIT_AUTOMAKE(EBTKS, 0.99)
 AM_CONFIG_HEADER(config.h)
 
 AC_PROG_INSTALL
@@ -21,6 +21,6 @@ smr_WITH_BUILD_PATH
 # Check for required C libraries
 mni_REQUIRE_VOLUMEIO
 
-AC_CONFIG_FILES([Makefile src/Makefile templates/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile templates/Makefile include/Makefile])
 AC_OUTPUT
 

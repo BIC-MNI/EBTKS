@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -4667,6 +4667,10 @@ imag(const Mat<fcomplex>& A)
 #endif
 
 //////////////////////////////////////////////////////////////////////
+
+// ERROR: won't compile, I will try to disable the whole thing
+
+#undef __GNUC__
 
 #ifdef __GNUC__
 #define _INSTANTIATE_MAT(Type)                       \

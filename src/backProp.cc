@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: backProp.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:24 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -95,7 +95,7 @@ BP_ANN::nInputNodes(unsigned n)
   
   UnsignedArray topology(_nNodesInLayer, _nLayers);
   
-  topology[0] = n;
+  topology[(unsigned int)0] = n;
 
   _create(topology);
   randomize(_SEED);
@@ -726,7 +726,7 @@ BP_ANN::_create(const UnsignedArray& topology)
   for (i = 0; i < _nLayers; i++)
     _nNodesInLayer[i] = topology[i];
 
-  _nInputNodes  = topology[0];
+  _nInputNodes  = topology[(unsigned int)0];
   _nOutputNodes = topology[_nLayers - 1];
 
   if ((_nWeightsForLayer = (unsigned *) malloc(_nLayers*sizeof(unsigned))) == NULL)

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TrainingSet.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -22,7 +22,7 @@ $State: Exp $
 #include <assert.h>
 #include <stdlib.h>
 
-const DEFAULT_TRAINING_SET_SIZE = 250;
+const int DEFAULT_TRAINING_SET_SIZE = 250;
 
 /***************
  * Example class

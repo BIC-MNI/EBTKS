@@ -12,16 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: fcomplex.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "fcomplex.h"
 
 // A few functions that define (bogus) math ops for complex
 
-static _errorCount_fcomplex = 100;
+static int _errorCount_fcomplex = 100;
 
 int operator < (const fcomplex&, const fcomplex&) {
   if (_errorCount_fcomplex) {

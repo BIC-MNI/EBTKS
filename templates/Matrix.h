@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_H
@@ -79,9 +79,9 @@ extern "C" {
 #define MAX(x, y) ((x > y) ? (x) : (y))
 #endif
 
-const MATLAB = 0;
-const RAW = 1;
-const ASCII  = 2;
+const int MATLAB = 0;
+const int RAW = 1;
+const int ASCII  = 2;
 
 typedef double  (*IndexFunction)(unsigned r, unsigned c);
 typedef dcomplex (*ComplexIndexFunction)(unsigned r, unsigned c);

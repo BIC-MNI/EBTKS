@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Array.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-20 21:42:46 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /*
@@ -32,11 +32,11 @@ $State: Exp $
 #include "trivials.h"
 #include "MTypes.h"
 
-const DEFAULT_SIZE   = 0;
-const SIZE_INCREMENT = 32;
+const int DEFAULT_SIZE   = 0;
+const int SIZE_INCREMENT = 32;
 
-const BEFORE = -1;
-const AFTER  = 1;
+const int BEFORE = -1;
+const int AFTER  = 1;
 
 /******************
  * Array base class

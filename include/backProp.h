@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: backProp.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 21:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef BACKPROP_H
@@ -60,9 +60,9 @@ class BP_ANN {
   Boolean   _softmaxAtOutputLayer;
 
 // Consts and default values
-  static const       _LUT_LENGTH;
+  static const int   _LUT_LENGTH;
   static const long  _SEED;
-  static const       _N_CYCLES;
+  static const int   _N_CYCLES;
   static const float _LEARNING_RATE, _MOMENTUM, _TEMPERATURE;
   static const float _MAX_ERROR, _MAX_D_ERROR;
   static const unsigned _SHUFFLE_INTERVAL;
