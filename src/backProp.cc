@@ -12,15 +12,19 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: backProp.cc,v $
-$Revision: 1.3 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.4 $
+$Author: jason $
+$Date: 2004-01-19 15:38:15 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "backProp.h"
 #include <assert.h>
+
+#ifdef HAVE_MALLOC_H
 #include <malloc.h>
+#endif
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>

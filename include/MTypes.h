@@ -12,15 +12,26 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MTypes.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 18:00:29 $
+$Revision: 1.4 $
+$Author: jason $
+$Date: 2004-01-19 15:38:15 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MTYPES_H
 #define MTYPES_H
 
+#ifdef HAVE_VALUES_H
 #include <values.h>
+#else
+// JPL: values.h does not exist on OS X, so here I'm adding a hack and
+// defining the necessary values myself
+#include <limits.h>
+#include <float.h>
+#define MAXSHORT   SHRT_MAX
+#define MAXINT     INT_MAX 
+#define MAXDOUBLE  DBL_MAX
+
+#endif // end of values.h hack
 
 typedef unsigned char  Byte;
 //typedef unsigned short Grey;

@@ -12,6 +12,9 @@ AC_PROG_MAKE_SET
 AC_PROG_CC
 AC_PROG_CXX
 
+dnl The values.h and malloc.h files are not available on OS 10.3
+AC_CHECK_HEADERS(values.h malloc.h)
+
 dnl Build only static libs by default
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL

@@ -1,3 +1,8 @@
+2004-01-19  Jason Lerch	   <jason@bic.mni.mcgill.ca>
+
+	* added checks for values.h and malloc.h and changed the includes
+	where necessary. This fixes a compilation problem on OS 10.3
+	
 2003-11-25  Steve ROBBINS  <stever@bic.mni.mcgill.ca>
 
 	* CVS TAG: EBTKS-1_1.
