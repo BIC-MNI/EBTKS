@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Pool.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 16:57:23 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "Pool.h"
 #include <assert.h>
-#include <iostream.h>
+#include <iostream>		// (bert) changed from iostream.h
+using namespace std;		// (bert) added
 
 template <class Type>
 Pool<Type>::Pool(unsigned nElements)
