@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.4 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.5 $
+$Author: vsingh $
+$Date: 2004-04-04 17:45:34 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.4 2003-11-17 04:07:52 stever Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.5 2004-04-04 17:45:34 vsingh Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -467,7 +467,7 @@ TBSpline::bendingEnergyTensor(const IntArray &n, DblMat &J)
 DblMat 
 TBSpline::bendingEnergy(int size, int order)
 {
-  unsigned int i,j,k,l;
+  int i,j,k,l;
   int interval, offset, region;
   const int spline = 4;  // ie  splines are cubic
 
@@ -506,7 +506,7 @@ TBSpline::bendingEnergy(int size, int order)
 	  {
 	    C[k] = 0;
 	    for(l = 0; l < MIN(k+1,sizeC-k); l++)
-	      C[k] += B[i][(unsigned int)MAX(0,k-spline+1)+l]
+	      C[k] += B[i][MAX(0,k-spline+1)+l]
 		*B[j][spline-1-l-MAX(0,spline-1-k)];
 	  }
 	// evalute integral on [0,1]
