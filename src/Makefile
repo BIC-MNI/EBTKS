@@ -18,7 +18,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = ..
 
-prefix = /tmp/INSECT
+prefix = /home/jason/bicdist/bindist
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/EBTKS
 pkgincludedir = $(includedir)/EBTKS
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run aclocal
-AUTOCONF = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run automake
-AUTOHEADER = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run autoheader
+ACLOCAL = ${SHELL} /home/jason/bicdist/libraries/EBTKS/missing --run aclocal
+AUTOCONF = ${SHELL} /home/jason/bicdist/libraries/EBTKS/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/jason/bicdist/libraries/EBTKS/missing --run automake
+AUTOHEADER = ${SHELL} /home/jason/bicdist/libraries/EBTKS/missing --run autoheader
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -57,7 +57,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run tar
+AMTAR = ${SHELL} /home/jason/bicdist/libraries/EBTKS/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc3
@@ -83,7 +83,7 @@ X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 am__include = include
 am__quote = 
-install_sh = /home/jason/src/libraries/EBTKS/install-sh
+install_sh = /home/jason/bicdist/libraries/EBTKS/install-sh
 
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/templates
 
@@ -121,8 +121,8 @@ libAZgen_s_la_OBJECTS = $(am_libAZgen_s_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
-CPPFLAGS = -I/tmp/INSECT/include -I/home/jason/include -I/usr/local/mni/include -I/usr/local/lib/qt-2.3.2/include
-LDFLAGS = -L/tmp/INSECT/lib -L/home/jason/lib -L/usr/local/mni/lib -L/usr/local/lib/qt-2.3.2/lib
+CPPFLAGS = -I/home/jason/bicdist/bindist/include
+LDFLAGS = -L/home/jason/bicdist/bindist/lib
 LIBS = -lvolume_io -lminc -lnetcdf -lm 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 DEP_FILES = $(DEPDIR)/FileIO.Plo $(DEPDIR)/Histogram.Plo \
