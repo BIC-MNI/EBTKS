@@ -12,11 +12,13 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MatrixSupport.cc,v $
-$Revision: 1.3 $
-$Author: jason $
-$Date: 2004-01-19 15:38:15 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2004-01-29 19:42:19 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#include "config.h"
+
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif 
