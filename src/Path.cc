@@ -12,16 +12,17 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Path.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:45 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:42:39 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "Path.h"
 #include <assert.h>
 #include <dirent.h>
-#include <fstream.h>
+#include <fstream>		// (bert) changed from fstream.h
+using namespace std;		// (bert) added
 #include <pwd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -112,7 +113,7 @@ Path::expanded() const
       }
       MString pwd(pwdPtr);
 
-      if ((*this)(0, 2) == "..") {               // Expand .. to full path
+      if ((*this)(0, 2) == MString("..")) { // Expand .. to full path (bert)
 	int slashIndex = pwd.indexOf('/', -1);
 	if (slashIndex >= 0)
 	  newPath = pwd(0, slashIndex) + (*this)(2);
