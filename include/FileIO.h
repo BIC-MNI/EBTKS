@@ -12,17 +12,18 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: FileIO.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 18:02:06 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef FILE_IO_H
 #define FILE_IO_H
 
 #include <stdio.h>
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+#include <fstream>		/* (bert) changed from fstream.h */
+using namespace std;
 #include "Path.h"
 //#include "popen.h"
 
@@ -102,5 +103,7 @@ void     closeFile();
 MATFile *openMatlabFile(const Path&, const char *);
 void     closeMatlabFile(MATFile *);
 #endif
+
+extern int get_temp_filename(char *);
 
 #endif
