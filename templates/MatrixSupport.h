@@ -12,19 +12,19 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MatrixSupport.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 16:57:04 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_SUPPORT_H
 #define _MATRIX_SUPPORT_H
 
 #ifdef USE_COMPMAT
-  #include <dcomplex.h>
+  #include "dcomplex.h"
 #endif
 #ifdef USE_FCOMPMAT
-  #include <fcomplex.h>
+  #include "fcomplex.h"
 #endif
 
 typedef void (*FFTFUNC)(int n, double *real, double *imag);
@@ -207,13 +207,36 @@ void fft_basic(dcomplex *cbuffer,double *sintab, int buflog, int direct);
 void fft_basic_float(fcomplex *cbuffer,float *sintab, int buflog, int direct);
 #endif
 
-template <class Type> 
-void allocateArray(unsigned n, Type *&array);
 template <class Type>
-void freeArray(Type *&array);
+void allocateArray(unsigned n, Type *&array) 
+{
+  if (!n) {
+    array = 0;
+    return;
+  }
+
+  array = new Type[n];
+  if (!array)
+    return;
+
+  Type *elPtr = array;
+  for (unsigned i = n; i; i--)
+    *elPtr++ = Type(0);
+}
+
+template <class Type>
+void freeArray(Type *&array)
+{
+  if (array) {
+    delete [] array;
+    array = 0;
+  }
+}
+
 
 void inferDimensions(unsigned long nElements, unsigned& nrows, unsigned& ncols);
 void inferDimensions(unsigned long nElements, unsigned& nslis, unsigned& nrows, 
 		     unsigned& ncols);
-#endif
 
+
+#endif // _MATRIX_SUPPORT_H

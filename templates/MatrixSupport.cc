@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MatrixSupport.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 16:57:04 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <malloc.h>
 #include <math.h>
 #include <stdio.h>
-#include <iostream.h>
+#include <iostream>		// (bert) changed from iostream.h
+using namespace std;		// (bert) added
 #include "dcomplex.h"
 #include "MatrixSupport.h"
 
@@ -550,33 +551,6 @@ void fft_basic_float(fcomplex *cbuffer,float *sintab, int buflog, int direct)
 #endif
 // End of C code
 
-template <class Type>
-void
-allocateArray(unsigned n, Type *&array) 
-{
-  if (!n) {
-    array = 0;
-    return;
-  }
-
-  array = new Type[n];
-  if (!array)
-    return;
-
-  Type *elPtr = array;
-  for (unsigned i = n; i; i--)
-    *elPtr++ = Type(0);
-}
-
-template <class Type>
-void
-freeArray(Type *&array)
-{
-  if (array) {
-    delete [] array;
-    array = 0;
-  }
-}
 
 void 
 inferDimensions(unsigned long nElements, unsigned& nrows, unsigned& ncols)
@@ -631,20 +605,4 @@ inferDimensions(unsigned long nElements, unsigned& nslis, unsigned& nrows,
     inferDimensions(nElements/nslis, nrows, ncols);
   }
 }
-
-
-
-#ifdef __GNUC__
-#define _INSTANTIATE_MATRIXSUPPORT(Type) \
-       template void freeArray(Type *&);   \
-       template void allocateArray(unsigned, Type *&);
-
-_INSTANTIATE_MATRIXSUPPORT(int);
-_INSTANTIATE_MATRIXSUPPORT(unsigned int);
-_INSTANTIATE_MATRIXSUPPORT(float);
-_INSTANTIATE_MATRIXSUPPORT(double);
-_INSTANTIATE_MATRIXSUPPORT(dcomplex);
-#endif
-
-
 
