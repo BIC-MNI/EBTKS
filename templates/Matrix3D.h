@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix3D.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 15:09:37 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX3D_H
@@ -473,153 +473,338 @@ private:
   Mat3D& _fft(unsigned nslis, unsigned nrows, unsigned ncols, FFTFUNC fftFunc);
 
 // Kept up to here for now
+};
+
 ///////////////////////////////////////////////////////////////////////////
-//   Friends
+//  Various non-member template functions
 ///////////////////////////////////////////////////////////////////////////
 
-  friend void clear(Mat3D<Type> A) { A.clear(); }
+template <class Type>
+void clear(Mat3D<Type> A) { A.clear(); }
   
-  friend Mat3D<Type>& operator += (double addend, Mat3D<Type>& A) { 
-    return A += addend; }
-  friend Mat3D<Type>  operator +  (double addend, const Mat3D<Type>& A) { 
-    return A + addend; }
-  friend Mat3D<Type>& operator -= (double subend, Mat3D<Type>& A) { 
-    return A -= subend; }
-  friend Mat3D<Type>  operator -  (double subend, const Mat3D<Type>& A) { 
-    return A - subend; }
-  friend Mat3D<Type>& operator *= (double factor, Mat3D<Type>& A) { 
-    return A *= factor; }
-  friend Mat3D<Type>  operator *  (double factor, const Mat3D<Type>& A) { 
-    return A * factor; }
-  friend Mat3D<Type>& operator /= (double factor, Mat3D<Type>& A) { 
-    return A /= factor; }
-  friend Mat3D<Type>  operator /  (double factor, const Mat3D<Type>& A) { 
-    return A / factor; }
+template <class Type>
+Mat3D<Type>& operator += (double addend, Mat3D<Type>& A)
+{ 
+  return A += addend;
+}
+
+template <class Type>
+Mat3D<Type>  operator +  (double addend, const Mat3D<Type>& A)
+{ 
+  return A + addend;
+}
+
+template <class Type>
+Mat3D<Type>& operator -= (double subend, Mat3D<Type>& A)
+{ 
+  return A -= subend;
+}
+
+template <class Type>
+Mat3D<Type>  operator -  (double subend, const Mat3D<Type>& A)
+{ 
+  return A - subend;
+}
+
+template <class Type>
+Mat3D<Type>& operator *= (double factor, Mat3D<Type>& A)
+{ 
+  return A *= factor;
+}
+template <class Type>
+Mat3D<Type>  operator *  (double factor, const Mat3D<Type>& A)
+{ 
+  return A * factor;
+}
+
+template <class Type>
+Mat3D<Type>& operator /= (double factor, Mat3D<Type>& A)
+{ 
+  return A /= factor;
+}
+
+template <class Type>
+Mat3D<Type>  operator /  (double factor, const Mat3D<Type>& A) 
+{ 
+  return A / factor;
+}
   
-  friend int    isvector(const Mat3D<Type>& A)             { return A.isvector(); }
-  friend int    iscolumnvector(const Mat3D<Type>& A)       { return A.iscolumnvector(); }
-  friend int    isrowvector(const Mat3D<Type>& A)          { return A.isrowvector(); }
-  friend int    isslicevector(const Mat3D<Type>& A)          { return A.isslicevector(); }
-  friend unsigned   getrows(const Mat3D<Type>& A)     { return A.getrows(); }
-  friend unsigned   getcols(const Mat3D<Type>& A)     { return A.getcols(); }
-  friend unsigned   getslis(const Mat3D<Type>& A)     { return A.getslis(); }
-  friend unsigned   nElements(const Mat3D<Type>& A)   { return A.nElements(); }
-  friend unsigned    length(const Mat3D<Type>& A) { return A.length(); }
-  friend Type min(const Mat3D<Type>& A, unsigned *sli = 0, unsigned *row=0, 
-		  unsigned *col=0)  { 
-    return A.min(sli, row, col); }
-  friend Type max(const Mat3D<Type>& A, unsigned *sli=0, unsigned *row=0, 
-		  unsigned *col=0) {
-    return A.max(sli, row, col); }
+template <class Type>
+int isvector(const Mat3D<Type>& A) { return A.isvector(); }
 
-  friend Type      median(const Mat3D<Type>& A, Type minVal = 0, Type maxVal = 0) { 
-    return A.median(minVal, maxVal); }
-  friend double    sum(const Mat3D<Type>& A)           { return A.sum(); }
-  friend complex   csum(const Mat3D<Type>& A)          { return A.csum(); }
-  friend double    sum2(const Mat3D<Type>& A)          { return A.sum2(); }
-  friend complex   csum2(const Mat3D<Type>& A)         { return A.csum2(); }
-  friend double    mean(const Mat3D<Type>& A)          { return A.mean(); }
-  friend complex   cmean(const Mat3D<Type>& A)         { return A.cmean(); }
-  friend double    trace(const Mat3D<Type>& A)         { return A.trace(); }
-  friend complex   ctrace(const Mat3D<Type>& A)        { return A.ctrace(); }
-  friend double    norm(const Mat3D<Type>& A)          { return A.norm(); }
-  friend complex   cnorm(const Mat3D<Type>& A)         { return A.cnorm(); }
-  friend double    det(const Mat3D<Type>& A)           { return A.det(); }
-  friend complex   cdet(const Mat3D<Type>& A)          { return A.cdet(); }
+template <class Type>
+int iscolumnvector(const Mat3D<Type>& A) { return A.iscolumnvector(); }
 
-  friend Mat3D<Type> applyElementWise(const Mat3D<Type>& A, double (*function)(double)) {
-    return A.applyElementWise(function); }
-  friend Mat3D<Type> applyElementWiseC2C(const Mat3D<Type>& A, 
-					 complex (*function)(complex)){
-    return A.applyElementWiseC2C(function); }
+template <class Type>
+int isrowvector(const Mat3D<Type>& A) { return A.isrowvector(); }
+
+template <class Type>
+int isslicevector(const Mat3D<Type>& A) { return A.isslicevector(); }
+
+template <class Type>
+unsigned getrows(const Mat3D<Type>& A) { return A.getrows(); }
+
+template <class Type>
+unsigned getcols(const Mat3D<Type>& A) { return A.getcols(); }
+
+template <class Type>
+unsigned getslis(const Mat3D<Type>& A) { return A.getslis(); }
+
+template <class Type>
+unsigned nElements(const Mat3D<Type>& A) { return A.nElements(); }
+
+template <class Type>
+unsigned length(const Mat3D<Type>& A) { return A.length(); }
+
+template <class Type>
+Type min(const Mat3D<Type>& A, unsigned *sli = 0, unsigned *row = 0, 
+	 unsigned *col = 0)
+{ 
+  return A.min(sli, row, col);
+}
+
+template <class Type>
+Type max(const Mat3D<Type>& A, unsigned *sli = 0, unsigned *row = 0, 
+	 unsigned *col = 0)
+{
+  return A.max(sli, row, col);
+}
+
+template <class Type>
+Type median(const Mat3D<Type>& A, Type minVal = 0, Type maxVal = 0) 
+{ 
+  return A.median(minVal, maxVal);
+}
+
+template <class Type>
+double sum(const Mat3D<Type>& A)           { return A.sum(); }
+
+template <class Type>
+complex csum(const Mat3D<Type>& A)          { return A.csum(); }
+
+template <class Type>
+double sum2(const Mat3D<Type>& A)          { return A.sum2(); }
+
+template <class Type>
+complex csum2(const Mat3D<Type>& A)  { return A.csum2(); }
+
+template <class Type>
+double mean(const Mat3D<Type>& A)    { return A.mean(); }
+
+template <class Type>
+complex cmean(const Mat3D<Type>& A)  { return A.cmean(); }
+
+template <class Type>
+double trace(const Mat3D<Type>& A)   { return A.trace(); }
+
+template <class Type>
+complex ctrace(const Mat3D<Type>& A) { return A.ctrace(); }
+
+template <class Type>
+double norm(const Mat3D<Type>& A)    { return A.norm(); }
+
+template <class Type>
+complex cnorm(const Mat3D<Type>& A)  { return A.cnorm(); }
+
+template <class Type>
+double det(const Mat3D<Type>& A)     { return A.det(); }
+
+template <class Type>
+complex cdet(const Mat3D<Type>& A)   { return A.cdet(); }
+
+template <class Type>
+Mat3D<Type> applyElementWise(const Mat3D<Type>& A, double (*function)(double))
+{
+  return A.applyElementWise(function);
+}
+
+template <class Type>
+Mat3D<Type> applyElementWiseC2C(const Mat3D<Type>& A, 
+				complex (*function)(complex))
+{
+  return A.applyElementWiseC2C(function);
+}
 
 #ifdef USE_COMPMAT
 #ifdef USE_DBLMAT
-  friend Mat3D<double> applyElementWiseC2D(const Mat3D<complex>& A,
-					 double (*function)(const complex&));
-  friend Mat3D<double> arg(const Mat3D<complex>& A);
-  friend Mat3D<double> real(const Mat3D<complex>& A);
-  friend Mat3D<double> imag(const Mat3D<complex>& A);
-#endif
-#endif
+template <class Type>
+Mat3D<double> applyElementWiseC2D(const Mat3D<complex>& A,
+				  double (*function)(const complex&));
+
+template <class Type>
+Mat3D<double> arg(const Mat3D<complex>& A);
+
+template <class Type>
+Mat3D<double> real(const Mat3D<complex>& A);
+
+template <class Type>
+Mat3D<double> imag(const Mat3D<complex>& A);
+#endif // USE_DBLMAT
+#endif // USE_COMPMAT
+
 #ifdef USE_FCOMPMAT
 #ifdef USE_FLMAT
-  friend Mat3D<float> applyElementWiseC2D(const Mat3D<fcomplex>& A,
-					double (*function)(const complex&));
-  friend Mat3D<float> arg(const Mat3D<fcomplex>& A);
-  friend Mat3D<float> real(const Mat3D<fcomplex>& A);
-  friend Mat3D<float> imag(const Mat3D<fcomplex>& A);
-#endif
-#endif
+template <class Type>
+Mat3D<float> applyElementWiseC2D(const Mat3D<fcomplex>& A,
+				 double (*function)(const complex&));
 
-  friend Mat3D<Type> exp(const Mat3D<Type>& A)            { return A.exp(); }
-  friend Mat3D<Type> cos(const Mat3D<Type>& A)            { return A.cos(); }
-  friend Mat3D<Type> sin(const Mat3D<Type>& A)            { return A.sin(); }
-  friend Mat3D<Type> abs(const Mat3D<Type>& A)            { return A.abs();}
-  friend Mat3D<Type> round(const Mat3D<Type>& A)          { return A.round();}
+template <class Type>
+Mat3D<float> arg(const Mat3D<fcomplex>& A);
+
+template <class Type>
+Mat3D<float> real(const Mat3D<fcomplex>& A);
+
+template <class Type>
+Mat3D<float> imag(const Mat3D<fcomplex>& A);
+
+#endif // USE_FLMAT
+#endif // USE_FCOMPMAT
+
+template <class Type>
+Mat3D<Type> exp(const Mat3D<Type>& A) { return A.exp(); }
+
+template <class Type>
+Mat3D<Type> cos(const Mat3D<Type>& A) { return A.cos(); }
+
+template <class Type>
+Mat3D<Type> sin(const Mat3D<Type>& A) { return A.sin(); }
+
+template <class Type>
+Mat3D<Type> abs(const Mat3D<Type>& A) { return A.abs();}
+
+template <class Type>
+Mat3D<Type> round(const Mat3D<Type>& A) { return A.round();}
   
-  friend Mat3D<Type>& pad(Mat3D<Type>& A, unsigned slicepad, unsigned rowpad, 
-			 unsigned colpad, Type value = 0){
-    return A.pad(slicepad, rowpad, colpad, value); }
-  friend Mat3D<Type> pad(const Mat3D<Type>& A, unsigned slicepad, unsigned rowpad, 
-			 unsigned colpad, Type value = 0){
-    return A.padConst(slicepad, rowpad, colpad, value); }
-  friend Mat3D<Type> padConst(const Mat3D<Type>& A, unsigned slicepad, unsigned rowpad, 
-			      unsigned colpad, Type value = 0){
-    return A.padConst(slicepad, rowpad, colpad, value); }
+template <class Type>
+Mat3D<Type>& pad(Mat3D<Type>& A, unsigned slicepad, unsigned rowpad, 
+		 unsigned colpad, Type value = 0)
+{
+  return A.pad(slicepad, rowpad, colpad, value);
+}
+
+template <class Type>
+Mat3D<Type> pad(const Mat3D<Type>& A, unsigned slicepad, unsigned rowpad, 
+		unsigned colpad, Type value = 0)
+{
+  return A.padConst(slicepad, rowpad, colpad, value);
+}
+
+template <class Type>
+Mat3D<Type> padConst(const Mat3D<Type>& A, unsigned slicepad, unsigned rowpad, 
+		     unsigned colpad, Type value = 0)
+{
+  return A.padConst(slicepad, rowpad, colpad, value);
+}
   
-  friend Mat3D<Type>  rotate180(const Mat3D<Type>& A)                 { return A.rotate180(); }
+template <class Type>
+Mat3D<Type> rotate180(const Mat3D<Type>& A) { return A.rotate180(); }
+
 #ifdef HAVE_DBLMAT
-  friend Mat3D<Type> erode(const Mat3D<Type>& A, const Mat3D<double>& strel) {
-    return A.erode(strel); }
-  friend Mat3D<Type> dilate(const Mat3D<Type>& A, const Mat3D<double>& strel) {
-    return A.dilate(strel); }
-  friend Mat3D<Type> open(const Mat3D<Type>& A, const Mat3D<double>& strel) {
-    return A.open(strel); }
-  friend Mat3D<Type> close(const Mat3D<Type>& A, const Mat3D<double>& strel) {
-    return A.close(strel); }
-#endif
+template <class Type>
+Mat3D<Type> erode(const Mat3D<Type>& A, const Mat3D<double>& strel)
+{
+  return A.erode(strel);
+}
 
-  friend Histogram histogram(const Mat3D<Type>& A, double minin = 0, double maxin = 0,
-			     unsigned n = 0) {
-    return A.histogram(minin, maxin, n); }
+template <class Type>
+Mat3D<Type> dilate(const Mat3D<Type>& A, const Mat3D<double>& strel)
+{
+  return A.dilate(strel);
+}
+
+template <class Type>
+Mat3D<Type> open(const Mat3D<Type>& A, const Mat3D<double>& strel)
+{
+  return A.open(strel);
+}
+
+template <class Type>
+Mat3D<Type> close(const Mat3D<Type>& A, const Mat3D<double>& strel)
+{
+  return A.close(strel);
+}
+#endif // HAVE_DBLMAT
+
+template <class Type>
+Histogram histogram(const Mat3D<Type>& A, double minin = 0, double maxin = 0,
+		    unsigned n = 0)
+{
+  return A.histogram(minin, maxin, n);
+}
   
-  friend Mat3D<Type> clip(const Mat3D<Type>& A, Type minVal, Type maxVal, Type minFill,
-			  Type maxFill) { 
-    return A.clipConst(minVal, maxVal, minFill, maxFill); }
-  friend Mat3D<Type> map(const Mat3D<Type>& A, const ValueMap& valueMap) { 
-    return A.mapConst(valueMap); }
-  friend Mat3D<Type> scale(const Mat3D<Type>& A, double minout=0.0, double maxout=255.0,
-			   double minin = 0.0, double maxin=0.0) { 
-    return A.scaleConst(minout, maxout, minin, maxin); }
+template <class Type>
+Mat3D<Type> clip(const Mat3D<Type>& A, Type minVal, Type maxVal, Type minFill,
+		 Type maxFill)
+{ 
+  return A.clipConst(minVal, maxVal, minFill, maxFill);
+}
+
+template <class Type>
+Mat3D<Type> map(const Mat3D<Type>& A, const ValueMap& valueMap)
+{ 
+  return A.mapConst(valueMap);
+}
+
+template <class Type>
+Mat3D<Type> scale(const Mat3D<Type>& A, double minout = 0.0, 
+		  double maxout = 255.0, double minin = 0.0, 
+		  double maxin = 0.0)
+{ 
+  return A.scaleConst(minout, maxout, minin, maxin);
+}
   
-  friend void   loadRaw(Mat3D<Type>& A, char *filename, unsigned nslis = 0, 
-			unsigned nrows = 0, unsigned ncols = 0) { 
-    A.loadRaw(filename, nslis, nrows, ncols); }
-  friend void loadAscii(Mat3D<Type>& A, char *filename) { A.loadAscii(filename); }
+template <class Type>
+void loadRaw(Mat3D<Type>& A, char *filename, unsigned nslis = 0, 
+	       unsigned nrows = 0, unsigned ncols = 0) 
+{ 
+  A.loadRaw(filename, nslis, nrows, ncols);
+}
+
+template <class Type>
+void loadAscii(Mat3D<Type>& A, char *filename) { A.loadAscii(filename); }
   
-  friend void   saveRaw(const Mat3D<Type>& A, const char *filename) { 
-    A.saveRaw(filename); }
-  friend void   saveAscii(const Mat3D<Type>& A, const char *filename) { 
-    A.saveAscii(filename); }
+template <class Type>
+void saveRaw(const Mat3D<Type>& A, const char *filename)
+{ 
+  A.saveRaw(filename);
+}
+
+template <class Type>
+void saveAscii(const Mat3D<Type>& A, const char *filename)
+{ 
+  A.saveAscii(filename);
+}
 
 #ifdef USE_COMPMAT
-  friend Mat3D<complex> fft(const Mat3D<Type>& A, unsigned nslis = 0,
-			    unsigned nrows = 0, unsigned ncols=0) {
-    return asCompMat(A).fft(nslis, nrows, ncols); }
-  friend Mat3D<complex> ifft(const Mat3D<Type>& A, unsigned nslis = 0,
-			     unsigned nrows = 0, unsigned ncols = 0) {
+template <class Type>
+Mat3D<complex> fft(const Mat3D<Type>& A, unsigned nslis = 0,
+		   unsigned nrows = 0, unsigned ncols = 0)
+{
+  return asCompMat(A).fft(nslis, nrows, ncols);
+}
+
+template <class Type>
+Mat3D<complex> ifft(const Mat3D<Type>& A, unsigned nslis = 0,
+		    unsigned nrows = 0, unsigned ncols = 0)
+{
     return asCompMat(A).ifft(nslis, nrows, ncols); }
-#endif
+#endif // USE_COMPMAT
+
 #ifdef USE_FCOMPMAT
-  friend Mat3D<fcomplex> ffft(const Mat3D<Type>& A, unsigned nslis = 0,
-			      unsigned nrows = 0, unsigned ncols = 0) {
-    return asFcompMat(A).fft(nslis, nrows, ncols); }
-  friend Mat3D<fcomplex> fifft(const Mat3D<Type>& A, unsigned nslis = 0,
-			       unsigned nrows = 0, unsigned ncols = 0) {
-    return asFcompMat(A).ifft(nslis, nrows, ncols); }
-#endif
-};
+template <class Type>
+Mat3D<fcomplex> ffft(const Mat3D<Type>& A, unsigned nslis = 0,
+		     unsigned nrows = 0, unsigned ncols = 0)
+{
+  return asFcompMat(A).fft(nslis, nrows, ncols);
+}
+
+template <class Type>
+Mat3D<fcomplex> fifft(const Mat3D<Type>& A, unsigned nslis = 0,
+		      unsigned nrows = 0, unsigned ncols = 0)
+{
+  return asFcompMat(A).ifft(nslis, nrows, ncols);
+}
+#endif // USE_FCOMPMAT
 
 template <class Type> ostream& operator << (ostream&, const Mat3D<Type>&);
 

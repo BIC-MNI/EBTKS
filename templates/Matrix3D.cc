@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix3D.cc,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 15:09:37 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "Matrix3D.h"
@@ -1814,10 +1814,11 @@ Mat3D<Type>::pad(unsigned nslis, unsigned nrows, unsigned ncols,
       !slice && !row && !col)
     return *this;
 
-  char *tempFile = tempnam(NULL, "Mat");
+  char tempFile[256];
+  get_temp_filename(tempFile);
 
   // Save the current matrix to disk
-  if (flushToDisk && tempFile && saveRaw(tempFile)) {
+  if (flushToDisk && saveRaw(tempFile)) {
     unsigned argSlis = _slis;
     unsigned argRows = _rows;
     unsigned argCols = _cols;
@@ -1841,10 +1842,7 @@ Mat3D<Type>::pad(unsigned nslis, unsigned nrows, unsigned ncols,
     this->absorb(result);
   }
 
-  if (flushToDisk && tempFile) {
-    unlink(tempFile);
-    free(tempFile);
-  }
+  unlink(tempFile);
 
   return *this;
 }
