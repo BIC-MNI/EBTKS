@@ -1,3 +1,10 @@
+2004-01-29  Bert Vincent   <bert@bic.mni.mcgill.ca>
+	* Include config.h in templates/MatrixSupport.cc so that the
+	HAVE_MALLOC_H is defined!
+
+	* Use explicit "C" linkage for isfinite()/finite() in SimpleArray.cc
+	and SimpleArraySpec.cc
+	
 2004-01-19  Jason Lerch	   <jason@bic.mni.mcgill.ca>
 
 	* added checks for values.h and malloc.h and changed the includes
