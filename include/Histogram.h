@@ -12,7 +12,7 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Histogram.h,v $
-$Revision: 1.1 $
+$Revision: 1.1.1.1 $
 $Author: jason $
 $Date: 2001-11-09 16:37:25 $
 $State: Exp $

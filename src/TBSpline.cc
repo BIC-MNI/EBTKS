@@ -12,7 +12,7 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.1 $
+$Revision: 1.1.1.1 $
 $Author: jason $
 $Date: 2001-11-09 16:37:25 $
 $State: Exp $
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.1 2001-11-09 16:37:25 jason Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.1.1.1 2001-11-09 16:37:25 jason Exp $";
 #endif
 
 #include "TBSpline.h"
