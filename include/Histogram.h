@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Histogram.h,v $
-$Revision: 1.3 $
-$Author: stever $
-$Date: 2003-11-17 04:07:51 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2004-12-08 16:42:55 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef HISTOGRAM_H
@@ -108,6 +108,19 @@ inline DblArray cdf(const Histogram& hist) { return hist.cdf(); }
 inline LUT<double> equalize(const Histogram& hist1, const Histogram& hist2)
 {
   return hist1.equalize(hist2);
+}
+
+template <class Type>
+Histogram &
+add(Histogram & hist, const SimpleArray <Type> & array)
+{
+  if (array.size()) {
+    array.resetIterator();
+    for (unsigned i = array.size(); i; i--)
+      hist.add(array++);
+  }
+
+  return hist;
 }
 
 #endif
