@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.6 $
-$Author: stever $
-$Date: 2003-11-21 20:38:44 $
+$Revision: 1.7 $
+$Author: bert $
+$Date: 2004-02-12 20:17:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -438,11 +438,11 @@ CachedArray<Type>::newSize(unsigned size)
   // Create file at requested size
   _self->_s.seekg(_maxNblocks*_blockSize*sizeof(Type));
   _self->_s.put('\0');
-  //assert(_s.is_open());
+  assert(_s.is_open());
   
   CacheBlock<Type> *block = _head;
   for (unsigned i = 0; block; i++, block = block->_next) {
-    //assert(block->read(_self->_s, i));
+    assert(block->read(_self->_s, i));
     if (_debug)
       cout << "<read block " << i << " at " << long(block) << ">" << flush;
   }
@@ -818,7 +818,7 @@ CachedArray<Type>::_read(unsigned block) const
 
   _blocks[readBlock->_ID] = 0;
     
-  //assert(readBlock->read(_self->_s, block));
+  assert(readBlock->read(_self->_s, block));
 
   _blocks[block] = readBlock;
 
