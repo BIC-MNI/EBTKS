@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.6 $
+$Revision: 1.7 $
 $Author: vsingh $
-$Date: 2004-04-04 19:48:42 $
+$Date: 2004-04-04 19:54:18 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.6 2004-04-04 19:48:42 vsingh Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.7 2004-04-04 19:54:18 vsingh Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -467,7 +467,7 @@ TBSpline::bendingEnergyTensor(const IntArray &n, DblMat &J)
 DblMat 
 TBSpline::bendingEnergy(int size, int order)
 {
-  int i,j,k,l;  // (vivek) changed all from signed to unsigned
+  int i,j,k,l;  // (vivek) changed all from unsigned to signed
   int interval, offset, region;
   const int spline = 4;  // ie  splines are cubic
 
