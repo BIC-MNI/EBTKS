@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:47 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 16:59:37 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SIMPLE_ARRAY_H
@@ -233,36 +233,6 @@ public:
   SimpleArray applyElementWise(Type (*function) (Type)) const;
   SimpleArray map(const ValueMap& map) const;
 
-friend unsigned size(const SimpleArray<Type>& array)   { return array.size(); }
-friend Type     min(const SimpleArray<Type>& array)    { return array.min(); }
-friend Type     max(const SimpleArray<Type>& array)    { return array.max(); }
-friend Type     range(const SimpleArray<Type>& array, 
-		      unsigned *minIndex = 0, unsigned *maxIndex = 0)  { 
-  return array.range(minIndex, maxIndex); }
-friend double   sum(const SimpleArray<Type>& array)    { return array.sum(); }
-friend double   sum2(const SimpleArray<Type>& array)   { return array.sum2(); }
-friend double   mean(const SimpleArray<Type>& array)   { return array.mean(); }
-friend double   prod(const SimpleArray<Type>& array)   { return array.prod(); }
-friend double   prod2(const SimpleArray<Type>& array){ return array.prod2(); }
-friend double   var(const SimpleArray<Type>& array)    { return array.var(); }
-friend double   stdev(const SimpleArray<Type>& array)    { return array.std(); }
-friend Type     median(const SimpleArray<Type>& array) { return array.median(); }
-friend Type     medianVolatile(SimpleArray<Type>& array){ return array.medianVolatile();}
-friend Type     mode(const SimpleArray<Type>& array, Type binWidth) {
-  return array.mode(binWidth); }
-friend SimpleArray<Type> max(const SimpleArray<Type>& array1, 
-			     const SimpleArray<Type>& array2);
-friend SimpleArray<Type> max(const SimpleArray<Type>& array1, 
-			     const SimpleArray<Type>& array2);
-friend SimpleArray<Type> abs(const SimpleArray<Type>& array)   { return array.abs(); }
-friend SimpleArray<Type> round(const SimpleArray<Type>& array, unsigned n = 0) { 
-  return array.round(n); }
-friend SimpleArray<Type> sqr(const SimpleArray<Type>& array) { return array.sqr(); }
-friend SimpleArray<Type> sqrt(const SimpleArray<Type>& array) { return array.sqrt(); }
-friend SimpleArray<Type> ln(const SimpleArray<Type>& array)  { return array.ln(); }
-friend SimpleArray<Type> log(const SimpleArray<Type>& array) { return array.log(); }
-friend void prune(SimpleArray<Type>& array) { array.prune(); }
-
 protected:
   // Median support functions
   Type _randomizedSelect(int p, int r, int i);
@@ -270,15 +240,94 @@ protected:
   int  _partition(int p, int r);
 };
 
-// Various non-member functions
+// Various non-member template functions
+//
 template <class Type>
-SimpleArray<double> cumSum(const SimpleArray<Type>& array) { return array.cumSum(); }
+unsigned size(const SimpleArray<Type>& array) { return array.size(); }
+
+template <class Type> 
+Type min(const SimpleArray<Type>& array) { return array.min(); }
 
 template <class Type>
-SimpleArray<double> cumProd(const SimpleArray<Type>& array) { return array.cumProd(); }
+Type max(const SimpleArray<Type>& array) { return array.max(); }
 
 template <class Type>
-SimpleArray<Type> exp(const SimpleArray<Type>& array) {return ::exp(1.0)^array;}
+Type range(const SimpleArray<Type>& array, unsigned *minIndex = 0, 
+	   unsigned *maxIndex = 0)
+{ 
+  return array.range(minIndex, maxIndex);
+}
+
+template <class Type>
+double sum(const SimpleArray<Type>& array) { return array.sum(); }
+
+template <class Type>
+double sum2(const SimpleArray<Type>& array) { return array.sum2(); }
+
+template <class Type>
+double mean(const SimpleArray<Type>& array) { return array.mean(); }
+
+template <class Type>
+double prod(const SimpleArray<Type>& array) { return array.prod(); }
+
+template <class Type>
+double prod2(const SimpleArray<Type>& array) { return array.prod2(); }
+
+template <class Type>
+double var(const SimpleArray<Type>& array) { return array.var(); }
+
+template <class Type>
+double stdev(const SimpleArray<Type>& array) { return array.std(); }
+
+template <class Type>
+Type median(const SimpleArray<Type>& array) { return array.median(); }
+
+template <class Type>
+Type medianVolatile(SimpleArray<Type>& array) { return array.medianVolatile(); }
+
+template <class Type>
+Type mode(const SimpleArray<Type>& array, Type binWidth) { return array.mode(binWidth); }
+
+template <class Type>
+SimpleArray<Type> abs(const SimpleArray<Type>& array) { return array.abs(); }
+
+template <class Type>
+SimpleArray<Type> sqr(const SimpleArray<Type>& array) { return array.sqr(); }
+
+template <class Type>
+SimpleArray<Type> sqrt(const SimpleArray<Type>& array) { return array.sqrt(); }
+
+template <class Type>
+SimpleArray<Type> ln(const SimpleArray<Type>& array) { return array.ln(); }
+
+template <class Type>
+SimpleArray<Type> log(const SimpleArray<Type>& array) { return array.log(); }
+
+template <class Type>
+SimpleArray<Type> max(const SimpleArray<Type>& array1, 
+		      const SimpleArray<Type>& array2);
+
+template <class Type>
+SimpleArray<Type> min(const SimpleArray<Type>& array1, 
+		      const SimpleArray<Type>& array2);
+
+template <class Type>
+SimpleArray<double> cumSum(const SimpleArray<Type>& array) 
+{ 
+  return array.cumSum();
+}
+
+template <class Type>
+SimpleArray<double> cumProd(const SimpleArray<Type>& array) 
+{ 
+  return array.cumProd();
+}
+
+template <class Type>
+SimpleArray<Type> exp(const SimpleArray<Type>& array) 
+{
+  return ::exp(1.0) ^ array;
+}
 
 template <class Type>
 SimpleArray<Type> exp10(const SimpleArray<Type>& array) { return 10^array; }
@@ -287,12 +336,58 @@ template <class Type>
 SimpleArray<Type> operator ^ (double base, const SimpleArray<Type>& array);
 
 // I/O  
-template <class Type> ostream& operator << (ostream& os, const SimpleArray<Type>& A);
-template <class Type> istream& operator >> (istream& is, SimpleArray<Type>& A);
+template <class T> ostream& operator << (ostream& os, const SimpleArray<T>& A) 
+{
+  return A.saveAscii(os); 
+}
+
+template <class T> istream& operator >> (istream& is, SimpleArray<T>& A) 
+{
+  return A.loadAscii(is); 
+}
 
 // Type conversions
-template <class Type> SimpleArray<int>    asIntArray(const SimpleArray<Type>&);
-template <class Type> SimpleArray<float>  asFloatArray(const SimpleArray<Type>&);
-template <class Type> SimpleArray<double> asDblArray(const SimpleArray<Type>&);
+template <class Type>
+SimpleArray<int> asIntArray(const SimpleArray<Type>&);
+
+template <class Type>
+SimpleArray<float> asFloatArray(const SimpleArray<Type>&);
+
+template <class Type>
+SimpleArray<double> asDblArray(const SimpleArray<Type>&);
+
+#ifdef USE_COMPMAT
+template <> 
+SimpleArray<dcomplex> SimpleArray<dcomplex>::round(unsigned n) const;
+
+template <> 
+SimpleArray<dcomplex>& SimpleArray<dcomplex>::prune();
+
+template <> 
+SimpleArray<dcomplex> operator ^ (double, const SimpleArray<dcomplex>&);
+#endif /* USE_COMPMAT */
+
+#ifdef USE_FCOMPMAT
+template <> 
+SimpleArray<fcomplex> SimpleArray<fcomplex>::round(unsigned n) const;
+
+template <> 
+SimpleArray<fcomplex>& SimpleArray<fcomplex>::prune();
+
+template <> 
+SimpleArray<fcomplex> operator ^ (double, const SimpleArray<fcomplex>&);
+#endif /* USE_FCOMPMAT */
+
+template <class Type>
+SimpleArray<Type> round(const SimpleArray<Type>& array, unsigned n = 0) 
+{ 
+  return array.round(n);
+}
+
+template <class Type>
+void prune(SimpleArray<Type>& array)
+{ 
+  array.prune();
+}
 
 #endif
