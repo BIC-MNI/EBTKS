@@ -1,3 +1,6 @@
+2004-12-08  Bert Vincent   <bert@bic.mni.mcgill.ca>
+	* Various changes for building against GCC 3.4.X
+	
 2004-04-08  Bert Vincent   <bert@bic.mni.mcgill.ca>
 	* Add CLAPACK sources to the distribution.
 	
