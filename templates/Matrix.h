@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.h,v $
-$Revision: 1.2 $
+$Revision: 1.3 $
 $Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Date: 2002-09-04 16:41:04 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_H
@@ -993,8 +993,15 @@ private:
 			     unsigned n = 0) { 
     return A.histogram(minin, maxin, n); }
   
-  friend SimpleArray<Type> array(const Mat<Type>& A, Type minVal = 0, Type maxVal=0) {
-    return A.array(minVal, maxVal); }
+  /* JPL code change: removed the default values for minVal and
+     maxVal, now simply assumes they are 0. An ugly hack, but the code
+     wasn't compiling otherwise. Change it back and solve the real
+     problem if you actually need to set the minVal and maxVal.
+  */
+
+  //  friend SimpleArray<Type> array(const Mat<Type>& A, Type minVal = 0, Type maxVal=0) {
+  friend SimpleArray<Type> array(const Mat<Type>& A) {
+    return A.array(0, 0); }
   friend Type      scalar(const Mat<Type>& A) { return A.scalar(); }
   friend void       qr(const Mat<Type>& A, Mat<Type>& R, Mat<Type>& Q) { A.qr(R, Q); }
   

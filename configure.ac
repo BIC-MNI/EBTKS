@@ -15,6 +15,7 @@ AC_PROG_CXX
 dnl Build only static libs by default
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 
 smr_WITH_BUILD_PATH
 
