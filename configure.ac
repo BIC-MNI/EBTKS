@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/FileIO.cc])
-AM_INIT_AUTOMAKE(EBTKS, 1.3)
+AM_INIT_AUTOMAKE(EBTKS, 1.4)
 AC_CONFIG_HEADERS([config.h])
 
 AC_PROG_INSTALL
