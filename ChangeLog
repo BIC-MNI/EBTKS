@@ -1,3 +1,10 @@
+2003-06-17  Steve ROBBINS  <stever@bic.mni.mcgill.ca>
+
+	* autogen.sh: Add libtoolize call.
+
+	* Makefile.am (ACLOCAL_AMFLAGS): Add "-I m4" to help
+	autoreconf.
+
 2002-09-04	Jason Lerch	<jason@bic.mni.mcgill.ca>
 	* ugly hack in Matrix.h on line 1004. See documentation in code to
 	understand just how ugly the hack really is!.

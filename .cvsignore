@@ -6,3 +6,6 @@ configure
 libtool
 stamp-h stamp-h.in
 stamp-h1
+.deps .libs
+autom4te.cache
+*.lo *.la
