@@ -1,3 +1,13 @@
+2004-02-13  Bert Vincent   <bert@bic.mni.mcgill.ca>
+	
+	* In CachedArray.cc, uncommented bits that actually
+	read/wrote/opened the cache file.  Also, fstream::open() requires
+	the "trunc" attribute to be set in order to create a new file, as
+	of GCC 3.0 and later.
+	
+	* Sadly, EBTKS now uses tempnam() so the annoying linker warning
+	is back in some versions of GCC.  I promise to fix this someday...
+	
 2004-01-29  Bert Vincent   <bert@bic.mni.mcgill.ca>
 	* Include config.h in templates/MatrixSupport.cc so that the
 	HAVE_MALLOC_H is defined!
