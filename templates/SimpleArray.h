@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.h,v $
-$Revision: 1.4 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.5 $
+$Author: bert $
+$Date: 2004-12-08 17:05:18 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SIMPLE_ARRAY_H
@@ -97,13 +97,13 @@ public:
   Boolean  containsOnly(Type value, unsigned start, unsigned end) const;
   // Total number of occurrences of object
   unsigned occurrencesOf(Type value) const {
-    return occurrencesOf(value, 0, _size - 1); }
+    return occurrencesOf(value, 0, this->_size - 1); }
   // Total number of occurrences of object present in a range
   unsigned occurrencesOf(Type, unsigned start, unsigned end) const; 
   // Index of first (dir > 0) or last (dir < 0) occurrence of value
   int    indexOf(Type, int dir, unsigned start) const;
   int    indexOf(Type value, int dir = 1) const { 
-    return indexOf(value, dir, (dir > 0) ? 0 : _size - 1); }
+    return indexOf(value, dir, (dir > 0) ? 0 : this->_size - 1); }
   int    indexOf(Type value, unsigned start) const { 
     return indexOf(value, 1, start); }
 
@@ -127,11 +127,11 @@ public:
   // Quicksort all elements
   virtual void qsort() { qsortAscending(); }
   virtual void qsort(int (*compare) (const void *, const void *)) { 
-    ::qsort(_contents, _size, sizeof(Type), compare); }
+    ::qsort(this->_contents, this->_size, sizeof(Type), compare); }
   virtual void qsortAscending() { 
-    ::qsort(_contents, _size, sizeof(Type), compareAscending); }
+    ::qsort(this->_contents, this->_size, sizeof(Type), compareAscending); }
   virtual void qsortDescending() {
-    ::qsort(_contents, _size, sizeof(Type), compareDescending); }
+    ::qsort(this->_contents, this->_size, sizeof(Type), compareDescending); }
   virtual SimpleArray<unsigned> qsortIndexAscending() const;
   virtual SimpleArray<unsigned> qsortIndexDescending() const;
 
@@ -141,7 +141,7 @@ public:
   Type   range(unsigned *minIndex = 0, unsigned *maxIndex = 0) const;
   double sum() const;
   double sum2() const;
-  double mean() const { return sum()/double(_size); }
+  double mean() const { return sum()/double(this->_size); }
   double prod() const;
   double prod2() const;
   double var() const;
@@ -187,7 +187,7 @@ public:
 
 // Arithmetic operations
   SimpleArray  operator - () const {
-    SimpleArray<Type> result(Type(0), _size); return result -= *this; }
+    SimpleArray<Type> result(Type(0), this->_size); return result -= *this; }
 
   SimpleArray& operator += (Type);         
   SimpleArray  operator +  (Type value) const { 

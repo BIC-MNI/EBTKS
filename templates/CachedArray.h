@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.h,v $
-$Revision: 1.3 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2004-12-08 17:02:34 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _CACHED_ARRAY_H
@@ -42,6 +42,7 @@ typedef CachedArray<double>        CachedDblArray;
 
 template <class Type>
 class CachedArray : public SimpleArray<Type> {
+
   static const unsigned _DEFAULT_BLOCK_SIZE;
   static const unsigned _DEFAULT_N_BLOCKS;
   static      unsigned _rangeErrorCount;
@@ -78,7 +79,7 @@ public:
   // Matlab I/O functions
 #ifdef HAVE_MATLAB
   virtual Boolean saveMatlab(const char *, const char *, const char *) const {
-    _notImplementedError(); return FALSE; }
+    this->_notImplementedError(); return FALSE; }
 #endif
 
   // Access functions
@@ -129,35 +130,35 @@ public:
 
   // Not implemented
   SimpleArray<Type> operator () (unsigned) const {
-    _notImplementedError(); return SimpleArray<Type>(0); }
+    this->_notImplementedError(); return SimpleArray<Type>(0); }
   SimpleArray<Type> operator () (unsigned, unsigned) const {
-    _notImplementedError(); return SimpleArray<Type>(0); }
+    this->_notImplementedError(); return SimpleArray<Type>(0); }
   SimpleArray<Type> operator () (const BoolArray&) const {
-    _notImplementedError(); return SimpleArray<Type>(0); }
+    this->_notImplementedError(); return SimpleArray<Type>(0); }
   SimpleArray<Type> operator () (const UnsignedArray&) const {
-    _notImplementedError(); return SimpleArray<Type>(0); }
+    this->_notImplementedError(); return SimpleArray<Type>(0); }
   SimpleArray<Type> common(const SimpleArray<Type>&) const {
-    _notImplementedError(); return SimpleArray<Type>(0); }
+    this->_notImplementedError(); return SimpleArray<Type>(0); }
 
   Type& first()                    { return getEl(0); }
-  Type& last()                     { return getEl(_size - 1); }
-  const Type    *contents() const  { _notImplementedError(); return 0; }
-  Type          *contents()        { _notImplementedError(); return 0; }
-  operator const Type *() const    { _notImplementedError(); return 0; }
-  operator       Type *()          { _notImplementedError(); return 0; }
+  Type& last()                     { return getEl(this->_size - 1); }
+  const Type    *contents() const  { this->_notImplementedError(); return 0; }
+  Type          *contents()        { this->_notImplementedError(); return 0; }
+  operator const Type *() const    { this->_notImplementedError(); return 0; }
+  operator       Type *()          { this->_notImplementedError(); return 0; }
 
   // Get functions
   double hitRate() const;
 
   // Quicksort functions; only straight ascending qsort is implemented
   void qsort() { qsortAscending(); }
-  void qsort(int (*) (const void *, const void *)) { _notImplementedError(); }
+  void qsort(int (*) (const void *, const void *)) { this->_notImplementedError(); }
   void qsortAscending();
-  void qsortDescending() { _notImplementedError(); }
+  void qsortDescending() { this->_notImplementedError(); }
   UnsignedArray qsortIndexAscending() const { 
-    _notImplementedError(); return UnsignedArray(0); }
+    this->_notImplementedError(); return UnsignedArray(0); }
   UnsignedArray qsortIndexDescending() const {
-    _notImplementedError(); return UnsignedArray(0); }
+    this->_notImplementedError(); return UnsignedArray(0); }
 
   // Median functions. The array is first reduced, using a histogram approach,
   // to a single-block array, for which the algorithm described
@@ -182,8 +183,8 @@ private:
   void              _openStream();
   void              _destroy();
   CacheBlock<Type> *_block(unsigned i) const {
-    if (i >= _size)
-      _rangeError(i);
+    if (i >= this->_size)
+      this->_rangeError(i);
     CacheBlock<Type> *block = _blocks[i / _blockSize];
     return (block) ? block : _read(i / _blockSize);
   }
@@ -227,11 +228,11 @@ public:
   CacheBlock(unsigned ID, unsigned sz);
   ~CacheBlock();
   
-  Type&       getEl(unsigned i) { _changed = TRUE; _nWrite++; return _contents[i]; }
-  const Type& getEl(unsigned i) const { _self->_nRead++; return _contents[i]; }
-  const Type& getElConst(unsigned i) const  { _self->_nRead++; return _contents[i]; }
+  Type&       getEl(unsigned i) { _changed = TRUE; _nWrite++; return this->_contents[i]; }
+  const Type& getEl(unsigned i) const { _self->_nRead++; return this->_contents[i]; }
+  const Type& getElConst(unsigned i) const  { _self->_nRead++; return this->_contents[i]; }
   void        setEl(unsigned i, Type value) { 
-    _changed = TRUE; _nWrite++; _contents[i]=value; }
+    _changed = TRUE; _nWrite++; this->_contents[i]=value; }
 
   //operator SimpleArray<Type> () const { return SimpleArray<Type>(_contents, _size); }
 

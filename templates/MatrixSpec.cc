@@ -1179,6 +1179,18 @@ arg(const Mat<dcomplex>& A)
   return T;
 }
 
+static double
+real(const dcomplex& d)
+{
+    return d.real();
+}
+
+static double
+imag(const dcomplex& d)
+{
+    return d.imag();
+}
+
 Mat<double>
 real(const Mat<dcomplex>& A)
 {
@@ -1247,13 +1259,13 @@ arg(const Mat<fcomplex>& A)
 Mat<float>
 real(const Mat<fcomplex>& A)
 {
-  return applyElementWiseC2D(A, &real);
+  return applyElementWiseC2D(A, &dcomplex::real);
 }
 
 Mat<float>
 imag(const Mat<fcomplex>& A)
 {
-  return applyElementWiseC2D(A, &imag);
+  return applyElementWiseC2D(A, &dcomplex::imag);
 }
 #endif // USE_FLMAT
 #endif // USE_FCOMPMAT

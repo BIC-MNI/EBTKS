@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.h,v $
-$Revision: 1.5 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.6 $
+$Author: bert $
+$Date: 2004-12-08 17:03:04 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_H
@@ -1312,9 +1312,9 @@ public:
 template <class Type>
 class Eye : public Mat<Type> {
 public:
-  Eye(unsigned nrows, unsigned ncols) : Mat<Type>(nrows, ncols) { eye(); }
-  Eye(Mat<Type>& A) :  Mat<Type>(A.getrows(), A.getcols()) { eye(); }
-  Eye(unsigned n) : Mat<Type>(n, n)  {eye(); }
+  Eye(unsigned nrows, unsigned ncols) : Mat<Type>(nrows, ncols) { this->eye(); }
+  Eye(Mat<Type>& A) :  Mat<Type>(A.getrows(), A.getcols()) { this->eye(); }
+  Eye(unsigned n) : Mat<Type>(n, n)  { this->eye(); }
   ~Eye() {}
 };
 
@@ -1323,11 +1323,11 @@ template <class Type>
 class Randuniform : public Mat<Type> {
 public:
   Randuniform(unsigned nrows, unsigned ncols, double min = 0, double max = 1) 
-    : Mat<Type>(nrows, ncols) { randuniform(min, max); }
+    : Mat<Type>(nrows, ncols) { this->randuniform(min, max); }
   Randuniform(const Mat<Type>& A, double min = 0, double max = 1) 
-    : Mat<Type>(A.getrows(), A.getcols()) { randuniform(min, max); }  
+    : Mat<Type>(A.getrows(), A.getcols()) { this->randuniform(min, max); }  
   Randuniform(unsigned n, double min = 0, double max = 1) : Mat<Type>(n, n) { 
-    randuniform(min, max); } 
+      this->randuniform(min, max); } 
   ~Randuniform() {}
 };
 
@@ -1336,32 +1336,32 @@ template <class Type>
 class Randnormal : public Mat<Type> {
 public:
   Randnormal(unsigned nrows, unsigned ncols, double mean = 0, double std = 1) 
-    : Mat<Type>(nrows, ncols) { randnormal(mean, std); }
+    : Mat<Type>(nrows, ncols) { this->randnormal(mean, std); }
   Randnormal(const Mat<Type>& A, double mean = 0, double std = 1) 
-    : Mat<Type>(A.getrows(), A.getcols()) { randnormal(mean, std); }  
+    : Mat<Type>(A.getrows(), A.getcols()) { this->randnormal(mean, std); }  
   Randnormal(unsigned n, double mean = 0, double std = 1)  
-    : Mat<Type>(n, n) { randnormal(mean, std); } 
+    : Mat<Type>(n, n) { this->randnormal(mean, std); } 
   ~Randnormal() {}
 };
 
 template <class Type>
 class  Hamming: public Mat<Type> {
 public:
-  Hamming(unsigned n)  : Mat<Type>(n, 1) {hamming(); } 
+  Hamming(unsigned n)  : Mat<Type>(n, 1) { this->hamming(); } 
   ~Hamming() {}
 };
 
 template <class Type>
 class  Hanning: public Mat<Type> {
 public:
-   Hanning(unsigned n)  : Mat<Type>(n, 1) {hanning(); } 
+   Hanning(unsigned n)  : Mat<Type>(n, 1) { this->hanning(); } 
   ~Hanning() {}
 };
 
 template <class Type>
 class  Blackman: public Mat<Type> {
 public:
-   Blackman(unsigned n)  : Mat<Type>(n, 1) {blackman(); } 
+   Blackman(unsigned n)  : Mat<Type>(n, 1) { this->blackman(); } 
   ~Blackman() {}
 };
 
@@ -1386,7 +1386,7 @@ public:
   // Reset to first element
   Type& first() { return reset(); }
   // Reset to last element
-  Type& last()  { return reset(_rows - 1, _cols - 1); } 
+  Type& last()  { return reset(this->_rows - 1, this->_cols - 1); } 
   // Reset to element (r, c)
   Type& reset(unsigned r=0, unsigned c=0) { return *(_elPtr = (_mat._el)[r] + c); } 
 
@@ -1407,7 +1407,7 @@ public:
   // Reset to first element
   const Type& first() { return reset(); }
   // Reset to last element
-  const Type& last()  { return reset(_rows - 1, _cols - 1); } 
+  const Type& last()  { return reset(this->_rows - 1, this->_cols - 1); } 
   // Reset to element (r, c)
   const Type& reset(unsigned r=0, unsigned c=0) { return *(_elPtr = (_mat._el)[r] + c); }
 

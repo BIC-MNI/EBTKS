@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.cc,v $
-$Revision: 1.4 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.5 $
+$Author: bert $
+$Date: 2004-12-08 17:02:50 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -3566,14 +3566,14 @@ SimpleArray<Type> array(const Mat<Type>& A, Type minVal, Type maxVal)
  */
 #include "MatrixSpec.cc"
 
-#define _INSTANTIATE_MAT(Type)                       \
+#define _INSTANTIATE_MAT(Type) \
          template class Mat<Type>;                   \
          template Mat<Type>& pmultEquals(Mat<Type>&, const Mat<Type> &); \
          template Mat<Type>& pdivEquals(Mat<Type>&, const Mat<Type> &); \
          template Mat<Type> inv(const Mat<Type> &); \
          template Mat<Type> operator*<Type>(double, const Mat<Type> &); \
-         unsigned Mat<Type>::_rangeErrorCount = 25; \
-         Boolean  Mat<Type>::flushToDisk = FALSE;
+         template<> unsigned Mat<Type>::_rangeErrorCount = 25; \
+         template<> Boolean  Mat<Type>::flushToDisk = FALSE;
 
 _INSTANTIATE_MAT(int);
 _INSTANTIATE_MAT(float);
