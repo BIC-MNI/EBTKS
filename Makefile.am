@@ -12,7 +12,9 @@ EXTRA_DIST = $(m4_files)
 #
 noinst_HEADERS = \
 	templates/SimpleArraySpec.cc \
-	templates/MatrixSpec.cc
+	templates/MatrixSpec.cc \
+	clapack/f2c.h \
+	clapack/blaswrap.h
 
 # Headers which are installed.
 #
@@ -81,7 +83,26 @@ libEBTKS_la_SOURCES = version.cc \
         templates/SimpleArray.cc \
         templates/ValueMap.cc \
         templates/miscTemplateFunc.cc \
-        templates/MatrixConv.cc
+        templates/MatrixConv.cc \
+	clapack/dcopy.c \
+	clapack/dgemm.c \
+	clapack/dgemv.c \
+	clapack/dger.c \
+	clapack/dlasyf.c \
+	clapack/dscal.c \
+	clapack/dswap.c \
+	clapack/dsyr.c \
+	clapack/dsysv.c \
+	clapack/dsytf2.c \
+	clapack/dsytrf.c \
+	clapack/dsytrs.c \
+	clapack/idamax.c \
+	clapack/ieeeck.c \
+	clapack/ilaenv.c \
+	clapack/lsame.c \
+	clapack/s_cmp.c \
+	clapack/s_copy.c \
+	clapack/xerbla.c
 
 
 m4_files = m4/mni_REQUIRE_LIB.m4		\
