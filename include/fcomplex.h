@@ -12,20 +12,18 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: fcomplex.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 17:57:56 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _FCOMPLEX_H
 #define _FCOMPLEX_H
 
-#include <iostream.h>
-
-#ifdef __GNUC__
-#include <complex.h>
-  typedef complex<float> fcomplex;
-#else
+#include <complex>		/* (bert) changed from complex.h */
+using namespace std;		/* (bert) added */
+typedef complex<float> fcomplex;
+#if 0				/* (bert) removed code here */
 
 //Code written by Georges Aboutanos
 //Based on Rose and Stroustrup and Sun complex.h.
@@ -180,7 +178,7 @@ inline void fcomplex::operator/=(fcomplex a)
   re = ((re*a.re) + (im*a.im))/denominator;
   im = ((im*a.re) - (re*a.im))/denominator;
 }
-#endif
+#endif /* (bert) end of removed code */
 
 int operator < (const fcomplex&, const fcomplex&);
 int operator <= (const fcomplex&, const fcomplex&);
