@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 15:08:12 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -218,7 +218,7 @@ Mat<Type>::Mat(const Mat<Type>& A)
 template <class Type>
 Mat<Type>::Mat(const SimpleArray<Type>& A, char dir)
 {
-  unsigned N = size(A);
+  unsigned N = A.size();
   
   if (dir == Mat<Type>::ROW) {
     _rows = _maxrows = 1;
@@ -250,7 +250,7 @@ Mat<Type>::Mat(unsigned nrows, unsigned ncols, Type value)
    
    _allocateEl();
    
-   if (value != 0)
+   if (value != 0.0)
       fill(value);
 }
 
@@ -395,15 +395,17 @@ Mat<Type>::operator () (unsigned n) const
 template <class Type>
 Type& 
 Mat<Type>::operator () (unsigned r, unsigned c) {
+  using std::min;		// (bert) force it to find the right min()
+
   if ((r >= _rows) || (c >= _cols)) {
     if (_rangeErrorCount) {
       cerr << "Error: indices (" << r << ", " << c << ") exceed matrix dimensions. "
-	   << "Changed to (" << ::min(r, _rows - 1) << ", " << ::min(c, _cols - 1)
+	   << "Changed to (" << min(r, _rows - 1) << ", " << min(c, _cols - 1)
 	   << ")" << endl;
       _rangeErrorCount--;
     }
-    r = ::min(r, _rows - 1);
-    c = ::min(c, _cols - 1);
+    r = min(r, _rows - 1);
+    c = min(c, _cols - 1);
   }
 
   return(_el[r][c]);
@@ -415,15 +417,17 @@ Mat<Type>::operator () (unsigned r, unsigned c) {
 template <class Type>
 Type
 Mat<Type>::operator () (unsigned r, unsigned c) const {
+  using std::min;		// (bert) force it to find the right min().
+
   if ((r >= _rows) || (c >= _cols)) {
     if (_rangeErrorCount) {
       cerr << "Error: indices (" << r << ", " << c << ") exceed matrix dimensions. "
-	   << "Changed to (" << ::min(r, _rows - 1) << ", " << ::min(c, _cols - 1)
+	   << "Changed to (" << min(r, _rows - 1) << ", " << min(c, _cols - 1)
 	   << ")" << endl;
       _rangeErrorCount--;
     }
-    r = ::min(r, _rows - 1);
-    c = ::min(c, _cols - 1);
+    r = min(r, _rows - 1);
+    c = min(c, _cols - 1);
   }
 
   return(_el[r][c]);
@@ -559,10 +563,11 @@ Mat<Type>::pad(unsigned nrows, unsigned ncols, int row, int col, Type value)
   if ((nrows == _rows) && (ncols == _cols) && !row && !col)
     return *this;
 
-  char *tempFile = tempnam(NULL, "Mat");
+  char tempFile[256];
+  get_temp_filename(tempFile);
 
   // Save the current matrix to disk
-  if (flushToDisk && tempFile && saveRaw(tempFile)) {
+  if (flushToDisk && saveRaw(tempFile)) {
     unsigned argRows = _rows;
     unsigned argCols = _cols;
 
@@ -584,10 +589,7 @@ Mat<Type>::pad(unsigned nrows, unsigned ncols, int row, int col, Type value)
     this->absorb(result);
   }
 
-  if (flushToDisk && tempFile) {
-    unlink(tempFile);
-    free(tempFile);
-  }
+  unlink(tempFile);
 
   return *this;
 }
@@ -649,7 +651,9 @@ template <class Type>
 Mat<Type>
 Mat<Type>::appendRight(const Mat<Type>& A) const
 {
-  Mat<Type> Temp(::max(_rows, A._rows), _cols + A._cols);
+  using std::max;		// (bert) force it to find the right max().
+
+  Mat<Type> Temp(max(_rows, A._rows), _cols + A._cols);
   Temp.insert(*this);
   Temp.insert(A, 0, _cols);
 
@@ -663,7 +667,9 @@ template <class Type>
 Mat<Type>
 Mat<Type>::appendBelow(const Mat<Type>& A) const
 {
-  Mat<Type> Temp(_rows + A._rows, ::max(_cols, A._cols));
+  using std::max;		// (bert) force it to use the right max()
+
+  Mat<Type> Temp(_rows + A._rows, max(_cols, A._cols));
   Temp.insert(*this);
   Temp.insert(A, _rows, 0);
 
@@ -796,7 +802,7 @@ Mat<Type>::insert(const char *path, unsigned nrows, unsigned ncols, int row, int
 
   int destRow = row;
   for (unsigned i = 0; i < nrows; i++, destRow++) {
-    if (!(argFile.stream().read((unsigned char *) buffer, ncols*sizeof(Type)))) {
+    if (!(argFile.stream().read((char *) buffer, ncols*sizeof(Type)))) {
       cerr << "Error while reading file " << path << endl;
       freeArray(buffer);
       return *this;
@@ -1202,32 +1208,6 @@ Mat<Type>::operator += (dcomplex x)
   return *this;
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>& 
-Mat<dcomplex>::operator += (dcomplex addend)
-{
-  dcomplex *elPtr = _el[0];
-  for (unsigned i=_rows ; i != 0 ; i--)
-    for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr += addend;
-  
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>& 
-Mat<fcomplex>::operator += (dcomplex addend)
-{
-  fcomplex *elPtr = _el[0];
-  for (unsigned i=_rows ; i != 0 ; i--)
-    for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr += addend;
-  
-  return *this;
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1244,32 +1224,6 @@ Mat<Type>::operator *= (dcomplex x)
   
   return *this;
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::operator *= (dcomplex scale)
-{
-  dcomplex *elPtr = _el[0];
-  for (unsigned i=_rows ; i != 0 ; i--)
-    for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr *= scale;
-  
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::operator *= (dcomplex scale)
-{
-  fcomplex *elPtr = _el[0];
-  for (unsigned i=_rows ; i != 0 ; i--)
-    for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr *= scale;
-  
-  return *this;
-}
-#endif
 
 //
 //-------------------------// 
@@ -1439,24 +1393,6 @@ Mat<Type>::inv() const
   return Ai;
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex> 
-Mat<dcomplex>::inv() const
-{
-  cerr << "Mat<dcomplex>::inv() called but not implemented" << endl;
-  return Mat<dcomplex>(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex> 
-Mat<fcomplex>::inv() const
-{
-  cerr << "Mat<fcomplex>::inv() called but not implemented" << endl;
-  return Mat<fcomplex>(*this);
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1509,24 +1445,6 @@ Mat<Type>::min(unsigned *row, unsigned *col) const
    return(min);
 }
 
-#ifdef USE_COMPMAT
-dcomplex
-Mat<dcomplex>::min(unsigned *, unsigned *) const
-{
-  cerr << "Mat<dcomplex>::min() called but not implemented" << endl;
-  return 0;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-fcomplex
-Mat<fcomplex>::min(unsigned *, unsigned *) const
-{
-  cerr << "Mat<fcomplex>::min() called but not implemented" << endl;
-  return 0;
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1562,24 +1480,6 @@ Mat<Type>::max(unsigned *row, unsigned *col) const
    return(max);
 }
 
-#ifdef USE_COMPMAT
-dcomplex
-Mat<dcomplex>::max(unsigned *, unsigned *) const
-{
-  cerr << "Mat<dcomplex>::max() called but not implemented" << endl;
-  return 0;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-fcomplex
-Mat<fcomplex>::max(unsigned *, unsigned *) const
-{
-  cerr << "Mat<fcomplex>::max() called but not implemented" << endl;
-  return 0;
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1589,24 +1489,6 @@ Mat<Type>::median(Type minVal, Type maxVal) const
 {
   return array(minVal, maxVal).medianVolatile();
 }
-
-#ifdef USE_COMPMAT
-dcomplex
-Mat<dcomplex>::median(dcomplex, dcomplex) const
-{
-  cerr << "Mat<dcomplex>::median() called but not implemented" << endl;
-  return 0;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-fcomplex
-Mat<fcomplex>::median(fcomplex, fcomplex) const
-{
-  cerr << "Mat<fcomplex>::median() called but not implemented" << endl;
-  return 0;
-}
-#endif
 
 //
 //-------------------------// 
@@ -1681,7 +1563,7 @@ Mat<Type>::cdet() const
     int factor = 1;
     Type *elPtr = *_el;
     for(unsigned col = 0; col < _cols; col++, factor *= -1)
-      determinant += dcomplex(*elPtr++) * residual(0, col).det() * factor;
+      determinant += dcomplex(*elPtr++) * (residual(0, col).det() * factor);
   }
   else 
     determinant = **_el;
@@ -1704,34 +1586,6 @@ Mat<Type>::applyElementWise(double (*function)(double))
   
   return(*this);
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::applyElementWise(double (*function)(double))
-{
-  dcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = (dcomplex) function(real(*elPtr));
-  
-  return(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::applyElementWise(double (*function)(double))
-{
-  fcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = (fcomplex) function(real(*elPtr));
-  
-  return(*this);
-}
-#endif
 
 template <class Type>
 Mat<Type>&
@@ -1759,34 +1613,6 @@ Mat<Type>::applyElementWiseC2C(dcomplex (*function)(dcomplex))
    return(*this);
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::applyElementWiseC2C(dcomplex (*function)(dcomplex))
-{
-  dcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = function(*elPtr);
-  
-  return(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::applyElementWiseC2C(dcomplex (*function)(dcomplex))
-{
-  fcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = fcomplex(function(*elPtr));
-  
-  return(*this);
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1805,19 +1631,6 @@ Mat<Type>::applyIndexFunction(IndexFunction F)
 //
 //-------------------------// 
 //
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::applyIndexFunction(ComplexIndexFunction F)
-{
-  dcomplex *elPtr = *_el;
-  for (unsigned r = 0; r < _rows; r++)
-    for (unsigned c = 0; c < _rows; c++)
-      *elPtr++ = dcomplex(F(r, c));
-
-  return(*this);
-}
-#endif
-
 template <class Type>
 Mat<Type>&
 Mat<Type>::applyIndexFunction(ComplexIndexFunction F)
@@ -1850,33 +1663,6 @@ Mat<Type>::log()
   return applyElementWise(::log);
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::log()
-{
-#ifndef __sun
-  return applyElementWise(::log);
-#else
-  dcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = ::log(*elPtr);
-  
-  return(*this);
-#endif
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::log()
-{
-  cerr << "Mat<fcomplex>::log() called but not implemented" << endl;
-  return *this;
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1886,33 +1672,6 @@ Mat<Type>::cos()
 {
   return applyElementWise(::cos);
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::cos()
-{
-#ifndef __sun
-  return applyElementWise(::cos);
-#else
-  dcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = ::cos(*elPtr);
-  
-  return(*this);
-#endif
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::cos()
-{
-  cerr << "Mat<fcomplex>::cos() called but not implemented" << endl;
-  return *this;
-}
-#endif
 
 //
 //-------------------------// 
@@ -1925,19 +1684,10 @@ Mat<Type>::sin()
   
   for(unsigned i = _rows; i; i--)
     for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = (Type) ::sin(*elPtr);
+      *elPtr = (Type) ::sin(double(*elPtr));
   
   return(*this);
 }
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::sin()
-{
-  cerr << "Mat<fcomplex>::sin() called but not implemented" << endl;
-  return *this;
-}
-#endif
 
 //
 //-------------------------// 
@@ -1949,34 +1699,6 @@ Mat<Type>::round()
   return applyElementWise(::rint);
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::round()
-{
-  dcomplex *elPtr = _el[0];
-   
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = dcomplex(rint(real(*elPtr)), rint(real(*elPtr)));
-  
-  return(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::round()
-{
-  fcomplex *elPtr = _el[0];
-   
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = fcomplex(rint(real(*elPtr)), rint(real(*elPtr)));
-  
-  return(*this);
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -1986,34 +1708,6 @@ Mat<Type>::abs()
 {
   return applyElementWise(::fabs);
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::abs()
-{
-  dcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = (dcomplex) ::abs(*elPtr);
-  
-  return(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::abs()
-{
-  fcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = (fcomplex) ::abs(*elPtr);
-  
-  return(*this);
-}
-#endif
 
 //
 //-------------------------// 
@@ -2038,58 +1732,12 @@ Mat<Type>::pow(double exponent)
   return *this;
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::pow(double)
-{
-  cerr << "Mat<dcomplex>::pow() called but not implemented" << endl;
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::pow(double)
-{
-  cerr << "Mat<fcomplex>::pow() called but not implemented" << endl;
-  return *this;
-}
-#endif
-
 template <class Type>
 Mat<Type>&
 Mat<Type>::conj()
 {
   return *this;
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::conj()
-{
-  dcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = ::conj(*elPtr);
-  
-  return(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::conj()
-{
-  fcomplex *elPtr = _el[0];
-  
-  for(unsigned i = _rows; i; i--)
-    for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = ::conj(*elPtr);
-  
-  return(*this);
-}
-#endif
 
 //
 //-------------------------//
@@ -2187,22 +1835,6 @@ Mat<Type>::eig(Mat<Type>& D, Mat<Type>& V) const
    free((char *)positions);
 }
 
-#ifdef USE_COMPMAT
-void 
-Mat<dcomplex>::eig(Mat<dcomplex>&, Mat<dcomplex>&) const
-{
-  cerr << "Mat<dcomplex>::eig() called but not implemented" << endl;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-void 
-Mat<fcomplex>::eig(Mat<fcomplex>&, Mat<fcomplex>&) const
-{
-  cerr << "Mat<fcomplex>::eig() called but not implemented" << endl;
-}
-#endif
-
 //
 //-------------------------// 
 //
@@ -2239,24 +1871,6 @@ Mat<Type>::house() const
    
    return(v);
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex> 
-Mat<dcomplex>::house() const
-{
-  cerr << "Mat<dcomplex>::house() called but not implemented" << endl;
-  return Mat<dcomplex>(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex> 
-Mat<fcomplex>::house() const
-{
-  cerr << "Mat<fcomplex>::house() called but not implemented" << endl;
-  return Mat<fcomplex>(*this);
-}
-#endif
 
 //
 //-------------------------//Not sure 
@@ -2369,24 +1983,6 @@ Mat<Type>::histogram(double minin, double maxin, unsigned n) const
   
   return histogram;
 }
-
-#ifdef USE_COMPMAT
-Histogram
-Mat<dcomplex>::histogram(double, double, unsigned) const
-{
-  cerr << "Mat<dcomplex>::histogram() called but not implemented" << endl;
-  return Histogram(0);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Histogram
-Mat<fcomplex>::histogram(double, double, unsigned) const
-{
-  cerr << "Mat<fcomplex>::histogram() called but not implemented" << endl;
-  return Histogram(0);
-}
-#endif
 
 /*
 //this histogram works in the following way
@@ -2744,22 +2340,6 @@ Mat<Type>::qr(Mat<Type>& R, Mat<Type>& Q, Mat<Type>& P) const
    free((char *)piv);
 }
 
-#ifdef USE_COMPMAT
-void 
-Mat<dcomplex>::qr(Mat<dcomplex>&, Mat<dcomplex>&, Mat<dcomplex>&) const
-{
-  cerr << "Mat<dcomplex>::qr() called but not implemented" << endl;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-void 
-Mat<fcomplex>::qr(Mat<fcomplex>&, Mat<fcomplex>&, Mat<fcomplex>&) const
-{
-  cerr << "Mat<fcomplex>::qr() called but not implemented" << endl;
-}
-#endif
-
 //
 //-------------------------//
 //
@@ -2818,7 +2398,7 @@ Mat<Type>::svd(Mat<Type>& U, Mat<Type>& S, Mat<Type>& V) const
    for(i=0 ; i < mindim ; i++){
      Type& sii = S(i, i);
      if (double(sii) < 0.0) {
-       sii = int(fabs(sii));
+       sii = int(fabs(double(sii)));
        for(j=0 ; j < _rows ; j++)
 	 U(j,i) = -U(j,i);
      }
@@ -2831,22 +2411,6 @@ Mat<Type>::svd(Mat<Type>& U, Mat<Type>& S, Mat<Type>& V) const
 	 S(i,j) = (Type)0.0;
      }
 }
-
-#ifdef USE_COMPMAT
-void 
-Mat<dcomplex>::svd(Mat<dcomplex>&, Mat<dcomplex>&, Mat<dcomplex>&) const
-{
-  cerr << "Mat<dcomplex>::svd() called but not implemented" << endl;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-void 
-Mat<fcomplex>::svd(Mat<fcomplex>&, Mat<fcomplex>&, Mat<fcomplex>&) const
-{
-  cerr << "Mat<fcomplex>::svd() called but not implemented" << endl;
-}
-#endif
 
 //
 //-------------------------//
@@ -2869,24 +2433,6 @@ Mat<Type>::clip(Type minVal, Type maxVal, Type minFill, Type maxFill)
   return(*this);
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::clip(dcomplex, dcomplex, dcomplex, dcomplex)
-{
-  cerr << "Mat<dcomplex>::clip called but not implemented" << endl;
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::clip(fcomplex, fcomplex, fcomplex, fcomplex)
-{
-  cerr << "Mat<fcomplex>::clip called but not implemented" << endl;
-  return *this;
-}
-#endif
-
 //
 //-------------------------//
 //
@@ -2903,24 +2449,6 @@ Mat<Type>::map(const ValueMap& valueMap)
   
   return(*this);
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::map(const ValueMap&)
-{
-  cerr << "Mat<dcomplex>::map called but not implemented" << endl;
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::map(const ValueMap&)
-{
-  cerr << "Mat<fcomplex>::map called but not implemented" << endl;
-  return *this;
-}
-#endif
 
 //
 //-------------------------//
@@ -3123,24 +2651,6 @@ Mat<Type>::erode(const Mat<double>& strel) const
   return result;
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>
-Mat<dcomplex>::erode(const Mat<double>&) const
-{
-  cerr << "Mat<dcomplex>::erode() called but not implemented" << endl;
-  return Mat<dcomplex>(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>
-Mat<fcomplex>::erode(const Mat<double>&) const
-{
-  cerr << "Mat<fcomplex>::erode() called but not implemented" << endl;
-  return Mat<fcomplex>(*this);
-}
-#endif
-
 template <class Type>
 Mat<Type>
 Mat<Type>::dilate(const Mat<double>& strel) const
@@ -3202,25 +2712,7 @@ Mat<Type>::dilate(const Mat<double>& strel) const
    return result;
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>
-Mat<dcomplex>::dilate(const Mat<double>&) const
-{
-  cerr << "Mat<dcomplex>::dilate() called but not implemented" << endl;
-  return Mat<dcomplex>(*this);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>
-Mat<fcomplex>::dilate(const Mat<double>&) const
-{
-  cerr << "Mat<fcomplex>::dilate() called but not implemented" << endl;
-  return Mat<fcomplex>(*this);
-}
-#endif
-
-#endif
+#endif // USE_DBLMAT
 
 /******************************Old code***************************************
 template <class Type>
@@ -3394,65 +2886,7 @@ Mat<Type>::loadMatlab(const char *filename, const char *varname)
   return TRUE;
 }
 
-//This function goes to the named mat file and searches for the given variable 
-//Next, if possible, it reinitializes the calling object to represent the
-//same matrix as that defined by the Matlab variable.  The Matlab matrix
-//is stored in double format.  The function Matlab2Mat will convert the 
-//Matlab data to the type of its calling object (this).  This may mean a loss
-//of precision.
-#ifdef USE_COMPMAT
-Boolean
-Mat<dcomplex>::loadMatlab(const char *filename, const char *varname)
-{
-  if (!filename || !varname) {
-    cerr << "Mat<dcomplex>::loadMatlab(): no filename or variable name specified" << endl;
-    return FALSE;
-  }
-
-   //Check to ensure that the file can be opened successfully for reading
-   MATFile *infile = matOpen((char *) filename,"r");
-   if(infile==NULL) {
-     cerr << "Mat<dcomplex>::loadMatlab(): Can't open file: "<<filename<<endl;
-     return FALSE;
-   }
-   
-   //Assign pointer to the Matrix object allocated from the file and ensure that
-   //the named variable was found
-   Matrix *MatlabMatrix = matGetMatrix(infile, (char *) varname);
-   if(MatlabMatrix==NULL) {
-     cerr << "Mat<dcomplex>::loadMatlab(): Could not find: "
-	  << varname << " in file: " << filename << endl;
-     //close the file and quit 
-     matClose(infile);
-     return FALSE;
-   }
-   
-   //Check to see if the Matlab Matrix was full or sparse, dcomplex or real
-   //if (mxIsDcomplex(MatlabMatrix) == 0) {
-   if (mxIsComplex(MatlabMatrix) == 0) {
-     Mat<double> Temp(_rows,_cols);
-     Temp.loadMatlab(filename,varname); 
-   }
-   else
-     *this = matlab2Mat(MatlabMatrix);         
-   
-   //We were successful
-   matClose(infile);
-   mxFreeMatrix(MatlabMatrix);
-
-   return TRUE;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Boolean
-Mat<fcomplex>::loadMatlab(const char *, const char *)
-{
-  cerr << "Mat<fcomplex>::loadMatlab() called but not implemented" << endl;
-  return(0);     
-}
-#endif
-#endif
+#endif // HAVE_MATLAB
 //
 //-------------------------//
 //
@@ -3475,7 +2909,7 @@ Mat<Type>::loadRaw(const char *filename, unsigned nrows, unsigned ncols)
     _allocateEl();
   }
   
-  if (!matrixFile.stream().read((unsigned char *)_el + _maxrows*sizeof(Type *),
+  if (!matrixFile.stream().read((char *)_el + _maxrows*sizeof(Type *),
 				_maxrows*_maxcols*sizeof(Type)))
     return FALSE;
   
@@ -3511,24 +2945,6 @@ Mat<Type>::loadAscii(const char *filename)
   
   return TRUE;
 }
-
-#ifdef USE_COMPMAT
-Boolean
-Mat<dcomplex>::loadAscii(const char *)
-{
-  cerr << "Mat<dcomplex>::loadAscii() not implemented" << endl;
-  return FALSE;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Boolean
-Mat<fcomplex>::loadAscii(const char *)
-{
-  cerr << "Mat<fcomplex>::loadAscii() not implemented" << endl;
-  return FALSE;
-}
-#endif
 
 //
 //-------------------------//
@@ -3568,24 +2984,28 @@ template <class Type>
 Boolean
 Mat<Type>::save(const char *filename, int type, const char *varname) const
 {
+  Boolean result;		// bert - added
+
   switch(type) {
   case RAW:
-    saveRaw(filename);
+    result = saveRaw(filename);
     break;
   case ASCII:
-    saveAscii(filename);
+    result = saveAscii(filename);
     break;
   case MATLAB:
 #ifdef HAVE_MATLAB
-    saveMatlab(filename, varname);
+    result = saveMatlab(filename, varname);
 #else
     cerr << "Can't save MATLAB files. Please compile with -DHAVE_MATLAB" << endl;
 #endif
     break;
   default:
     cerr << "Unrecognized type for saving" << endl;
+    result = 0;
     break;
   }
+  return (result);		// bert - return a value.
 }
 
 //
@@ -3628,99 +3048,8 @@ Mat<Type>::saveMatlab(const char *filename, const char *varname, const char *opt
 
   return status;
 }
+#endif // HAVE_MATLAB
 
-#ifdef USE_COMPMAT
-Boolean
-Mat<dcomplex>::saveMatlab(const char *filename, const char *varname, const char *option) const
-{
-  if (!_rows || !_cols) {
-    cerr << "Attempt to save empty matrix as matlab file. Not saved" << endl;
-    return FALSE;
-  }
-
-  //Create a temporary double arrays for the real and imaginary parts
-  double *real = 0;
-  allocateArray(_rows*_cols, real);
-  if (!real) {
-    cerr << "Couldn't allocate real array; matrix not saved" << endl;
-    return FALSE;
-  }
-
-  double *imag = 0;
-  allocateArray(_rows*_cols, imag);
-  if (!imag) {
-    cerr << "Couldn't allocate imag array; matrix not saved" << endl;
-    freeArray(real);
-    return FALSE;
-  }
-
-  // Fill real and imag arrays columnwise (this is Matlab's storage convention)
-  double *realPtr = real;
-  double *imagPtr = imag;
-  for (unsigned col = 0; col < _cols; col++)
-    for (unsigned row = 0; row < _rows; row++) {
-      dcomplex value = _el[row][col];
-      *realPtr++ = ::real(value);
-      *imagPtr++ = ::imag(value);
-    }
-  
-  // Write the matrix out
-  Boolean status = ::saveMatlab(filename, varname, option, _rows, _cols, real, imag);
-
-  // Free temporary arrays
-  freeArray(real);
-  freeArray(imag);
-
-  return status;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Boolean
-Mat<fcomplex>::saveMatlab(const char *filename, const char *varname, const char *option) const
-{
-  if (!_rows || !_cols) {
-    cerr << "Attempt to save empty matrix as matlab file. Not saved" << endl;
-    return FALSE;
-  }
-
-  //Create a temporary double arrays for the real and imaginary parts
-  double *real = 0;
-  allocateArray(_rows*_cols, real);
-  if (!real) {
-    cerr << "Couldn't allocate real array; matrix not saved" << endl;
-    return FALSE;
-  }
-
-  double *imag = 0;
-  allocateArray(_rows*_cols, imag);
-  if (!imag) {
-    cerr << "Couldn't allocate imag array; matrix not saved" << endl;
-    freeArray(real);
-    return FALSE;
-  }
-
-  // Fill real and imag arrays columnwise (this is Matlab's storage convention)
-  double *realPtr = real;
-  double *imagPtr = imag;
-  for (unsigned col = 0; col < _cols; col++)
-    for (unsigned row = 0; row < _rows; row++) {
-      fcomplex value = _el[row][col];
-      *realPtr++ = ::real(value);
-      *imagPtr++ = ::imag(value);
-    }
-  
-  // Write the matrix out
-  Boolean status = ::saveMatlab(filename, varname, option, _rows, _cols, real, imag);
-
-  // Free temporary arrays
-  freeArray(real);
-  freeArray(imag);
-
-  return status;
-}
-#endif
-#endif
 //
 //-------------------------//
 //
@@ -3737,7 +3066,7 @@ Mat<Type>::saveRaw(const char *filename) const
 //outfile.write((unsigned char *) &nrows, sizeof(unsigned));
 //outfile.write((unsigned char *) &ncols, sizeof(unsigned));
    
-   outfile.write((unsigned char *)_el + _maxrows*sizeof(Type *) , _maxrows*_maxcols*sizeof(Type));
+   outfile.write((char *)_el + _maxrows*sizeof(Type *) , _maxrows*_maxcols*sizeof(Type));
    
    outfile.close();
 
@@ -3772,24 +3101,6 @@ Mat<Type>::saveAscii(const char *filename) const
 
    return (outfile) ? TRUE : FALSE;
 }
-
-#ifdef USE_COMPMAT
-Boolean
-Mat<dcomplex>::saveAscii(const char *) const
-{
-  cerr << "Mat<dcomplex>::saveAscii() not implemented" << endl;
-  return FALSE;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Boolean
-Mat<fcomplex>::saveAscii(const char *) const
-{
-  cerr << "Mat<fcomplex>::saveAscii() not implemented" << endl;
-  return FALSE;
-}
-#endif
 
 //
 //-------------------------//
@@ -3845,9 +3156,7 @@ template <class Type>
 void 
 Mat<Type>::_modify_sub_section(unsigned r1,unsigned r2,unsigned c1,unsigned c2,const Mat<Type>& B)
 {
-   if ((r1 > r2) || (c1 > c2) || (r2 >= _rows) || (c2>= _cols) || (r1 < 0) ||
-         (c1 < 0)){
-	
+  if ((r1 > r2) || (c1 > c2) || (r2 >= _rows) || (c2>= _cols)) { // (bert)
       cerr << "Error in cropting: improper row or column sizes." << endl;
       cerr << r1 << " to " << r2 << " and" << endl;
       cerr << c1 << " to " << c2 << endl;
@@ -3884,18 +3193,21 @@ template <class Type>
 Mat<Type>&
 Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
 {
+  using std::max;		// (bert) force it to use the right max()
+  using std::abs;		// (bert) and force the right abs()!
+
   // Verify dimensions of FFT
   if ((nrows > 1) && ((nrows < _rows) || !isPowerOf2(nrows))) {
     cerr << "Warning! Mat<Type>::fft():" << endl
 	 << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
-    nrows = ::max(unsigned(4), nextPowerOf2(::max(nrows, _rows)));
+    nrows = max(unsigned(4), nextPowerOf2(max(nrows, _rows)));
     cerr << "  increased to " << nrows << endl;
   }
 
   if ((ncols > 1) && ((ncols < _cols) || !isPowerOf2(ncols))) {
     cerr << "Warning! Mat<Type>::fft():" << endl
 	 << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
-    ncols = ::max(unsigned(4), nextPowerOf2(::max(ncols, _cols)));
+    ncols = max(unsigned(4), nextPowerOf2(max(ncols, _cols)));
     cerr << "  increased to " << ncols << endl;
   }
 
@@ -3903,12 +3215,12 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
   Boolean doY = (nrows != 1) && (_rows > 1) ? TRUE : FALSE;
 
   if (!nrows)
-    nrows = ::max(unsigned(4), nextPowerOf2(_rows));
+    nrows = max(unsigned(4), nextPowerOf2(_rows));
   else if (nrows == 1)
     nrows = _rows;
 
   if (!ncols)
-    ncols = ::max(unsigned(4), nextPowerOf2(_cols));
+    ncols = max(unsigned(4), nextPowerOf2(_cols));
   else if (ncols == 1)
     ncols = _cols;
 
@@ -3918,7 +3230,7 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
   // Allocate temporary arrays
   double *real = 0;
   double *imag = 0;
-  unsigned maxDim = ::max(doX ? _cols : 1, doY ? _rows : 1);
+  unsigned maxDim = max(doX ? _cols : 1, doY ? _rows : 1);
 
   allocateArray(maxDim, real);
   allocateArray(maxDim, imag);
@@ -3935,8 +3247,8 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       Type *sourcePtr = _el[row];
       for(col = _cols; col != 0; col--) {
 	dcomplex value(*sourcePtr++);
-	*realPtr++ = ::real(value);
-	*imagPtr++ = ::imag(value);
+	*realPtr++ = value.real();
+	*imagPtr++ = value.imag();
       }
 
       // Calculate 1D FFT
@@ -3947,7 +3259,7 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       imagPtr   = imag;
       sourcePtr = _el[row];
       for(col = _cols; col != 0; col--)
-	*sourcePtr++ = Type(::abs(dcomplex(*realPtr++, *imagPtr++)));
+	*sourcePtr++ = Type(abs(dcomplex(*realPtr++, *imagPtr++)));
     }
 
   // Take 1D FFT in Y (column) direction
@@ -3959,8 +3271,8 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       Type    *sourcePtr = _el[0] + col;
       for(row = _rows; row != 0; row--) {
 	dcomplex value(*sourcePtr);
-	*realPtr++ = ::real(value);
-	*imagPtr++ = ::imag(value);
+	*realPtr++ = value.real();
+	*imagPtr++ = value.imag();
 	sourcePtr += _cols;
       }
 
@@ -3972,7 +3284,7 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       imagPtr   = imag;
       sourcePtr = _el[0] + col;
       for(row = _rows; row != 0; row--) {
-	*sourcePtr = Type(::abs(dcomplex(*realPtr++, *imagPtr++)));
+	*sourcePtr = Type(abs(dcomplex(*realPtr++, *imagPtr++)));
 	sourcePtr += _cols;
       }
     }
@@ -3983,215 +3295,6 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
 
   return *this;
 }
-
-#ifdef USE_COMPMAT
-Mat<dcomplex>&
-Mat<dcomplex>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
-{
-  // Verify dimensions of FFT
-  if ((nrows > 1) && ((nrows < _rows) || !isPowerOf2(nrows))) {
-    cerr << "Warning! Mat<dcomplex>::fft():" << endl
-	 << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
-    nrows = ::max(unsigned(4), nextPowerOf2(::max(nrows, _rows)));
-    cerr << "  increased to " << nrows << endl;
-  }
-
-  if ((ncols > 1) && ((ncols < _cols) || !isPowerOf2(ncols))) {
-    cerr << "Warning! Mat<dcomplex>::fft():" << endl
-	 << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
-    ncols = ::max(unsigned(4), nextPowerOf2(::max(ncols, _cols)));
-    cerr << "  increased to " << ncols << endl;
-  }
-
-  Boolean doX = (ncols != 1) && (_cols > 1) ? TRUE : FALSE;
-  Boolean doY = (nrows != 1) && (_rows > 1) ? TRUE : FALSE;
-
-  if (!nrows)
-    nrows = ::max(unsigned(4), nextPowerOf2(_rows));
-  else if (nrows == 1)
-    nrows = _rows;
-
-  if (!ncols)
-    ncols = ::max(unsigned(4), nextPowerOf2(_cols));
-  else if (ncols == 1)
-    ncols = _cols;
-
-  // Pad matrix to the final FFT dimensions
-  pad(nrows, ncols, (nrows - _rows)/2, (ncols - _cols)/2, 0);
-
-  // Allocate temporary arrays
-  double *real = 0;
-  double *imag = 0;
-  unsigned maxDim = ::max(doX ? _cols : 1, doY ? _rows : 1);
-
-  allocateArray(maxDim, real);
-  allocateArray(maxDim, imag);
-  assert(real && imag);
-
-  unsigned row, col;
-
-  // Take 1D FFT in X (row) direction
-  if (doX)
-    for(row = 0; row < _rows; row++) {
-      // Fill temporary FFT array
-      double  *realPtr   = real;
-      double  *imagPtr   = imag;
-      dcomplex *sourcePtr = _el[row];
-      for(col = _cols; col != 0; col--) {
-	dcomplex value(*sourcePtr++);
-	*realPtr++ = ::real(value);
-	*imagPtr++ = ::imag(value);
-      }
-
-      // Calculate 1D FFT
-      fftFunc(_cols, real, imag);
-
-      // Put results back
-      realPtr   = real;
-      imagPtr   = imag;
-      sourcePtr = _el[row];
-      for(col = _cols; col != 0; col--)
-	*sourcePtr++ = dcomplex(*realPtr++, *imagPtr++);
-    }
-
-  // Take 1D FFT in Y (column) direction
-  if (doY)
-    for(col = 0; col < _cols; col++) {
-      // Fill temporary FFT array
-      double  *realPtr   = real;
-      double  *imagPtr   = imag;
-      dcomplex *sourcePtr = _el[0] + col;
-      for(row = _rows; row != 0; row--) {
-	dcomplex value(*sourcePtr);
-	*realPtr++ = ::real(value);
-	*imagPtr++ = ::imag(value);
-	sourcePtr += _cols;
-      }
-
-      // Calculate 1D FFT
-      fftFunc(_rows, real, imag);
-
-      // Put results back
-      realPtr   = real;
-      imagPtr   = imag;
-      sourcePtr = _el[0] + col;
-      for(row = _rows; row != 0; row--) {
-	*sourcePtr = dcomplex(*realPtr++, *imagPtr++);
-	sourcePtr += _cols;
-      }
-    }
-
-  // Free temporary arrays
-  freeArray(real);
-  freeArray(imag);
-
-  return *this;
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>&
-Mat<fcomplex>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
-{
-  // Verify dimensions of FFT
-  if ((nrows > 1) && ((nrows < _rows) || !isPowerOf2(nrows))) {
-    cerr << "Warning! Mat<fcomplex>::fft():" << endl
-	 << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
-    nrows = ::max(unsigned(4), nextPowerOf2(::max(nrows, _rows)));
-    cerr << "  increased to " << nrows << endl;
-  }
-
-  if ((ncols > 1) && ((ncols < _cols) || !isPowerOf2(ncols))) {
-    cerr << "Warning! Mat<fcomplex>::fft():" << endl
-	 << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
-    ncols = ::max(unsigned(4), nextPowerOf2(::max(ncols, _cols)));
-    cerr << "  increased to " << ncols << endl;
-  }
-
-  Boolean doX = (ncols != 1) && (_cols > 1) ? TRUE : FALSE;
-  Boolean doY = (nrows != 1) && (_rows > 1) ? TRUE : FALSE;
-
-  if (!nrows)
-    nrows = ::max(unsigned(4), nextPowerOf2(_rows));
-  else if (nrows == 1)
-    nrows = _rows;
-
-  if (!ncols)
-    ncols = ::max(unsigned(4), nextPowerOf2(_cols));
-  else if (ncols == 1)
-    ncols = _cols;
-
-  // Pad matrix to the final FFT dimensions
-  pad(nrows, ncols, (nrows - _rows)/2, (ncols - _cols)/2, 0);
-
-  // Allocate temporary arrays
-  double *real = 0;
-  double *imag = 0;
-  unsigned maxDim = ::max(doX ? _cols : 1, doY ? _rows : 1);
-  allocateArray(maxDim, real);
-  allocateArray(maxDim, imag);
-  assert(real && imag);
-
-  unsigned row, col;
-
-  // Take 1D FFT in X (row) direction
-  if (doX)
-    for(row = 0; row < _rows; row++) {
-      // Fill temporary FFT array
-      double  *realPtr   = real;
-      double  *imagPtr   = imag;
-      fcomplex *sourcePtr = _el[row];
-      for(col = _cols; col != 0; col--) {
-	fcomplex value(*sourcePtr++);
-	*realPtr++ = ::real(value);
-	*imagPtr++ = ::imag(value);
-      }
-
-      // Calculate 1D FFT
-      fftFunc(_cols, real, imag);
-
-      // Put results back
-      realPtr   = real;
-      imagPtr   = imag;
-      sourcePtr = _el[row];
-      for(col = _cols; col != 0; col--)
-	*sourcePtr++ = fcomplex(*realPtr++, *imagPtr++);
-    }
-
-  // Take 1D FFT in Y (column) direction
-  if (doY)
-    for(col = 0; col < _cols; col++) {
-      // Fill temporary FFT array
-      double  *realPtr   = real;
-      double  *imagPtr   = imag;
-      fcomplex *sourcePtr = _el[0] + col;
-      for(row = _rows; row != 0; row--) {
-	fcomplex value(*sourcePtr);
-	*realPtr++ = ::real(value);
-	*imagPtr++ = ::imag(value);
-	sourcePtr += _cols;
-      }
-
-      // Calculate 1D FFT
-      fftFunc(_rows, real, imag);
-
-      // Put results back
-      realPtr   = real;
-      imagPtr   = imag;
-      sourcePtr = _el[0] + col;
-      for(row = _rows; row != 0; row--) {
-	*sourcePtr = fcomplex(*realPtr++, *imagPtr++);
-	sourcePtr += _cols;
-      }
-    }
-
-  // Free temporary arrays
-  freeArray(real);
-  freeArray(imag);
-
-  return *this;
-}
-#endif
 
 template <class Type>
 Mat<Type>&
@@ -4270,68 +3373,6 @@ Mat<Type>::matlab2Mat(Matrix *MatlabMatrix) const
    return(NULL);
 }
 
-#ifdef USE_COMPMAT
-Mat<dcomplex>
-Mat<dcomplex>::matlab2Mat(Matrix *MatlabMatrix) const
-{  
-  //Make sure that pointer is not NULL
-  if(MatlabMatrix==NULL)
-     {
-       cerr<<"The input argument points to a non existent object(NULL)"<<endl;
-       exit(1);
-     }
-   
-   unsigned Matlab_rows=mxGetM(MatlabMatrix);
-   unsigned Matlab_cols=mxGetN(MatlabMatrix);
-   Mat<dcomplex> Temp(Matlab_rows,Matlab_cols);
-   double *MatlabRealDATA=mxGetPr(MatlabMatrix);
-   double *MatlabImagDATA=mxGetPi(MatlabMatrix);
-   //See if the object is Full or Sparse and do corresponding action
-   if(mxIsFull(MatlabMatrix))
-     { //Since the Matlab storage representation of the object
-       //is exactly the transpose of the Mat representation, The object
-       //is initialized with its indices reversed.
-       
-       for(unsigned i=0;i<Matlab_cols;i++)
-          for(unsigned j=0;j<Matlab_rows;j++)
-            {
-             Temp._el[j][i]= dcomplex( *MatlabRealDATA, *MatlabImagDATA);
-             MatlabRealDATA++;
-             MatlabImagDATA++;
-            } 
-       return(Temp);
-        
-     }
-   else if(mxIsSparse(MatlabMatrix))
-     {
-       //This code was derived from code form the external interface guide for 
-       // Matlab pg. 7 (Copyright Math Works)
-       int *ir=mxGetIr(MatlabMatrix);
-       int *jc=mxGetJc(MatlabMatrix);
-       int temp_index;
-       for(unsigned j=0; j<Matlab_cols;j++)
-        {
-          temp_index=jc[j+1];
-          for(int k=jc[j];k<temp_index;k++)
-            Temp._el[ir[k]][j] = dcomplex(MatlabRealDATA[k],MatlabImagDATA[k]);
-        }
-       
-       return(Temp);
-     }
-
-   return(Temp);
-}
-#endif
-
-#ifdef USE_FCOMPMAT
-Mat<fcomplex>
-Mat<fcomplex>::matlab2Mat(Matrix *) const
-{  
-  cerr << "Mat<fcomplex>::_Matlab2Mat() called but not implemented" << endl;
-  return Mat<fcomplex>(*this);
-}
-#endif
-
 template <class Type>
 Matrix *
 Mat<Type>::mat2Matlab(const char *name) const
@@ -4353,39 +3394,7 @@ Mat<Type>::mat2Matlab(const char *name) const
   return(CopyofThis);
 }
 
-#ifdef USE_COMPMAT
-Matrix *
-Mat<dcomplex>::mat2Matlab(const char *name) const
-{ 
-  Matrix *CopyofThis;
-
-  //Allocate the memory for the Matlab matrix and set its name
-  CopyofThis=mxCreateFull(_rows,_cols,1);
-  mxSetName(CopyofThis,name);
-
-  double *MatlabPrData=mxGetPr(CopyofThis);
-  double *MatlabPiData=mxGetPi(CopyofThis);
-  for(unsigned i=0;i< _cols;i++)
-    for(unsigned j=0;j<_rows;j++)
-     {
-      *MatlabPrData= ::real(_el[j][i]);
-       MatlabPrData++;
-      *MatlabPiData= ::imag(_el[j][i]);
-       MatlabPiData++; 
-     } 
-  
-  return(CopyofThis);
-} 
-#endif
-#ifdef USE_FCOMPMAT
-Matrix *
-Mat<fcomplex>::mat2Matlab(const char *) const
-{ 
-  cerr << "Mat<fcomplex>::_Mat2Matlab() called but not implemented" << endl;
-  return 0;
-}
-#endif
-#endif
+#endif // HAVE_MATLAB
 
 //
 // Private functions end
@@ -4413,7 +3422,7 @@ template <class Type> Mat<double> asDblMat(const Mat<Type>& A)
   
   return cast;
 }
-#endif
+#endif // USE_DBLMAT
 
 //
 //-------------------------// 
@@ -4534,179 +3543,55 @@ template <class Type> Mat<unsigned char> asUChrMat(const Mat<Type>& A)
 }
 #endif
 
-#ifdef USE_COMPMAT
-template <class Type>
-Mat<dcomplex> 
-fft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0) 
+// (bert) added this declaration here to make the compiler happier.  This
+// way it doesn't see the default parameters as being listed as part of
+// the function definition.  I think this was causing a compilation problem
+// Jason found.
+//
+template<class Type>
+SimpleArray<Type> array(const Mat<Type>& A, Type minVal, Type maxVal)
 {
-  return asCompMat(A).fft(nrows, ncols); 
+    return A.array(minVal, maxVal); 
 }
-
-template <class Type>
-Mat<dcomplex> 
-ifft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0) 
-{
-  return asCompMat(A).ifft(nrows, ncols); 
-}
-
-#ifdef USE_DBLMAT
-Mat<double>
-applyElementWiseC2D(const Mat<dcomplex>& A, double (*function)(const dcomplex&))
-{
-  unsigned nrows = A.getrows();
-  unsigned ncols = A.getcols();
-
-  Mat<double> T(nrows, ncols);
-   
-  double  *TelPtr = (double *) T.getEl()[0];
-  dcomplex *AelPtr = (dcomplex *) A.getEl()[0];
-  
-  for(unsigned i = nrows; i; i--)
-    for(unsigned j = ncols ; j != 0 ; j--)
-      *TelPtr++ = function(*AelPtr++);
-
-  return T;
-}
-
-Mat<double>
-arg(const Mat<dcomplex>& A)
-{
-  unsigned nrows = A.getrows();
-  unsigned ncols = A.getcols();
-
-  Mat<double> T(nrows, ncols);
-   
-  double  *TelPtr = (double *) T.getEl()[0];
-  dcomplex *AelPtr = (dcomplex *) A.getEl()[0];
-  
-  for(unsigned i = nrows; i; i--)
-    for(unsigned j = ncols ; j != 0 ; j--)
-      *TelPtr++ = arg(*AelPtr++);
-
-  return T;
-}
-
-Mat<double>
-real(const Mat<dcomplex>& A)
-{
-  return applyElementWiseC2D(A, &real);
-}
-
-Mat<double>
-imag(const Mat<dcomplex>& A)
-{
-  return applyElementWiseC2D(A, &imag);
-}
-#endif
-#endif
-
-#ifdef USE_FCOMPMAT
-template <class Type>
-Mat<fcomplex> 
-ffft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0) 
-{
-  return asFcompMat(A).fft(nrows, ncols); 
-}
-
-template <class Type>
-Mat<fcomplex> 
-fifft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0) 
-{
-  return asFcompMat(A).ifft(nrows, ncols); 
-}
-
-#ifdef USE_FLMAT
-Mat<float>
-applyElementWiseC2D(const Mat<fcomplex>& A, double (*function)(const dcomplex&))
-{
-  unsigned nrows = A.getrows();
-  unsigned ncols = A.getcols();
-
-  Mat<float> T(nrows, ncols);
-   
-  float  *TelPtr = (float *) T.getEl()[0];
-  fcomplex *AelPtr = (fcomplex *) A.getEl()[0];
-  
-  for(unsigned i = nrows; i; i--)
-    for(unsigned j = ncols ; j != 0 ; j--)
-      *TelPtr++ = function(*AelPtr++);
-
-  return T;
-}
-
-Mat<float>
-arg(const Mat<fcomplex>& A)
-{
-  unsigned nrows = A.getrows();
-  unsigned ncols = A.getcols();
-
-  Mat<float> T(nrows, ncols);
-   
-  float    *TelPtr = (float *) T.getEl()[0];
-  fcomplex *AelPtr = (fcomplex *) A.getEl()[0];
-  
-  for(unsigned i = nrows; i; i--)
-    for(unsigned j = ncols ; j != 0 ; j--)
-      *TelPtr++ = arg(*AelPtr++);
-
-  return T;
-}
-
-Mat<float>
-real(const Mat<fcomplex>& A)
-{
-  return applyElementWiseC2D(A, &real);
-}
-
-Mat<float>
-imag(const Mat<fcomplex>& A)
-{
-  return applyElementWiseC2D(A, &imag);
-}
-#endif
-#endif
 
 //////////////////////////////////////////////////////////////////////
 
-// ERROR: won't compile, I will try to disable the whole thing
-
-#undef __GNUC__
-
 #ifdef __GNUC__
+
+/* For the GNU compiler, include the explicit specializations in this file,
+ * so they can be seen during class instantiation.
+ */
+#include "MatrixSpec.cc"
+
 #define _INSTANTIATE_MAT(Type)                       \
          template class Mat<Type>;                   \
-         template Mat<Type> operator *(Mat<Type> &, Mat<Type> &); \
-         template Mat<Type> operator *(double, const Mat<Type> &); \
-         template Mat<Type> operator /(Mat<Type> &, Mat<Type> &); \
-         template Mat<Type> operator /(double, const Mat<Type> &); \
-         template Mat<Type> operator +(Mat<Type> &, Mat<Type> &); \
-         template Mat<Type> operator +(double, const Mat<Type> &); \
-         template Mat<Type> operator -(Mat<Type> &, Mat<Type> &); \
-         template Mat<Type> operator -(double, const Mat<Type> &); \
-         template Mat<Type>& operator +=(Mat<Type> &, const Mat<Type> &); \
-         template Mat<Type>& operator -=(Mat<Type> &, const Mat<Type> &); \
-         template Mat<Type>& operator *=(Mat<Type> &, const Mat<Type> &); \
-         template Mat<Type>& operator /=(Mat<Type> &, const Mat<Type> &); \
-         template Mat<Type> inv(const Mat<Type> &);  \
-         template Mat<Type> pmultEquals(Mat<Type>&, const Mat<Type> &); \
-         template Mat<Type> pdivEquals(Mat<Type>&, const Mat<Type> &); \
+         template Mat<Type>& pmultEquals(Mat<Type>&, const Mat<Type> &); \
+         template Mat<Type>& pdivEquals(Mat<Type>&, const Mat<Type> &); \
+         template Mat<Type> inv(const Mat<Type> &); \
+         template Mat<Type> operator*<Type>(double, const Mat<Type> &); \
          unsigned Mat<Type>::_rangeErrorCount = 25; \
          Boolean  Mat<Type>::flushToDisk = FALSE;
 
 _INSTANTIATE_MAT(int);
 _INSTANTIATE_MAT(float);
 _INSTANTIATE_MAT(double);
+template class Zeros<double>;
+template class Ones<double>;
+template class Eye<double>;
+template ostream & operator<<(ostream &, Mat<double> const &);
+template SimpleArray<double> array(Mat<double> const &, double, double);
 #ifdef USE_COMPMAT
 _INSTANTIATE_MAT(dcomplex);
 template Mat<dcomplex> fft(const Mat<double> &, unsigned, unsigned);
 template Mat<dcomplex> fft(const Mat<dcomplex> &, unsigned, unsigned);
 template Mat<dcomplex> ifft(const Mat<double> &, unsigned, unsigned);
 template Mat<dcomplex> ifft(const Mat<dcomplex> &, unsigned, unsigned);
-#endif
-template class Zeros<double>;
-template class Ones<double>;
-template class Eye<double>;
-template double det(const Mat<double> &);
-template ostream & operator<<(ostream &, Mat<double> const &);
-template SimpleArray<double> array(Mat<double> const &, double, double);
-#endif
+#endif // USE_COMPMAT
+#else
+#ifdef USE_COMPMAT
+template Mat<dcomplex>& pmultEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
+template Mat<dcomplex>& pdivEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
+#endif // USE_COMPMAT
+template Mat<double>& pmultEquals(Mat<double>&, const Mat<double> &);
+template Mat<double>& pdivEquals(Mat<double>&, const Mat<double> &);
+#endif // __GNUC__ not defined

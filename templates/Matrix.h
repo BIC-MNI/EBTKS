@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.h,v $
-$Revision: 1.3 $
-$Author: jason $
-$Date: 2002-09-04 16:41:04 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2003-04-16 15:08:12 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_H
@@ -49,7 +49,7 @@ $State: Exp $
  * USE_FCOMPMAT (fcomplex)        fCompMat
  *****************************************************************************/
 
-#include <dcomplex.h>
+#include "dcomplex.h"
 
 #ifdef USE_FCOMPMAT
   #include "fcomplex.h"
@@ -61,15 +61,16 @@ extern "C" {
 }
 #endif
 
-#include <stream.h>
+/* #include <stream.h> (bert) removed */
 #include <math.h>
-#include <fstream.h>
+#include <fstream>		/* (bert) changed from fstream.h */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <stddef.h>
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 #include "MTypes.h"
 #include "MatrixSupport.h"
 #include "Histogram.h"
@@ -562,19 +563,19 @@ public:
   //Returns the sum of all the elements of the ACTIVE matrix divided by the
   //number of active elements
   double  mean() const  { return sum()/nElements(); }
-  dcomplex cmean() const { return csum()/nElements(); }
+  dcomplex cmean() const { return csum() / double(nElements()); }
 
   //Returns the standard deviation of the matrix elements
   double  std() const  { return ::sqrt(var()); }
-  dcomplex cstd() const { return ::sqrt(cvar()); }
+  dcomplex cstd() const { return std::sqrt(cvar()); }
 
   //Returns the variance of the matrix elements
   double  var() const  { double  mn = mean(); return sum2()/nElements() - SQR(mn); }
-  dcomplex cvar() const { dcomplex mn = cmean(); return csum2()/nElements() - SQR(mn); }
+  dcomplex cvar() const { dcomplex mn = cmean(); return csum2() / double(nElements()) - SQR(mn); }
   
   //Returns the norm of the matrix
   double  norm() const  { return ::sqrt(sum2()); }
-  dcomplex cnorm() const { return ::sqrt(csum2()); }
+  dcomplex cnorm() const { return std::sqrt(csum2()); }
   
   //Returns the trace of the matrix
   double  trace() const { return real(ctrace()); }
@@ -868,213 +869,424 @@ private:
 
   Mat& _fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc);
 
-/****************************End Private functions*****************************/
+/***************************End Private functions*****************************/
    
+/*******************************END OF Mat CLASS******************************/
+};
 
-/****************************Friend functions**********************************/
+// Non-member template functions
 
-  friend void      clear(Mat<Type> A) { A.clear(); }
-  
-  friend Mat<Type> pad(const Mat<Type>& A, unsigned rowpad, unsigned colpad, 
-		       Type value = 0) {
-    return A.padConst(rowpad, colpad, value); }
-  
-  friend Mat<Type>& resize(Mat<Type> A, unsigned nrows, unsigned ncols, 
-			   int row = 0, int col = 0) {
-    return A.resize(nrows, ncols, row, col); }
-  friend Mat<Type>& resize(Mat<Type> A) { return A.resize(); }
-  
-  friend Mat<Type> appendRight(const Mat<Type>& A, const Mat<Type>& V) {
-    return A.appendRight(V); }
-  friend Mat<Type> appendBelow(const Mat<Type>& A, const Mat<Type>& V) {
-    return A.appendBelow(V); }
-  
-  friend Mat<Type> residual(const Mat<Type>& A, unsigned row, unsigned col) {
-    return A.residual(row, col); }
-  
-  friend Mat<Type>& fill(Mat<Type> A, Type value) { return A.fill(value); }
-  friend Mat<Type>& eye(Mat<Type>& A)             { return A.eye(); }
-  friend Mat<Type>& randuniform(Mat<Type>& A, double min = 0, double max = 1) { 
-    return A.randuniform(min, max); }
-  friend Mat<Type>& randnormal(Mat<Type>& A, double mean = 0, double std = 1) { 
-    return A.randnormal(mean, std); }
-  friend Mat<Type>& hamming(Mat<Type>& A)         { return A.hamming(); }
-  friend Mat<Type>& hanning(Mat<Type>& A)         { return A.hanning(); }
-  friend Mat<Type>& blackman(Mat<Type>& A)        { return A.blackman(); }
-  friend Mat<Type>  diag(const Mat<Type>& A)      { return A.diag(); }
-  friend Mat<Type>  toeplitz(const Mat<Type>& c, const Mat<Type>& r) { 
-    return(c.toeplitz(r)); }
-  friend Mat<Type>  toeplitz(const Mat<Type>& c)  { return(c.toeplitz(c)); }
-  friend unsigned   getrows(const Mat<Type>& A)   { return A.getrows(); }
-  friend unsigned   getcols(const Mat<Type>& A)     { return A.getcols(); }
-  friend unsigned   nElements(const Mat<Type>& A)   { return A.nElements(); }
-  friend unsigned   getmaxrows(const Mat<Type>& A)  { return A.getmaxrows(); }
-  friend unsigned   get_maxcols(const Mat<Type>& A)  { return A.getmaxcols(); }
-  friend int        isvector(const Mat<Type>& A)       { return A.isvector(); }
-  friend int        iscolumnvector(const Mat<Type>& A) { return A.iscolumnvector(); }
-  friend int        isrowvector(const Mat<Type>& A)    { return A.isrowvector(); }
-  friend unsigned   length(const Mat<Type>& A)         { return A.length(); }
-  friend ostream&   display(ostream& os, const Mat<Type>& A) { return A.display(os); }
-  friend ostream&   display(ostream& os, const Mat<Type> A,unsigned r1, unsigned r2, 
-			    unsigned c1, unsigned c2) { 
-    return A.display(os, r1,r2,c1,c2); }
-  
-  friend Mat<Type>& operator += (double addend, Mat<Type>& A)       { return A+=addend; }
-  friend Mat<Type>  operator +  (double addend, const Mat<Type>& A) { return A+addend; }
-  friend Mat<Type>& operator -= (double subend, Mat<Type>& A)       { return A-=subend; }
-  friend Mat<Type>  operator -  (double subend, const Mat<Type>& A) { return A-subend; }
-  friend Mat<Type>& operator *= (double factor,  Mat<Type>& A)      { return A*=factor; }
-  friend Mat<Type>  operator *  (double factor,  const Mat<Type>& A){ return A*factor; }
-  friend Mat<Type>& operator /= (double factor,  Mat<Type>& A)      { return A/=factor; }
-  friend Mat<Type>  operator /  (double factor,  const Mat<Type>& A){ return A/factor; }
+template <class T>
+void clear(Mat<T> A) { A.clear(); }
 
-  friend Mat<Type>  t(const Mat<Type>& A)         { return A.t(); }
-  friend Mat<Type>  rotate180(const Mat<Type>& A) { return A.rotate180(); }
-  friend Mat<Type>  inv(const Mat<Type>& A)       { return A.inv(); }
-  friend Mat<Type>  h(const Mat<Type>& A)         { return A.h(); }
+template <class T>  
+Mat<T> pad(const Mat<T>& A, unsigned rowpad, unsigned colpad, T value = 0)
+{
+  return A.padConst(rowpad, colpad, value);
+}
+
+template <class T>  
+Mat<T>& resize(Mat<T> A, unsigned nrows, unsigned ncols, 
+	       int row = 0, int col = 0)
+{
+  return A.resize(nrows, ncols, row, col);
+}
+
+template <class T>
+Mat<T>& resize(Mat<T> A) { return A.resize(); }
+
+template <class T>  
+Mat<T> appendRight(const Mat<T>& A, const Mat<T>& V)
+{
+  return A.appendRight(V);
+}
+
+template <class T>
+Mat<T> appendBelow(const Mat<T>& A, const Mat<T>& V)
+{
+  return A.appendBelow(V);
+}
   
-  friend Type      min(const Mat<Type>& A, unsigned *row=0, unsigned *col=0) { 
-    return A.min(row, col); }
-  friend Type      max(const Mat<Type>& A, unsigned *row=0, unsigned *col=0) { 
-    return A.max(row, col); }
-  friend Type      median(const Mat<Type>& A, Type minVal, Type maxVal) { 
-    return A.median(minVal, maxVal); }
-  friend double    sum(const Mat<Type>& A)           { return A.sum(); }
-  friend dcomplex   csum(const Mat<Type>& A)          { return A.csum(); }
-  friend double    sum2(const Mat<Type>& A)          { return A.sum2(); }
-  friend dcomplex   csum2(const Mat<Type>& A)         { return A.csum2(); }
-  friend double    mean(const Mat<Type>& A)          { return A.mean(); }
-  friend dcomplex   cmean(const Mat<Type>& A)         { return A.cmean(); }
-  friend double    trace(const Mat<Type>& A)         { return A.trace(); }
-  friend dcomplex   ctrace(const Mat<Type>& A)        { return A.ctrace(); }
-  friend double    norm(const Mat<Type>& A)          { return A.norm(); }
-  friend dcomplex   cnorm(const Mat<Type>& A)         { return A.cnorm(); }
-  friend double    det(const Mat<Type>& A)           { return A.det(); }
-  friend dcomplex   cdet(const Mat<Type>& A)          { return A.cdet(); }
+template <class T> 
+Mat<T> residual(const Mat<T>& A, unsigned row, unsigned col)
+{
+  return A.residual(row, col);
+}
+  
+template <class T>
+Mat<T>& fill(Mat<T> A, T value) { return A.fill(value); }
 
-  friend Mat<Type> applyElementWise(const Mat<Type>& A, double (*function)(double)) {
-    return A.applyElementWise(function); }
-  friend Mat<Type> applyElementWiseC2C(const Mat<Type>& A, dcomplex (*function)(dcomplex)){
-    return A.applyElementWiseC2C(function); }
+template <class T>
+Mat<T>& eye(Mat<T>& A) { return A.eye(); }
 
-  friend Mat<Type> exp(const Mat<Type>& A)           { return A.exp(); }
-  friend Mat<Type> log(const Mat<Type>& A)           { return A.log(); }
-  friend Mat<Type> cos(const Mat<Type>& A)           { return A.cos(); }
-  friend Mat<Type> sin(const Mat<Type>& A)           { return A.sin(); }
+template <class T>
+Mat<T>& randuniform(Mat<T>& A, double min = 0, double max = 1)
+{
+  return A.randuniform(min, max);
+}
+
+template <class T>
+Mat<T>& randnormal(Mat<T>& A, double mean = 0, double std = 1)
+{ 
+  return A.randnormal(mean, std);
+}
+
+template <class T>
+Mat<T>& hamming(Mat<T>& A) { return A.hamming(); }
+
+template <class T>
+Mat<T>& hanning(Mat<T>& A) { return A.hanning(); }
+
+template <class T>
+Mat<T>& blackman(Mat<T>& A) { return A.blackman(); }
+
+template <class T>
+Mat<T> diag(const Mat<T>& A) { return A.diag(); }
+
+template <class T>
+Mat<T> toeplitz(const Mat<T>& c, const Mat<T>& r)
+{ 
+  return(c.toeplitz(r));
+}
+
+template <class T>
+Mat<T> toeplitz(const Mat<T>& c) { return(c.toeplitz(c)); }
+
+template <class T>
+unsigned getrows(const Mat<T>& A) { return A.getrows(); }
+
+template <class T>
+unsigned getcols(const Mat<T>& A) { return A.getcols(); }
+
+template <class T>
+unsigned nElements(const Mat<T>& A) { return A.nElements(); }
+
+template <class T>
+unsigned getmaxrows(const Mat<T>& A) { return A.getmaxrows(); }
+
+template <class T>
+unsigned get_maxcols(const Mat<T>& A) { return A.getmaxcols(); }
+
+template <class T>
+int isvector(const Mat<T>& A) { return A.isvector(); }
+
+template <class T>
+int iscolumnvector(const Mat<T>& A) { return A.iscolumnvector(); }
+
+template <class T>
+int isrowvector(const Mat<T>& A) { return A.isrowvector(); }
+
+template <class T>
+unsigned length(const Mat<T>& A) { return A.length(); }
+
+template <class T>
+ostream& display(ostream& os, const Mat<T>& A) { return A.display(os); }
+
+template <class T>
+ostream& display(ostream& os, const Mat<T> A,unsigned r1, unsigned r2, 
+		 unsigned c1, unsigned c2)
+{ 
+  return A.display(os, r1, r2, c1, c2); 
+}
+  
+template <class T>
+Mat<T>  t(const Mat<T>& A) { return A.t(); }
+
+template <class T>
+Mat<T>  rotate180(const Mat<T>& A) { return A.rotate180(); }
+
+template <class T>
+Mat<T>  h(const Mat<T>& A) { return A.h(); }
+  
+template <class T>
+double sum(const Mat<T>& A) { return A.sum(); }
+
+template <class T>
+dcomplex csum(const Mat<T>& A) { return A.csum(); }
+
+template <class T>
+double sum2(const Mat<T>& A) { return A.sum2(); }
+
+template <class T>
+dcomplex csum2(const Mat<T>& A) { return A.csum2(); }
+
+template <class T>
+double mean(const Mat<T>& A) { return A.mean(); }
+
+template <class T>
+dcomplex cmean(const Mat<T>& A) { return A.cmean(); }
+
+template <class T>
+double trace(const Mat<T>& A) { return A.trace(); }
+
+template <class T>
+dcomplex ctrace(const Mat<T>& A) { return A.ctrace(); }
+
+template <class T>
+double norm(const Mat<T>& A) { return A.norm(); }
+
+template <class T>
+dcomplex cnorm(const Mat<T>& A) { return A.cnorm(); }
+
+template <class T>
+double det(const Mat<T>& A) { return A.det(); }
+
+template <class T>
+dcomplex cdet(const Mat<T>& A) { return A.cdet(); }
+
+template <class T>
+Mat<T> exp(const Mat<T>& A) { return A.exp(); }
+
+template <class T>
+Mat<T> sqrt(const Mat<T>& A) { return A.sqrt(); }
+
+template <class T>
+Mat<T> rowhouse(const Mat<T>& A, const Mat<T>& V)
+{
+  return A.rowhouse(V);
+}
+
+template <class T>
+Mat<T> convolv2d(const Mat<T>& A, const Mat<T>& filter) 
+{
+  return A.convolv2d(filter);
+}
+  
+template <class T>
+void remake(Mat<T>& A, unsigned nrows, unsigned ncols)
+{
+  A(Mat<T>(nrows, ncols));
+}
+  
 #ifdef USE_COMPMAT
 #ifdef USE_DBLMAT
-  friend Mat<double> applyElementWiseC2D(const Mat<dcomplex>& A,
-					 double (*function)(const dcomplex&));
-  friend Mat<double> arg(const Mat<dcomplex>& A);
-  friend Mat<double> real(const Mat<dcomplex>& A);
-  friend Mat<double> imag(const Mat<dcomplex>& A);
+extern Mat<double> applyElementWiseC2D(const Mat<dcomplex>& A,
+				       double (*function)(const dcomplex&));
+extern Mat<double> arg(const Mat<dcomplex>& A);
+extern Mat<double> real(const Mat<dcomplex>& A);
+extern Mat<double> imag(const Mat<dcomplex>& A);
 #endif
 #endif
 #ifdef USE_FCOMPMAT
 #ifdef USE_FLMAT
-  friend Mat<float> applyElementWiseC2D(const Mat<fcomplex>& A,
+extern Mat<float> applyElementWiseC2D(const Mat<fcomplex>& A,
 					double (*function)(const dcomplex&));
-  friend Mat<float> arg(const Mat<fcomplex>& A);
-  friend Mat<float> real(const Mat<fcomplex>& A);
-  friend Mat<float> imag(const Mat<fcomplex>& A);
+extern Mat<float> arg(const Mat<fcomplex>& A);
+extern Mat<float> real(const Mat<fcomplex>& A);
+extern Mat<float> imag(const Mat<fcomplex>& A);
 #endif
 #endif
-  friend Mat<Type> round(const Mat<Type>& A)         { return A.round(); }
-  friend Mat<Type> abs(const Mat<Type>& A)           { return A.abs(); }
-  friend Mat<Type> sqrt(const Mat<Type>& A)          { return A.sqrt(); }
-  friend Mat<Type> pow(const Mat<Type>& A, double exp) { return A.pow(exp); }
-  friend void      eig(const Mat<Type>& A, Mat<Type>& D, Mat<Type>& V) { A.eig(D, V); }
-  friend Mat<Type> house(const Mat<Type>& A)         { return A.house(); }
-  friend Mat<Type> rowhouse(const Mat<Type>& A, const Mat<Type>& V) {
-    return A.rowhouse(V); }
-  friend Mat<Type> convolv2d(const Mat<Type>& A, const Mat<Type>& filter) { 
-    return A.convolv2d(filter); }
-  friend Histogram histogram(const Mat<Type>& A, double minin = 0, double maxin = 0, 
-			     unsigned n = 0) { 
-    return A.histogram(minin, maxin, n); }
-  
-  /* JPL code change: removed the default values for minVal and
-     maxVal, now simply assumes they are 0. An ugly hack, but the code
-     wasn't compiling otherwise. Change it back and solve the real
-     problem if you actually need to set the minVal and maxVal.
-  */
 
-  //  friend SimpleArray<Type> array(const Mat<Type>& A, Type minVal = 0, Type maxVal=0) {
-  friend SimpleArray<Type> array(const Mat<Type>& A) {
-    return A.array(0, 0); }
-  friend Type      scalar(const Mat<Type>& A) { return A.scalar(); }
-  friend void       qr(const Mat<Type>& A, Mat<Type>& R, Mat<Type>& Q) { A.qr(R, Q); }
+template <class T> 
+Mat<T>& operator += (double addend, Mat<T>& A) { return A+=addend; }
+
+template <class T> 
+Mat<T>  operator +  (double addend, const Mat<T>& A) { return A+addend; }
+
+template <class T> 
+Mat<T>& operator -= (double subend, Mat<T>& A) { return A-=subend; }
+
+template <class T> 
+Mat<T>  operator -  (double subend, const Mat<T>& A) { return A-subend; }
+
+template <class T> 
+Mat<T>& operator *= (double factor,  Mat<T>& A) { return A*=factor; }
+
+template <class T> 
+Mat<T>  operator *  (double factor,  const Mat<T>& A) { return A*factor; }
+
+template <class T> 
+Mat<T>& operator /= (double factor,  Mat<T>& A) { return A/=factor; }
+
+template <class T> 
+Mat<T>  operator /  (double factor,  const Mat<T>& A) { return A/factor; }
+
+template <class T> 
+Mat<T> inv(const Mat<T>& A) { return A.inv(); }
+
+template <class T> 
+T min(const Mat<T>& A, unsigned *row = 0, unsigned *col = 0)
+{ 
+  return A.min(row, col);
+}
+
+template <class T> 
+T max(const Mat<T>& A, unsigned *row = 0, unsigned *col = 0) 
+{ 
+  return A.max(row, col);
+}
+
+template <class T> T 
+median(const Mat<T>& A, T minVal, T maxVal) 
+{ 
+  return A.median(minVal, maxVal);
+}
+
+template <class T> 
+Mat<T> applyElementWise(const Mat<T>& A, double (*function)(double))
+{ 
+  return A.applyElementWise(function);
+}
+
+template <class T> 
+Mat<T> applyElementWiseC2C(const Mat<T>& A, dcomplex (*function)(dcomplex))
+{
+  return A.applyElementWiseC2C(function);
+}
+
+template <class T> 
+Mat<T> log(const Mat<T>& A) { return A.log(); }
+
+template <class T> 
+Mat<T> cos(const Mat<T>& A) { return A.cos(); }
+
+template <class T>
+Mat<T> sin(const Mat<T>& A) { return A.sin(); }
+
+template <class T>
+Mat<T> round(const Mat<T>& A) { return A.round(); }
+
+template <class T>
+Mat<T> abs(const Mat<T>& A) { return A.abs(); }
+
+template <class T> 
+Mat<T> pow(const Mat<T>& A, double exp) { return A.pow(exp); }
+
+template <class T>
+void eig(const Mat<T>& A, Mat<T>& D, Mat<T>& V) { A.eig(D, V); }
+
+template <class T> 
+Mat<T> house(const Mat<T>& A) { return A.house(); }
+
+template <class T> 
+Histogram histogram(const Mat<T>& A, double minin = 0, double maxin = 0, unsigned n = 0) { return A.histogram(minin, maxin, n); }
+
+template <class T>
+void qr(const Mat<T>& A, Mat<T>& R, Mat<T>& Q) { A.qr(R, Q); }
+
+template <class T>
+void svd(const Mat<T>& A, Mat<T>& U, Mat<T>& S, Mat<T>& V) { A.svd(U,S,V); }
   
-  friend void       qr(const Mat<Type>& A, Mat<Type>& R, Mat<Type>& Q, Mat<Type>& P) {
-    A.qr(R,Q,P); }
+template <class T>
+Mat<T> clip(const Mat<T>& A, T minVal, T maxVal, T minFill, T maxFill) 
+{
+  return A.clipConst(minVal, maxVal, minFill, maxFill);
+}
+
+template <class T>
+Mat<T> map(const Mat<T>& A, const ValueMap& valueMap) 
+{ 
+  return A.mapConst(valueMap); 
+}
+
+template <class T>
+Mat<T> scale(const Mat<T>& A, double minout = 0.0, double maxout = 255.0, 
+	     double minin = 0.0, double maxin=0.0) 
+{ 
+  return A.scaleConst(minout, maxout, minin, maxin);
+}
   
-  friend void       svd(const Mat<Type>& A, Mat<Type>& U, Mat<Type>& S,Mat<Type>& V) {
-    A.svd(U,S,V); }
+template <class T>
+void linearinterpolate(const Mat<T>& x, unsigned Urow, unsigned Drow, 
+		       unsigned Ucol, unsigned Dcol, Mat<T>& y)
+{
+  x.linearinterpolate(Urow,Drow,Ucol,Dcol,y); 
+}
   
-  friend Mat<Type> clip(const Mat<Type>& A, Type minVal, Type maxVal, Type minFill,
-			Type maxFill) { 
-    return A.clipConst(minVal, maxVal, minFill, maxFill); }
-  friend Mat<Type> map(const Mat<Type>& A, const ValueMap& valueMap) { 
-    return A.mapConst(valueMap); }
-  friend Mat<Type> scale(const Mat<Type>& A, double minout = 0.0, double maxout = 255.0, 
-			 double minin = 0.0, double maxin=0.0) { 
-    return A.scaleConst(minout, maxout, minin, maxin); }
-  
-  friend void  linearinterpolate(const Mat<Type>& x, unsigned Urow, unsigned Drow, 
-				 unsigned Ucol, unsigned Dcol, Mat<Type>& y) {
-    x.linearinterpolate(Urow,Drow,Ucol,Dcol,y); }
-  
-  friend Mat<Type> filter(Mat<Type>& B,Mat<Type>& A,const Mat<Type>& x) { 
-    return (x.filter(B,A)); }
+template <class T>
+Mat<T> filter(Mat<T>& B, Mat<T>& A, const Mat<T>& x) 
+{ 
+  return (x.filter(B, A));
+}
   
 #ifdef USE_DBLMAT
-  friend Mat<Type> erode(const Mat<Type>& A, const Mat<double>& strel) {
-    return A.erode(strel); }
-  friend Mat<Type> dilate(const Mat<Type>& A, const Mat<double>& strel) {
-    return A.dilate(strel); }
-  friend Mat<Type> open(const Mat<Type>& A, const Mat<double>& strel) {
-    return A.open(strel); }
-  friend Mat<Type> close(const Mat<Type>& A, const Mat<double>& strel) {
-    return A.close(strel); }
-#endif
+template <class T>
+Mat<T> erode(const Mat<T>& A, const Mat<double>& strel) 
+{
+  return A.erode(strel);
+}
+
+template <class T>
+Mat<T> dilate(const Mat<T>& A, const Mat<double>& strel) 
+{
+  return A.dilate(strel);
+}
+
+template <class T> 
+Mat<T> open(const Mat<T>& A, const Mat<double>& strel)
+{
+  return A.open(strel);
+}
+
+template <class T> 
+Mat<T> close(const Mat<T>& A, const Mat<double>& strel)
+{
+  return A.close(strel);
+}
+#endif // USE_DBLMAT
+
+template <class T>
+T scalar(const Mat<T>& A) { return A.scalar(); }
   
-  friend Boolean loadRaw(Mat<Type>& A, const char *filename,
-			 unsigned nrows = 0,unsigned ncols = 0) {
-    return A.loadRaw(filename, nrows, ncols); }
-  friend Boolean loadAscii(Mat<Type>& A, const char *filename) { 
-    return A.loadAscii(filename); }
+template <class T> 
+void qr(const Mat<T>& A, Mat<T>& R, Mat<T>& Q, Mat<T>& P) { A.qr(R,Q,P); }
+  
+  
+template <class T>
+Boolean loadRaw(Mat<T>& A, const char *filename,
+		unsigned nrows = 0, unsigned ncols = 0) 
+{
+  return A.loadRaw(filename, nrows, ncols);
+}
+
+template <class T>
+Boolean loadAscii(Mat<T>& A, const char *filename)
+{ 
+  return A.loadAscii(filename);
+}
   
 #ifdef HAVE_MATLAB   
-  friend Boolean loadMatlab(Mat<Type>& A, const char *filename, const char *varname = "A"){
-    return A.loadMatlab(filename,varname); }
+template <class T>
+Boolean loadMatlab(Mat<T>& A, const char *filename, const char *varname = "A")
+{
+  return A.loadMatlab(filename, varname);
+}
   
-  friend Boolean saveMatlab(const Mat<Type>& A, const char *filename, 
-			    const char *varname, const char *option = "u") {
-    return A.saveMatlab(filename, varname, option); }
-#endif
+template <class T>
+Boolean saveMatlab(const Mat<T>& A, const char *filename, 
+		   const char *varname, const char *option = "u")
+{
+  return A.saveMatlab(filename, varname, option);
+}
+#endif // HAVE_MATLAB
   
-  friend Boolean saveRaw(const Mat<Type>& A, const char *filename) { 
-    return A.saveRaw(filename); }
-  friend Boolean saveAscii(const Mat<Type>& A, const char *filename) {
-    return A.saveAscii(filename); }
-  
-  friend void remake(Mat<Type>& A, unsigned nrows, unsigned ncols) {
-    A(Mat<Type>(nrows, ncols)); }
-  
+template <class T>
+Boolean saveRaw(const Mat<T>& A, const char *filename) 
+{ 
+  return A.saveRaw(filename);
+}
+
+template <class T>
+Boolean saveAscii(const Mat<T>& A, const char *filename)
+{
+  return A.saveAscii(filename);
+}
+
 #ifdef USE_COMPMAT
-  friend Mat<dcomplex> fft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0);
-  friend Mat<dcomplex> ifft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0);
-#endif
+template <class T>
+Mat<dcomplex> fft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+template <class T>
+Mat<dcomplex> ifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+#endif /* USE_COMPMAT */
 
 #ifdef USE_FCOMPMAT
-  friend Mat<fcomplex> ffft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0);
-  friend Mat<fcomplex> fifft(const Mat<Type>& A, unsigned nrows = 0, unsigned ncols = 0);
-#endif
-  
-/********************************END OF Mat CLASS******************************/
-};
+template <class T>
+Mat<fcomplex> ffft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+template <class T>
+Mat<fcomplex> fifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+#endif /* USE_FCOMPMAT */
 
-template <class Type> ostream& operator << (ostream&, const Mat<Type>&);
+template <class T> ostream& operator << (ostream&, const Mat<T>&);
 
 /*******************************Sub classes************************************/
 
@@ -1205,5 +1417,8 @@ public:
   const Type& operator --()    { return *--_elPtr; } // Prefix decrement
   const Type& operator --(int) { return *_elPtr--; } // Postfix decrement
 };
+
+template<class Type>
+SimpleArray<Type> array(const Mat<Type>& A, Type minVal = 0, Type maxVal = 0);
 
 #endif
