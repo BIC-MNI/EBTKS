@@ -2,12 +2,12 @@
 
 #if HAVE_FINITE
 #ifndef finite
-extern int finite(double);
+extern "C" int finite(double);
 #endif /* finite() not defined (as macro) */
 #define FINITE(x) finite(x)
 #elif HAVE_ISFINITE
 #ifndef isfinite
-extern int isfinite(double);
+extern "C" int isfinite(double);
 #endif /* isfinite() not defined (as macro) */
 #define FINITE(x) isfinite(x)
 #else

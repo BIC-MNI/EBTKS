@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.6 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.7 $
+$Author: bert $
+$Date: 2004-01-29 19:42:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -613,12 +613,12 @@ SimpleArray<Type>::common(const SimpleArray<Type>& array) const
 
 #if HAVE_FINITE
 #ifndef finite
-extern int finite(double);
+extern "C" int finite(double);
 #endif /* finite() not defined (as macro) */
 #define FINITE(x) finite(x)
 #elif HAVE_ISFINITE
 #ifndef isfinite
-extern int isfinite(double);
+extern "C" int isfinite(double);
 #endif /* isfinite() not defined (as macro) */
 #define FINITE(x) isfinite(x)
 #else
