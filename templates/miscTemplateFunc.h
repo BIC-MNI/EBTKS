@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: miscTemplateFunc.h,v $
-$Revision: 1.3 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2004-12-08 16:42:20 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MISC_TEMPLATE_FUNC_H
@@ -23,10 +23,6 @@ $State: Exp $
 #include <stdlib.h>
 #include "dcomplex.h"
 #include "fcomplex.h"
-
-// Forward declarations
-class Histogram;
-template <class Type> class SimpleArray;
 
 inline double asDouble(dcomplex value) { return sqrt(std::norm(value)); }
 inline double asDouble(fcomplex value) { return sqrt(std::norm(value)); }
@@ -90,19 +86,6 @@ inline Type clamp(const Type& value, const Type& a, const Type& b) {
   }
 
   return value;
-}
-
-template <class Type>
-Histogram&
-add(Histogram& hist, const SimpleArray<Type>& array)
-{
-  if (array.size()) {
-    array.resetIterator();
-    for (unsigned i = array.size(); i; i--)
-      hist.add(array++);
-  }
-
-  return hist;
 }
 
 template <class Type>
