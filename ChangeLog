@@ -1,3 +1,8 @@
+2003-11-21  Steve ROBBINS  <stever@bic.mni.mcgill.ca>
+
+	* templates/CachedArray.cc: Remove debugging statements
+	erroneously left in code.
+
 2003-11-14  Steve ROBBINS  <stever@bic.mni.mcgill.ca>
 
 	* configure.ac: Set version to 1.0.

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.5 $
+$Revision: 1.6 $
 $Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Date: 2003-11-21 20:38:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -24,7 +24,9 @@ $State: Exp $
 #include <stdio.h>
 #include <unistd.h>
 
+
 using namespace std;
+
 
 //
 // CachedArray class
@@ -478,9 +480,6 @@ CachedArray<Type>::median() const
 {
   assert(_size);
 
-  cout << "DEBUG: in median of CachedArray" << endl;
-  cout << "DEBUG: _size = " << _size << endl;
-
   if (_size <= _blockSize) {
     if (!_blocks[0])
       _read(0);
@@ -503,7 +502,6 @@ CachedArray<Type>::medianVolatile()
       _read(0);
     return (*_blocks[0])(_size).medianVolatile();
   }
-  cout << "DEBUG: histMedian = " << _histMedian() << endl;
   return _histMedian();
 }
 
@@ -723,7 +721,6 @@ template <class Type>
 void
 CachedArray<Type>::_openStream()
 {
-  cout << "DEBUG: state of _s: " << _s.is_open() << endl;
   if (_s.is_open())
     _self->_s.close();
 
@@ -734,10 +731,7 @@ CachedArray<Type>::_openStream()
     _s.open(path, ios::in|ios::out);
     //    _s.open(path, ios::in);
 
-    cout << "DEBUG: state of path: " << path << endl;
     unlink(path);
-
-    cout << "DEBUG: state of _s: " << _s.is_open() << endl;
     //assert(_s.is_open());
 
     // Create file at requested size
