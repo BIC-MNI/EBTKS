@@ -12,12 +12,14 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MatrixConv.cc,v $
-$Revision: 1.3 $
+$Revision: 1.4 $
 $Author: bert $
-$Date: 2003-04-16 16:55:37 $
+$Date: 2004-12-08 17:06:56 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
+#include <iostream>
+using namespace std;
 #include "Matrix.h"
 //#include "miscTemplateFunc.h"
 
