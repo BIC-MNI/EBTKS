@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MPoint.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 18:00:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef MPOINT_H
@@ -22,7 +22,8 @@ $State: Exp $
 
 #include <math.h>
 #include <stdlib.h>
-#include "iostream.h"
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 #include "trivials.h"
 #include "MTypes.h"
 #include "Pool.h"

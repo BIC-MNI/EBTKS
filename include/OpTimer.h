@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OpTimer.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 22:27:11 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:00:10 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _OP_TIMER_H
 #define _OP_TIMER_H
 
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 
 typedef double (*TimeFunc)();
 

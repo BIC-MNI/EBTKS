@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: backProp.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:44 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 17:58:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef BACKPROP_H
 #define BACKPROP_H
 
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 #include <stdio.h>
 #include "Array.h"
 #include "TrainingSet.h"
