@@ -12,11 +12,12 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: MatrixConv.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:47 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 16:55:37 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#include <config.h>
 #include "Matrix.h"
 //#include "miscTemplateFunc.h"
 
@@ -90,14 +91,23 @@ Mat<fcomplex> asFcompMat(const Mat<Type>& Re, const Mat<Type>& Im)
 }
 #endif
 
-// ERROR: re-enable def to work as before
-
-#undef __GNUC__
-
-#ifdef __GNUC__
 template Mat<dcomplex> asCompMat(Mat<double> const &);
 template Mat<dcomplex> asCompMat(Mat<dcomplex> const &);
-#else
-#pragma instantiate Mat<dcomplex> asCompMat(const Mat<double>&)
-#pragma instantiate Mat<dcomplex> asCompMat(const Mat<dcomplex>&)
-#endif
+
+
+#if !defined(__GNUC__) && defined(__sgi)
+#include "MatrixSpec.cc"
+#include "SimpleArraySpec.cc"
+
+#ifdef USE_COMPMAT
+template class Mat<dcomplex>;
+template Mat<dcomplex> inv(const Mat<dcomplex> &);
+template Mat<dcomplex> fft(const Mat<double> &, unsigned, unsigned);
+template Mat<dcomplex> fft(const Mat<dcomplex> &, unsigned, unsigned);
+template Mat<dcomplex> ifft(const Mat<double> &, unsigned, unsigned);
+template Mat<dcomplex> ifft(const Mat<dcomplex> &, unsigned, unsigned);
+template class SimpleArray<dcomplex>;
+template class IndexStruct<dcomplex>;
+#endif // USE_COMPMAT
+#endif // !defined(__GNUC__) && defined(__sgi)
+
