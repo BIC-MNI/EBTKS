@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:44 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:04:03 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,7 +28,10 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : April 21, 1996 (John G. Sled)
 @MODIFIED   : $Log: TBSpline.h,v $
-@MODIFIED   : Revision 1.2  2002-03-20 21:42:44  jason
+@MODIFIED   : Revision 1.3  2003-04-16 18:04:03  bert
+@MODIFIED   : Removed meaningless const qualifiers on operator[] to avoid compiler warnings
+@MODIFIED   :
+@MODIFIED   : Revision 1.2  2002/03/20 21:42:44  jason
 @MODIFIED   : Now compiles with gcc 3
 @MODIFIED   :
 @MODIFIED   : Revision 1.1.1.1  2001/11/09 16:37:25  jason
@@ -65,7 +68,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.2 2002-03-20 21:42:44 jason Exp $";
+static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.3 2003-04-16 18:04:03 bert Exp $";
 #endif
 
 #ifndef TBSPLINE_H
@@ -180,7 +183,7 @@ protected:
 public:
   TIndex(const IntArray &n);  // initial value is zero
   TIndex(const IntArray &index, const IntArray &n);  // initial value is index
-  virtual const int operator[] (unsigned i) { return _index[i]; };
+  virtual int operator[] (unsigned i) { return _index[i]; }; // (bert) lose const
   int flat(void) { return _flat; };
   virtual void operator ++ (void);
   virtual void reset(void) { _index.clear(0); };
@@ -199,7 +202,7 @@ public:
   TSubIndex(const TIndex &index, const IntArray &smallN);
   TSubIndex(const TIndex &index, const IntArray &smallIndex,
 	    const IntArray &smallN);
-  virtual const int operator[] (unsigned i) { return _smallIndex[i]; };
+  virtual int operator[] (unsigned i) { return _smallIndex[i]; }; // (bert) lose const
   virtual void operator ++ ();
   void reset(void) { _index.clear(0); _smallIndex.clear(0); };
 };
