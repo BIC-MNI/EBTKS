@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.7 $
+$Revision: 1.8 $
 $Author: bert $
-$Date: 2004-02-12 20:17:52 $
+$Date: 2004-02-13 18:31:29 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -722,22 +722,26 @@ void
 CachedArray<Type>::_openStream()
 {
   if (_s.is_open())
-    _self->_s.close();
+    _s.close();
 
   if (_size) {
-    const char *path = "/tmp/test"; //tempnam(NULL, "CA-");
-    assert(path);
+    const char *path = tempnam(NULL, "CA-");
 
-    _s.open(path, ios::in|ios::out);
-    //    _s.open(path, ios::in);
+    // Have to specify 'trunc' for some versions of the libraries, 
+    // otherwise the file may not be created.
+    //
+    _s.open(path, ios::in | ios::out | ios::trunc);
 
+    // Unlink the file so it will be deleted automatically when
+    // closed.
+    //
     unlink(path);
-    //assert(_s.is_open());
+
+    assert(_s.is_open());
 
     // Create file at requested size
     _s.seekg(_maxNblocks*_blockSize*sizeof(Type));
     _s.put('\0');
-    //assert(_s.is_open());
   }
 }
 
