@@ -6,7 +6,8 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/templates -DUSE_COMPMAT -D
 lib_LTLIBRARIES = libEBTKS.la
 
 
-EXTRA_DIST = $(m4_files)
+EXTRA_DIST = $(m4_files) \
+	epm-header.in
 
 # Some #include'd C++ sources which are not independently compiled.
 #

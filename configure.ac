@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT
 AC_CONFIG_SRCDIR([src/FileIO.cc])
-AM_INIT_AUTOMAKE(EBTKS, 1.4)
+AM_INIT_AUTOMAKE(EBTKS, 1.5)
 AC_CONFIG_HEADERS([config.h])
 
 AC_PROG_INSTALL
@@ -24,5 +24,6 @@ smr_WITH_BUILD_PATH
 AC_CHECK_FUNCS(finite isfinite mkstemp)
 
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
+AC_OUTPUT(epm-header
+)
 

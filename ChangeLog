@@ -1,3 +1,6 @@
+2005-03-16  Andrew Janke   <a.janke@gmail.com>
+	* Added epm-header.in
+
 2004-12-08  Bert Vincent   <bert@bic.mni.mcgill.ca>
 	* Various changes for building against GCC 3.4.X
 	
