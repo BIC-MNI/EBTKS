@@ -12,16 +12,17 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 15:02:27 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _CACHED_ARRAY_H
 #define _CACHED_ARRAY_H
 
 #include "SimpleArray.h"
-#include <fstream.h>
+#include <fstream>		/* (bert) changed from fstream.h */
+using namespace std;		/* (bert) added */
 
 /********************************************************************
  * CachedArray class
@@ -228,6 +229,7 @@ public:
   ~CacheBlock();
   
   Type&       getEl(unsigned i) { _changed = TRUE; _nWrite++; return _contents[i]; }
+  const Type& getEl(unsigned i) const { _self->_nRead++; return _contents[i]; }
   const Type& getElConst(unsigned i) const  { _self->_nRead++; return _contents[i]; }
   void        setEl(unsigned i, Type value) { 
     _changed = TRUE; _nWrite++; _contents[i]=value; }

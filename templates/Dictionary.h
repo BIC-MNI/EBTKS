@@ -12,15 +12,16 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Dictionary.h,v $
-$Revision: 1.1 $
-$Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Revision: 1.2 $
+$Author: bert $
+$Date: 2003-04-16 15:03:14 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include <iostream.h>
+#include <iostream>		/* (bert) changed from iostream.h */
+using namespace std;		/* (bert) added */
 #include "MTypes.h"
 #include "trivials.h"
 

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.3 $
-$Author: jason $
-$Date: 2002-03-29 00:07:22 $
+$Revision: 1.4 $
+$Author: bert $
+$Date: 2003-04-16 15:02:27 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -33,8 +33,7 @@ $State: Exp $
 template <class Type> const unsigned CachedArray<Type>::_DEFAULT_BLOCK_SIZE = 32768;
 template <class Type> const unsigned CachedArray<Type>::_DEFAULT_N_BLOCKS   = 2;
 template <class Type> unsigned CachedArray<Type>::_rangeErrorCount = 25;
-#endif
-
+#endif // __GNUC__ not defined
 //
 // Constructors/destructor
 //
@@ -854,7 +853,6 @@ Type
 CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
 {
   assert(_size);
-
   cout << "Begin: " << nBelow << " : " << nAbove << endl;
 
   if (_size <= _blockSize) {
@@ -1072,9 +1070,9 @@ CacheBlock<Type>::write(fstream& s) const
          template CachedArray<Type> operator ^ (double,                 \
                                                 CachedArray<Type> const &); \
          template class CacheBlock<Type>;                               \
-         unsigned CachedArray<Type>::_rangeErrorCount = 25;  
+         unsigned CachedArray<Type>::_rangeErrorCount = 25;
 
 
 _INSTANTIATE_CACHEDARRAY(char);
 _INSTANTIATE_CACHEDARRAY(float);
-#endif
+#endif // __GNUC__ defined
