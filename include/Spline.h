@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Spline.h,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:44 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 17:59:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SPLINE_3D_H
@@ -179,7 +179,7 @@ public:
 protected:
   double _r2(const float *p1, const float *p2) const {
     double r2 = 0.0;
-    for (unsigned d = 0; d < _nDimensions; d++) {
+    for (unsigned i = 0; i < _nDimensions; i++) { /* (bert) changed d to i */
       double d = double(*p1++) - *p2++;
       r2 += d*d;
     }
