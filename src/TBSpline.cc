@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.7 $
-$Author: vsingh $
-$Date: 2004-04-04 19:54:18 $
+$Revision: 1.8 $
+$Author: bert $
+$Date: 2004-04-06 18:52:33 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.7 2004-04-04 19:54:18 vsingh Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.8 2004-04-06 18:52:33 bert Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -640,6 +640,8 @@ TBSpline::solveSymmetricSystem(DblMat &A, DblMat b, int *info)
   dsysv_(&uplo, &n, &nrhs, (_doublereal *) *A.getEl(), &lda, ipiv, 
 	 (_doublereal *) *b.getEl(), &ldb,
 	 &work, &lwork, (_integer *)info);
+
+  delete [] ipiv;
   return(b);
 }
 
