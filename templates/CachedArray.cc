@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.8 $
+$Revision: 1.9 $
 $Author: bert $
-$Date: 2004-02-13 18:31:29 $
+$Date: 2004-04-06 18:51:45 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -852,7 +852,8 @@ Type
 CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
 {
   assert(_size);
-  cout << "Begin: " << nBelow << " : " << nAbove << endl;
+  if (_debug)
+      cout << "Begin: " << nBelow << " : " << nAbove << endl;
 
   if (_size <= _blockSize) {
     unsigned fullSize = nBelow + _size + nAbove;
@@ -865,7 +866,8 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
   Type floor, ceil;
   extrema(&floor, &ceil);
 
-  cout << "Floor and Ceiling: " << floor << " : " << ceil << endl;
+  if (_debug)
+      cout << "Floor and Ceiling: " << floor << " : " << ceil << endl;
 
   if (floor == ceil)
     return floor;
@@ -876,19 +878,24 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
   for (unsigned i = _size; i; i--)
     hist.add((*this)++);
 
-  //  cout << endl << "Contents: " << *this << endl;
-  //  cout << "Hist: " << hist << endl;
-  cout << "[" << nBelow << ", " << nAbove << "]" << endl;
+  if (_debug) {
+      //  cout << endl << "Contents: " << *this << endl;
+      //  cout << "Hist: " << hist << endl;
+      cout << "[" << nBelow << ", " << nAbove << "]" << endl;
+  }
 
   unsigned bin;
   double histMedian = hist.median(&bin, nBelow, nAbove);
-  cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
+
+  if (_debug)
+      cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
 
   unsigned nBelow2, nAbove2;
   removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
 		 &nBelow2, &nAbove2);
-  
-  cout << "nBelow2 : nAbove2 " << nBelow2 << " : " << nAbove2 << endl;
+
+  if (_debug)
+      cout << "nBelow2 : nAbove2 " << nBelow2 << " : " << nAbove2 << endl;
 
   return _histMedian(nBelow + nBelow2, nAbove + nAbove2);
 }

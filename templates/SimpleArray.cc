@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.7 $
+$Revision: 1.8 $
 $Author: bert $
-$Date: 2004-01-29 19:42:44 $
+$Date: 2004-04-06 18:51:58 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -784,7 +784,8 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
 
   *max = *min = (*this)++;
 
-  cout << _size << " :: " << *max << " :: " << *min << endl;
+  if (_debug)
+      cout << _size << " :: " << *max << " :: " << *min << endl;
 
   for (unsigned i = 1; i < _size; i++) {
     Type value = (*this)++;
@@ -794,7 +795,8 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
       *max = value;
   }
 
-  cout << _size << " :: " << *max << " :: " << *min << endl;
+  if (_debug) 
+      cout << _size << " :: " << *max << " :: " << *min << endl;
 }
 
 template <class Type>
