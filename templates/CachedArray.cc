@@ -12,14 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.9 $
+$Revision: 1.10 $
 $Author: bert $
-$Date: 2004-04-06 18:51:45 $
+$Date: 2004-12-08 17:02:18 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "CachedArray.h"
 #include "Histogram.h"
+#include "FileIO.h"
 #include <assert.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -48,12 +49,12 @@ CachedArray<Type>::CachedArray(unsigned size, unsigned nBlocks, unsigned blockSi
   _self = this;
   _head = 0;
   _blocks = 0;
-  _size = 0;
+  this->_size = 0;
   _blockSize = 0;
   _nBlocks = 0;
   _itBlock = 0;
   _itBlockPtr = 0;
-  _itIndex = 0;
+  this->_itIndex = 0;
 
   _initialize(size, nBlocks, blockSize);
   _openStream();
@@ -69,12 +70,12 @@ CachedArray<Type>::CachedArray(const Type *init, unsigned size, unsigned nBlocks
   _self = this;
   _head = 0;
   _blocks = 0;
-  _size = 0;
+  this->_size = 0;
   _blockSize = 0;
   _nBlocks = 0;
   _itBlock = 0;
   _itBlockPtr = 0;
-  _itIndex = 0;
+  this->_itIndex = 0;
   
   _initialize(size, nBlocks, blockSize);
   _openStream();
@@ -91,12 +92,12 @@ CachedArray<Type>::CachedArray(const CachedArray<Type>& array)
   _self = this;
   _head = 0;
   _blocks = 0;
-  _size = 0;
+  this->_size = 0;
   _blockSize = 0;
   _nBlocks = 0;
   _itBlock = 0;
   _itBlockPtr = 0;
-  _itIndex = 0;
+  this->_itIndex = 0;
 
   _initialize(array._size, array._nBlocks, array._blockSize);
   _openStream();
@@ -112,12 +113,12 @@ CachedArray<Type>::CachedArray(const SimpleArray<Type>& array, unsigned nBlocks,
   _self = this;
   _head = 0;
   _blocks = 0;
-  _size = 0;
+  this->_size = 0;
   _blockSize = 0;
   _nBlocks = 0;
   _itBlock = 0;
   _itBlockPtr = 0;
-  _itIndex = 0;
+  this->_itIndex = 0;
 
   _initialize(array.size(), nBlocks, blockSize);
   _openStream();
@@ -139,8 +140,8 @@ template <class Type>
 ostream&
 CachedArray<Type>::saveBinary(ostream& os, unsigned n, unsigned start) const
 {
-  if (start >= _size) {
-    if (_size)
+  if (start >= this->_size) {
+    if (this->_size)
       if (_rangeErrorCount) {
 	_rangeErrorCount--;
 	cerr << "CachedArray::saveBinary: start out of range" << endl; 
@@ -150,9 +151,9 @@ CachedArray<Type>::saveBinary(ostream& os, unsigned n, unsigned start) const
   }
   
   if (!n)
-    n = _size - start;
-  else if (start + n > _size) {
-    n = _size - start;
+    n = this->_size - start;
+  else if (start + n > this->_size) {
+    n = this->_size - start;
     if (_rangeErrorCount) {
       _rangeErrorCount--;
       cerr << "CachedArray::saveBinary: n too large; truncated" << endl;
@@ -180,11 +181,11 @@ istream&
 CachedArray<Type>::loadBinary(istream& is, unsigned n, unsigned start)
 {
   if (!n)
-    n = _size;
+    n = this->_size;
 
   newSize(start + n);
 
-  if (_size) {
+  if (this->_size) {
     unsigned startInBlock = start % _blockSize;
     for (unsigned b = start / _blockSize; b < _maxNblocks; b++) {
       CacheBlock<Type> *block = _read(b);
@@ -210,10 +211,10 @@ template <class Type>
 void
 CachedArray<Type>::resetIterator(unsigned i)
 {
-  if (!_size)
+  if (!this->_size)
     return;
 
-  assert(i < _size);
+  assert(i < this->_size);
   _self->_itBlock    = i / _blockSize;
   _self->_itBlockPtr = _read(_itBlock)->_contents;
   _self->_itIndex    = i - _itBlock * _blockSize;
@@ -224,7 +225,7 @@ template <class Type>
 void
 CachedArray<Type>::resetIterator(unsigned i) const
 {
-  if (!_size)
+  if (!this->_size)
     return;
 
   _self->_itBlock    = i / _blockSize;
@@ -235,15 +236,15 @@ CachedArray<Type>::resetIterator(unsigned i) const
   // const and non-const versions of resetIterator,
   _self->_blocks[_itBlock]->_changed = TRUE;
 
-  assert((i < _size) && 
+  assert((i < this->_size) && 
 	 (_itBlock < _maxNblocks) && 
 	 _itBlockPtr && 
-	 (_itIndex < _blockSize));
+	 (this->_itIndex < _blockSize));
 
-  if (_debug)
+  if (this->_debug)
     cout << "CachedArray::resetIterator:" << endl
 	 << "   i:" << i 
-	 << " _itIndex:" << _itIndex
+	 << " _itIndex:" << this->_itIndex
 	 << " _nBlocks:" << _nBlocks
          << " _maxNblocks:" << _maxNblocks
 	 << " _blockSize:" << _blockSize 
@@ -260,7 +261,7 @@ CachedArray<Type>::current()
     _self->_blocks[_itBlock]->_changed = TRUE;
   }
 
-  return *(_itBlockPtr + _itIndex);
+  return *(_itBlockPtr + this->_itIndex);
 }
 
 template <class Type>
@@ -272,7 +273,7 @@ CachedArray<Type>::current() const
     _self->_itIndex = 0;
   }
 
-  return *(_itBlockPtr + _itIndex);
+  return *(_itBlockPtr + this->_itIndex);
 }
 
 //
@@ -288,7 +289,7 @@ CachedArray<Type>::operator ++()
     _self->_blocks[_itBlock]->_changed = TRUE;
   }
 
-  return *(_itBlockPtr + _itIndex);
+  return *(_itBlockPtr + this->_itIndex);
 }
 
 template <class Type>
@@ -300,14 +301,14 @@ CachedArray<Type>::operator ++() const
     _self->_itIndex = 0;
   }
 
-  return *(_itBlockPtr + _itIndex);
+  return *(_itBlockPtr + this->_itIndex);
 }
 
 template <class Type>
 Type&
 CachedArray<Type>::operator ++(int)
 {
-  if (_itIndex >= _blockSize) {
+  if (this->_itIndex >= _blockSize) {
     _self->_itBlockPtr   = _read(++(_self->_itBlock))->_contents;
     _self->_itIndex = 0;
     _self->_blocks[_itBlock]->_changed = TRUE;
@@ -320,7 +321,7 @@ template <class Type>
 const Type&
 CachedArray<Type>::operator ++(int) const
 {
-  if (_itIndex >= _blockSize) {
+  if (this->_itIndex >= _blockSize) {
     _self->_itBlockPtr = _read(++(_self->_itBlock))->_contents;
     _self->_itIndex    = 0;
   }
@@ -341,7 +342,7 @@ CachedArray<Type>::operator --()
     _self->_blocks[_itBlock]->_changed = TRUE;
   }
 
-  return *(_itBlockPtr + _itIndex);
+  return *(_itBlockPtr + this->_itIndex);
 }
 
 template <class Type>
@@ -353,14 +354,14 @@ CachedArray<Type>::operator --() const
     _self->_itIndex = _blockSize - 1;
   }
 
-  return *(_itBlockPtr + _itIndex);
+  return *(_itBlockPtr + this->_itIndex);
 }
 
 template <class Type>
 Type&
 CachedArray<Type>::operator --(int)
 {
-  if (int(_itIndex) < 0) {
+  if (int(this->_itIndex) < 0) {
     _self->_itBlockPtr = _read(--(_self->_itBlock))->_contents;
     _self->_itIndex = _blockSize - 1;
     _self->_blocks[_itBlock]->_changed = TRUE;
@@ -373,7 +374,7 @@ template <class Type>
 const Type&
 CachedArray<Type>::operator --(int) const
 {
-  if (int(_itIndex) < 0) {
+  if (int(this->_itIndex) < 0) {
     _self->_itBlockPtr = _read(--(_self->_itBlock))->_contents;
     _self->_itIndex = _blockSize - 1;
   }
@@ -401,11 +402,11 @@ CachedArray<Type>::copyFromCarray(const Type *init, unsigned size)
 template <class Type>
 CachedArray<Type>::operator SimpleArray<Type> () const
 {
-  SimpleArray<Type> array(_size);
+  SimpleArray<Type> array(this->_size);
   Type             *destPtr = array.contents();
 
   resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     *destPtr++ = (*this)++;
   
   return array;
@@ -420,7 +421,7 @@ CachedArray<Type>::newSize(unsigned size)
     return;
   }
 
-  if (!_size) {
+  if (!this->_size) {
     _initialize(size, _nBlocks ? _nBlocks : _DEFAULT_N_BLOCKS, 
 		_blockSize ? _blockSize : _DEFAULT_BLOCK_SIZE);
     _openStream();
@@ -431,7 +432,7 @@ CachedArray<Type>::newSize(unsigned size)
 
   delete [] _blocks;
   delete _head;
-  _size = 0;
+  this->_size = 0;
 
   _initialize(size, _nBlocks, _blockSize);
   
@@ -443,7 +444,7 @@ CachedArray<Type>::newSize(unsigned size)
   CacheBlock<Type> *block = _head;
   for (unsigned i = 0; block; i++, block = block->_next) {
     assert(block->read(_self->_s, i));
-    if (_debug)
+    if (this->_debug)
       cout << "<read block " << i << " at " << long(block) << ">" << flush;
   }
 }
@@ -468,22 +469,22 @@ template <class Type>
 void
 CachedArray<Type>::qsortAscending()
 {
-  if (!_size)
+  if (!this->_size)
     cerr << "Warning: qsort attempted on empty CachedArray" << endl;
 
-  _qsort(0, _size - 1);
+  _qsort(0, this->_size - 1);
 }
 
 template <class Type> 
 Type
 CachedArray<Type>::median() const
 {
-  assert(_size);
+  assert(this->_size);
 
-  if (_size <= _blockSize) {
+  if (this->_size <= _blockSize) {
     if (!_blocks[0])
       _read(0);
-    return (*_blocks[0])(_size).medianVolatile();
+    return (*_blocks[0])(this->_size).medianVolatile();
   }
 
   CachedArray<Type> array(*this);
@@ -495,12 +496,12 @@ template <class Type>
 Type
 CachedArray<Type>::medianVolatile()
 {
-  assert(_size);
+  assert(this->_size);
 
-  if (_size <= _blockSize) {
+  if (this->_size <= _blockSize) {
     if (!_blocks[0])
       _read(0);
-    return (*_blocks[0])(_size).medianVolatile();
+    return (*_blocks[0])(this->_size).medianVolatile();
   }
   return _histMedian();
 }
@@ -577,11 +578,11 @@ template <class Type>
 CachedArray<Type>&
 CachedArray<Type>::operator /= (const CachedArray<Type>& array)
 {
-  assert(_size == array._size);
+  assert(this->_size == array._size);
 
   resetIterator();
   array.resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     (*this)++ /= array++;
   
   return *this;
@@ -592,11 +593,11 @@ template <class Type>
 CachedArray<Type>
 CachedArray<Type>::ln() const
 {
-  CachedArray<Type> result(_size);
+  CachedArray<Type> result(this->_size);
 
   resetIterator();
   result.resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     result++ = Type(::log(double((*this)++)));
 
   return result;
@@ -606,11 +607,11 @@ template <class Type>
 CachedArray<Type>
 CachedArray<Type>::log() const
 {
-  CachedArray<Type> result(_size);
+  CachedArray<Type> result(this->_size);
 
   resetIterator();
   result.resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     result++ = Type(::log10(double((*this)++)));
 
   return result;
@@ -634,7 +635,7 @@ template <class Type>
 CachedArray<Type>
 CachedArray<Type>::sample(unsigned maxN) const
 {
-  double step = double(_size - 1)/(maxN - 1);
+  double step = double(this->_size - 1)/(maxN - 1);
 
   if (step <= 1.0)
     return CachedArray<Type>(*this);
@@ -653,11 +654,11 @@ template <class Type>
 CachedArray<Type>
 CachedArray<Type>::applyElementWise(Type (*function) (Type)) const
 {
-  CachedArray<Type> result(_size);
+  CachedArray<Type> result(this->_size);
 
   resetIterator();
   result.resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     result++ = function((*this)++);
 
   return result;
@@ -667,11 +668,11 @@ template <class Type>
 CachedArray<Type>
 CachedArray<Type>::map(const ValueMap& map) const
 {
-  CachedArray<Type> result(_size);
+  CachedArray<Type> result(this->_size);
 
   resetIterator();
   result.resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     result++ = Type(map((*this)++));
 
   return result;
@@ -688,7 +689,7 @@ CachedArray<Type>::_initialize(unsigned size, unsigned nBlocks, unsigned blockSi
   if (size) {
     assert(nBlocks && blockSize);
 
-    _size       = size;
+    this->_size       = size;
     _blockSize  = blockSize;
     _nBlocks    = nBlocks;
     _maxNblocks = unsigned(::ceil(double(size)/blockSize));
@@ -710,7 +711,7 @@ CachedArray<Type>::_initialize(unsigned size, unsigned nBlocks, unsigned blockSi
       assert(_blocks[i] = _blocks[i-1]->addBlock(i, blockSize));
   }
 
-  if (_debug) {
+  if (this->_debug) {
     cout << endl << "Created blocks:" << endl;
     for (unsigned i = 0; i < _nBlocks; i++)
       cout << "  " << long(_blocks[i]) << endl;
@@ -724,8 +725,9 @@ CachedArray<Type>::_openStream()
   if (_s.is_open())
     _s.close();
 
-  if (_size) {
-    const char *path = tempnam(NULL, "CA-");
+  if (this->_size) {
+    char path[256];
+    get_temp_filename(path);
 
     // Have to specify 'trunc' for some versions of the libraries, 
     // otherwise the file may not be created.
@@ -749,7 +751,7 @@ template <class Type>
 void
 CachedArray<Type>::_destroy()
 {
-  if (_size) {
+  if (this->_size) {
     delete _head;
     _head = 0;
 
@@ -759,11 +761,11 @@ CachedArray<Type>::_destroy()
     _s.close();
     _blockSize = 0;
     _maxNblocks = 0;
-    _size = 0;
+    this->_size = 0;
 
     _itBlock = 0;
     _itBlockPtr = 0;
-    _itIndex = 0;
+    this->_itIndex = 0;
   }
 
   resetHitRate();
@@ -784,7 +786,7 @@ template <class Type>
 CacheBlock<Type> *
 CachedArray<Type>::_read(unsigned block) const
 {
-  if (_debug)
+  if (this->_debug)
     cout << "<request for block " << block << ">" << flush;
 
   if (_blocks[block])
@@ -794,12 +796,12 @@ CachedArray<Type>::_read(unsigned block) const
   CacheBlock<Type> *readBlock = _head;
   CacheBlock<Type> *curBlock  = _head->_next;
 
-  if (_debug)
+  if (this->_debug)
     cout << "(" << long(readBlock) << ",r:" << readBlock->_nRead 
 	 << ",w:" << readBlock->_nWrite << ")" << flush;
 
   while (curBlock) {
-    if (_debug)
+    if (this->_debug)
       cout << "(" << long(curBlock) << ",r:" << curBlock->_nRead 
 	   << ",w:" << curBlock->_nWrite << ")" << flush;
 
@@ -826,7 +828,7 @@ CachedArray<Type>::_read(unsigned block) const
 
   _blocks[block] = readBlock;
 
-  if (_debug)
+  if (this->_debug)
     cout << "<read block " << block << " at " << long(readBlock) << ">" << flush;
 
   return readBlock;
@@ -851,34 +853,34 @@ template <class Type>
 Type
 CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
 {
-  assert(_size);
-  if (_debug)
+  assert(this->_size);
+  if (this->_debug)
       cout << "Begin: " << nBelow << " : " << nAbove << endl;
 
-  if (_size <= _blockSize) {
-    unsigned fullSize = nBelow + _size + nAbove;
+  if (this->_size <= _blockSize) {
+    unsigned fullSize = nBelow + this->_size + nAbove;
     if (fullSize % 2)
-      return _randomizedSelect(0, _size - 1, (fullSize+1)/2 - nBelow);
+      return _randomizedSelect(0, this->_size - 1, (fullSize+1)/2 - nBelow);
     else
-      return _randomizedSelect(0, _size - 1, fullSize/2 - nBelow);
+      return _randomizedSelect(0, this->_size - 1, fullSize/2 - nBelow);
   }
 
   Type floor, ceil;
   extrema(&floor, &ceil);
 
-  if (_debug)
+  if (this->_debug)
       cout << "Floor and Ceiling: " << floor << " : " << ceil << endl;
 
   if (floor == ceil)
     return floor;
 
 
-  Histogram hist(floor, ceil, MAX(_size/100, 10));
+  Histogram hist(floor, ceil, MAX(this->_size/100, 10));
   resetIterator();
-  for (unsigned i = _size; i; i--)
+  for (unsigned i = this->_size; i; i--)
     hist.add((*this)++);
 
-  if (_debug) {
+  if (this->_debug) {
       //  cout << endl << "Contents: " << *this << endl;
       //  cout << "Hist: " << hist << endl;
       cout << "[" << nBelow << ", " << nAbove << "]" << endl;
@@ -887,14 +889,14 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
   unsigned bin;
   double histMedian = hist.median(&bin, nBelow, nAbove);
 
-  if (_debug)
+  if (this->_debug)
       cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
 
   unsigned nBelow2, nAbove2;
   removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
 		 &nBelow2, &nAbove2);
 
-  if (_debug)
+  if (this->_debug)
       cout << "nBelow2 : nAbove2 " << nBelow2 << " : " << nAbove2 << endl;
 
   return _histMedian(nBelow + nBelow2, nAbove + nAbove2);
@@ -1041,11 +1043,11 @@ Boolean
 CacheBlock<Type>::read(fstream& s, unsigned ID)
 {
   if (_changed) {
-    if (_debug)
+    if (this->_debug)
       cout << "<w" << _ID << ">" << flush;
     write(s);
   }
-  if (_debug)
+  if (this->_debug)
     cout << "<x" << _ID << "><r" << ID << ">" << flush;
 
   _ID = ID;
@@ -1053,7 +1055,7 @@ CacheBlock<Type>::read(fstream& s, unsigned ID)
   _changed = FALSE;
 
   s.seekg(_ID*_nBytes);
-  s.read((char *) _contents, _nBytes);
+  s.read((char *) this->_contents, _nBytes);
 
   return s ? TRUE : FALSE;
 }
@@ -1063,20 +1065,19 @@ Boolean
 CacheBlock<Type>::write(fstream& s) const
 {
   s.seekg(_ID*_nBytes);
-  s.write((char *) _contents, _nBytes);
+  s.write((char *) this->_contents, _nBytes);
 
   return s ? TRUE : FALSE;
 }
 
 #ifdef __GNUC__
-#define _INSTANTIATE_CACHEDARRAY(Type)                                  \
-         template class CachedArray<Type>;                              \
-         const unsigned CachedArray<Type>::_DEFAULT_BLOCK_SIZE = 32768; \
-         const unsigned CachedArray<Type>::_DEFAULT_N_BLOCKS   = 2;     \
-         template CachedArray<Type> operator ^ (double,                 \
-                                                CachedArray<Type> const &); \
-         template class CacheBlock<Type>;                               \
-         unsigned CachedArray<Type>::_rangeErrorCount = 25;
+#define _INSTANTIATE_CACHEDARRAY(Type)                           \
+  template class CachedArray<Type>;                              \
+  template<> const unsigned CachedArray<Type>::_DEFAULT_BLOCK_SIZE = 32768; \
+  template<> const unsigned CachedArray<Type>::_DEFAULT_N_BLOCKS   = 2;     \
+  template CachedArray<Type> operator ^ (double, CachedArray<Type> const &); \
+  template class CacheBlock<Type>;                               \
+  template<> unsigned CachedArray<Type>::_rangeErrorCount = 25;
 
 
 _INSTANTIATE_CACHEDARRAY(char);
