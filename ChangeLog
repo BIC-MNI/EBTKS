@@ -1,3 +1,6 @@
+2004-04-08  Bert Vincent   <bert@bic.mni.mcgill.ca>
+	* Add CLAPACK sources to the distribution.
+	
 2004-04-04  Vivek Singh    <vsingh@bic.mni.mcgill.ca>
 
 	* In TBSpline.cc changed iterating variables from unsigned
