@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.2 $
+$Revision: 1.3 $
 $Author: jason $
-$Date: 2002-03-20 21:42:47 $
+$Date: 2002-03-27 20:23:11 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -1818,11 +1818,14 @@ operator ^ (double base, const SimpleArray<Type>& array) {
             template class IndexStruct<Type>;                \
             template SimpleArray<Type> operator ^(double,    \
                                        SimpleArray<Type> const &);   \
-//            template unsigned size(SimpleArray<Type> const &); \
             template ostream& operator << (ostream&, const SimpleArray<Type>&); \
             template istream& operator >> (istream&, SimpleArray<Type>&); \
             template SimpleArray<double> asDblArray(const SimpleArray<Type>&);\
             unsigned SimpleArray<Type>::_rangeErrorCount = 25;
+
+/* For some reason this does not compile as part of the above macro
+//            template unsigned size(SimpleArray<Type> const &); \
+*/
 
 _INSTANTIATE_SIMPLEARRAY(char);
 _INSTANTIATE_SIMPLEARRAY(unsigned char);

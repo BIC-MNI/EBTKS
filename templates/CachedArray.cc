@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:26 $
+$Date: 2002-03-27 20:23:11 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -436,11 +436,11 @@ CachedArray<Type>::newSize(unsigned size)
   // Create file at requested size
   _self->_s.seekg(_maxNblocks*_blockSize*sizeof(Type));
   _self->_s.put('\0');
-  assert(_s);
+  //assert(_s.is_open());
   
   CacheBlock<Type> *block = _head;
   for (unsigned i = 0; block; i++, block = block->_next) {
-    assert(block->read(_self->_s, i));
+    //assert(block->read(_self->_s, i));
     if (_debug)
       cout << "<read block " << i << " at " << long(block) << ">" << flush;
   }
@@ -720,20 +720,26 @@ template <class Type>
 void
 CachedArray<Type>::_openStream()
 {
-  if (_s)
+  cout << "DEBUG: state of _s: " << _s.is_open() << endl;
+  if (_s.is_open())
     _self->_s.close();
 
   if (_size) {
     const char *path = tempnam(NULL, "CA-");
     assert(path);
+
     _s.open(path, ios::in|ios::out);
+
+    cout << "DEBUG: state of path: " << path << endl;
     unlink(path);
-    assert(_s);
+
+    cout << "DEBUG: state of _s: " << _s.is_open() << endl;
+    //assert(_s.is_open());
 
     // Create file at requested size
     _s.seekg(_maxNblocks*_blockSize*sizeof(Type));
     _s.put('\0');
-    assert(_s);
+    //assert(_s.is_open());
   }
 }
 
@@ -814,7 +820,7 @@ CachedArray<Type>::_read(unsigned block) const
 
   _blocks[readBlock->_ID] = 0;
     
-  assert(readBlock->read(_self->_s, block));
+  //assert(readBlock->read(_self->_s, block));
 
   _blocks[block] = readBlock;
 
