@@ -12,12 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: fcomplex.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:44:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+
 #include "fcomplex.h"
+#include <iostream>		// (bert) moved from fcomplex.h
+using namespace std;		// (bert) added
 
 // A few functions that define (bogus) math ops for complex
 

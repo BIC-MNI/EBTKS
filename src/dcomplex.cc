@@ -12,14 +12,15 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: dcomplex.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:46 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:44:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
 #include "dcomplex.h"
-#include <iostream.h>
+#include <iostream>		// (bert) changed from iostream.h
+using namespace std;		// (bert) added
 
 // A few functions that define (bogus) math ops for complex
 
