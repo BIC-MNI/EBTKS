@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OpTimer.h,v $
-$Revision: 1.1 $
+$Revision: 1.2 $
 $Author: jason $
-$Date: 2001-11-09 16:37:25 $
+$Date: 2002-03-20 22:27:11 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _OP_TIMER_H
@@ -29,9 +29,9 @@ class OpTimer {
   char      _verbose;
   char     *_operation;
   double    _start;
-  unsigned  _N;
-  unsigned  _interval;
-  unsigned  _i;
+  unsigned int _NN;
+  unsigned int _interval;
+  unsigned int _i;
   ostream  *_os;
   TimeFunc  _time;
   

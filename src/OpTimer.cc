@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: OpTimer.cc,v $
-$Revision: 1.2 $
+$Revision: 1.3 $
 $Author: jason $
-$Date: 2002-03-20 21:42:45 $
+$Date: 2002-03-20 22:27:12 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include "OpTimer.h"
@@ -53,7 +53,7 @@ OpTimer::OpTimer(const char *operation, unsigned N, unsigned reportInterval)
 
 OpTimer::~OpTimer()
 {
-  if (!_N)
+  if (!_NN)
     toc();
 
   if (_verbose)
@@ -101,7 +101,7 @@ OpTimer::timeType(int time)
 double 
 OpTimer::tic(unsigned N, unsigned reportInterval) 
 {
-  _N        = N;
+  _NN        = N;
   _interval = reportInterval;
   _i        = 0;
   return (_start = _time());
@@ -119,8 +119,8 @@ OpTimer::toc(unsigned i)
 
     *_os << _TIME_STRINGS[_timeType] << " time elapsed in " << _operation << ": ";
     _printTime(dt);
-    if (_N) {
-      double fraction = double(_i)/_N;
+    if (_NN) {
+      double fraction = double(_i)/_NN;
       *_os << " (" << ROUND(fraction*100) << "% of ";
       _printTime(dt/fraction) << ")";
     }
