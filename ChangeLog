@@ -1,3 +1,11 @@
+2004-04-04  Vivek Singh    <vsingh@bic.mni.mcgill.ca>
+
+	* In TBSpline.cc changed iterating variables from unsigned
+	to signed in the method bendingEnergy.  This is necessary
+	to deal with possibility negative results when calculating
+	index values.  The change appears to fix the incorrect bias field
+	with N3 under IRIX and the 0 field estimates seen under linux.
+
 2004-02-13  Bert Vincent   <bert@bic.mni.mcgill.ca>
 	
 	* In CachedArray.cc, uncommented bits that actually
