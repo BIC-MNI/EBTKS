@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.2 $
+$Revision: 1.3 $
 $Author: jason $
-$Date: 2002-03-27 20:23:11 $
+$Date: 2002-03-29 00:07:22 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -478,6 +478,9 @@ CachedArray<Type>::median() const
 {
   assert(_size);
 
+  cout << "DEBUG: in median of CachedArray" << endl;
+  cout << "DEBUG: _size = " << _size << endl;
+
   if (_size <= _blockSize) {
     if (!_blocks[0])
       _read(0);
@@ -500,7 +503,7 @@ CachedArray<Type>::medianVolatile()
       _read(0);
     return (*_blocks[0])(_size).medianVolatile();
   }
-
+  cout << "DEBUG: histMedian = " << _histMedian() << endl;
   return _histMedian();
 }
 
@@ -725,10 +728,11 @@ CachedArray<Type>::_openStream()
     _self->_s.close();
 
   if (_size) {
-    const char *path = tempnam(NULL, "CA-");
+    const char *path = "/tmp/test"; //tempnam(NULL, "CA-");
     assert(path);
 
     _s.open(path, ios::in|ios::out);
+    //    _s.open(path, ios::in);
 
     cout << "DEBUG: state of path: " << path << endl;
     unlink(path);
@@ -851,6 +855,8 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
 {
   assert(_size);
 
+  cout << "Begin: " << nBelow << " : " << nAbove << endl;
+
   if (_size <= _blockSize) {
     unsigned fullSize = nBelow + _size + nAbove;
     if (fullSize % 2)
@@ -862,8 +868,11 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
   Type floor, ceil;
   extrema(&floor, &ceil);
 
+  cout << "Floor and Ceiling: " << floor << " : " << ceil << endl;
+
   if (floor == ceil)
     return floor;
+
 
   Histogram hist(floor, ceil, MAX(_size/100, 10));
   resetIterator();
@@ -872,16 +881,18 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
 
   //  cout << endl << "Contents: " << *this << endl;
   //  cout << "Hist: " << hist << endl;
-  //  cout << "[" << nBelow << ", " << nAbove << "]" << endl;
+  cout << "[" << nBelow << ", " << nAbove << "]" << endl;
 
   unsigned bin;
   double histMedian = hist.median(&bin, nBelow, nAbove);
-  //cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
+  cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
 
   unsigned nBelow2, nAbove2;
   removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
 		 &nBelow2, &nAbove2);
   
+  cout << "nBelow2 : nAbove2 " << nBelow2 << " : " << nAbove2 << endl;
+
   return _histMedian(nBelow + nBelow2, nAbove + nAbove2);
 }
 

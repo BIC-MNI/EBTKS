@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.3 $
+$Revision: 1.4 $
 $Author: jason $
-$Date: 2002-03-27 20:23:11 $
+$Date: 2002-03-29 00:07:22 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -584,7 +584,7 @@ SimpleArray<Type>::removeAllNotIn(Type floor, Type ceil,
       aboveCtr++;
     else {
       if (i != j)
-	setEl(j, value);
+        setEl(j, value);
       j++;
     }
   }
@@ -826,6 +826,8 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
 
   *max = *min = (*this)++;
 
+  cout << _size << " :: " << *max << " :: " << *min << endl;
+
   for (unsigned i = 1; i < _size; i++) {
     Type value = (*this)++;
     if (value < *min)
@@ -833,6 +835,8 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
     if (value > *max)
       *max = value;
   }
+
+  cout << _size << " :: " << *max << " :: " << *min << endl;
 }
 
 template <class Type>
@@ -959,6 +963,8 @@ SimpleArray<Type>::median() const
 
   SimpleArray<Type> array(*this);
 
+  cout << "DEBUG: in median" << endl;
+
   return array.medianVolatile();
 }
 
@@ -967,6 +973,8 @@ Type
 SimpleArray<Type>::medianVolatile()
 {
   assert(_size);
+  cout << "DEBUG: _size in medianVolatile: " << _size << endl;
+  cout << "DEBUG: _size in medianVolatile: " << this->size() << endl;
 
   return _randomizedSelect(0, _size - 1, (_size % 2) ? (_size+1)/2 : _size/2);
 }
@@ -1821,8 +1829,8 @@ operator ^ (double base, const SimpleArray<Type>& array) {
             template ostream& operator << (ostream&, const SimpleArray<Type>&); \
             template istream& operator >> (istream&, SimpleArray<Type>&); \
             template SimpleArray<double> asDblArray(const SimpleArray<Type>&);\
-            unsigned SimpleArray<Type>::_rangeErrorCount = 25;
-
+            unsigned SimpleArray<Type>::_rangeErrorCount = 25; \
+//            template unsigned int size(SimpleArray<Type> const &); 
 /* For some reason this does not compile as part of the above macro
 //            template unsigned size(SimpleArray<Type> const &); \
 */

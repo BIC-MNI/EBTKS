@@ -38,10 +38,10 @@ pkglibdir = $(libdir)/EBTKS
 pkgincludedir = $(includedir)/EBTKS
 top_builddir = ..
 
-ACLOCAL = ${SHELL} /home/jason/src/INSECT/EBTKS/missing --run aclocal
-AUTOCONF = ${SHELL} /home/jason/src/INSECT/EBTKS/missing --run autoconf
-AUTOMAKE = ${SHELL} /home/jason/src/INSECT/EBTKS/missing --run automake
-AUTOHEADER = ${SHELL} /home/jason/src/INSECT/EBTKS/missing --run autoheader
+ACLOCAL = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run aclocal
+AUTOCONF = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run autoconf
+AUTOMAKE = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run automake
+AUTOHEADER = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run autoheader
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -57,7 +57,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = 
 host_triplet = i686-pc-linux-gnu
-AMTAR = ${SHELL} /home/jason/src/INSECT/EBTKS/missing --run tar
+AMTAR = ${SHELL} /home/jason/src/libraries/EBTKS/missing --run tar
 AS = @AS@
 AWK = gawk
 CC = gcc3
@@ -83,7 +83,7 @@ X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 am__include = include
 am__quote = 
-install_sh = /home/jason/src/INSECT/EBTKS/install-sh
+install_sh = /home/jason/src/libraries/EBTKS/install-sh
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
 
@@ -130,8 +130,8 @@ libAZgen_t_la_OBJECTS = $(am_libAZgen_t_la_OBJECTS)
 
 DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
-CPPFLAGS = -I/home/jason/include -I/usr/local/mni/include -I/usr/local/lib/qt-2.3.2/include
-LDFLAGS = -L/home/jason/lib -L/usr/local/mni/lib -L/usr/local/lib/qt-2.3.2/lib
+CPPFLAGS = -I/tmp/INSECT/include -I/home/jason/include -I/usr/local/mni/include -I/usr/local/lib/qt-2.3.2/include
+LDFLAGS = -L/tmp/INSECT/lib -L/home/jason/lib -L/usr/local/mni/lib -L/usr/local/lib/qt-2.3.2/lib
 LIBS = -lvolume_io -lminc -lnetcdf -lm 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 DEP_FILES = $(DEPDIR)/Array.Plo $(DEPDIR)/CachedArray.Plo \
