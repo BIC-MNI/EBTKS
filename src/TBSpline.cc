@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.2 $
-$Author: jason $
-$Date: 2002-03-20 21:42:45 $
+$Revision: 1.3 $
+$Author: bert $
+$Date: 2003-04-16 18:43:53 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.2 2002-03-20 21:42:45 jason Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.3 2003-04-16 18:43:53 bert Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -183,7 +183,7 @@ TBSpline::clearDataPoints(void)
 Boolean
 TBSpline::addDataPoint(const float *point, double value)
 {
-  unsigned int i,j,k,l;
+  int i,j,k,l;			// (bert) - changed from unsigned to signed.
   
   // check that point is within domain
   for_each_dimension(i)
@@ -685,7 +685,7 @@ TIndex::init(const IntArray &n)
 void 
 TIndex::operator ++ (void)
 {
-  for(unsigned int i = _nDimensions-1; i >= 0; i--)
+  for(int i = _nDimensions-1; i >= 0; i--) // (bert) changed 'i' to signed.
     {
       if(_index[i] < _n[i]-1)
 	{
@@ -745,7 +745,7 @@ TSubIndex::init(const IntArray &smallN)
 void 
 TSubIndex::operator ++ ()
 {
-  unsigned int i;
+  int i;			// (bert) - changed from unsigned to signed.
 
   // increment indices
   for(i = _nDimensions-1; i >= 0 ; i--)
@@ -830,7 +830,10 @@ TBSpline::test_solver(void)
 {
   DblMat A(10,10);
   DblMat b(10,1);
-  int info, i, j;
+  int i, j;
+#ifdef HAVE_MATLAB
+  int info;			// (bert) - made conditional to avoid warning
+#endif // HAVE_MATLAB
 
   for(i = 0; i < 10; i++)
     {
