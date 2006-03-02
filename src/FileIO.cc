@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: FileIO.cc,v $
-$Revision: 1.3 $
+$Revision: 1.4 $
 $Author: bert $
-$Date: 2003-04-16 18:41:23 $
+$Date: 2006-03-02 13:22:17 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -325,7 +325,15 @@ int
 get_temp_filename(char *pathname)
 {
 #ifdef HAVE_MKSTEMP
-  strcpy(pathname, "EBTKSXXXXXX");
+  char *tmp_dir = getenv("TMPDIR");
+  if (tmp_dir == NULL) {
+#ifdef P_tmpdir
+    tmp_dir = P_tmpdir;
+#else
+    tmp_dir = "/tmp";
+#endif
+  }
+  sprintf(pathname, "%s/EBTKSXXXXXX", tmp_dir);
   int fd = mkstemp(pathname);
   if (fd < 0) {
     return (0);

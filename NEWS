@@ -1,3 +1,7 @@
+New in release 1.5
+------------------
+Fix for temp file creation in src/FileIO.cc
+
 New in release 1.4
 ------------------
 Build fixes for GCC 3.4.X
