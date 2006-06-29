@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.8 $
-$Author: bert $
-$Date: 2004-04-06 18:52:33 $
+$Revision: 1.9 $
+$Author: rotor $
+$Date: 2006-06-29 19:51:31 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.8 2004-04-06 18:52:33 bert Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.9 2006-06-29 19:51:31 rotor Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -59,6 +59,10 @@ static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpl
 
 using namespace std;
 
+// For rounding errors.
+#ifndef EPSILON
+#define EPSILON ( 1.0e-14 )
+#endif
 
 //-----------------------------------------------------------------------
 // LAPACK definitions
@@ -119,9 +123,10 @@ TBSpline::TBSpline(const DblMat &domain,
 
   // determine number of basis functions in each dimension
   _n.newSize(_nDimensions);
-  for(i = 0; i < _nDimensions; i++)
-    _n[i] = (int) ceil((_domain(i,1) - _domain(i,0))/_distance) + 3;
-
+  for(i = 0; i < _nDimensions; i++){
+     _n[i] = (int) ceil( (_domain(i,1) - _domain(i,0))/(_distance * ( 1.0 + EPSILON ) )  ) + 3;
+  }
+   
   // create array of knot locations for each dimension
   _knots.resize(_n.max()+4,_nDimensions);
   for(i = 0; i < _nDimensions; i++)

@@ -1,3 +1,9 @@
+2006-06-29  Andrew + Claude  <a.janke@gmail.com>
+
+	* Changed the code by EPSILON for generating the number of co-efficients in
+	   a TBSpline. -- This was causing an esoteric error with nu_correct when
+	   imp files were written out with %15g and were thus rounded.
+	
 2006-03-02  Bert Vincent <bert@bic.mni.mcgill.ca>
 	* src/FileIO.cc - in get_temp_filename(), add an explicit path to 
 	the template passed to mkstemp() to avoid creating the temporary 

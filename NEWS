@@ -1,3 +1,9 @@
+New in Release 1.6.1
+--------------------
+
+Added a bug fix for TBSpline that was manifested in certain cases in nu_correct
+as "inputCompactField(): Incorrect number of coefficients"
+
 New in release 1.5
 ------------------
 Fix for temp file creation in src/FileIO.cc
