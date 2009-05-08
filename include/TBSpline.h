@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 18:04:03 $
+$Revision: 1.4 $
+$Author: claude $
+$Date: 2009-05-08 18:23:40 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,7 +28,10 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : April 21, 1996 (John G. Sled)
 @MODIFIED   : $Log: TBSpline.h,v $
-@MODIFIED   : Revision 1.3  2003-04-16 18:04:03  bert
+@MODIFIED   : Revision 1.4  2009-05-08 18:23:40  claude
+@MODIFIED   : fixed bug in splines to make N3 invariant to voxels sizes
+@MODIFIED   :
+@MODIFIED   : Revision 1.3  2003/04/16 18:04:03  bert
 @MODIFIED   : Removed meaningless const qualifiers on operator[] to avoid compiler warnings
 @MODIFIED   :
 @MODIFIED   : Revision 1.2  2002/03/20 21:42:44  jason
@@ -68,7 +71,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.3 2003-04-16 18:04:03 bert Exp $";
+static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.4 2009-05-08 18:23:40 claude Exp $";
 #endif
 
 #ifndef TBSPLINE_H
@@ -114,6 +117,7 @@ protected:
   IntArray _n;         // number of basis functions in each dimension
   int      _nProduct;  // product of elements of n
   int      _four;      // 4^nDimensions
+  unsigned _nsamples;  // number of sampling points
   IntArray _smallN;    // { 4, 4, 4, 4 ...}  size of small tensor
 
 protected:
@@ -139,7 +143,9 @@ public:
                                              // bending energy of the spline
            int allocate_flag = TRUE);  // TRUE -> normal usage
                                        // FALSE -> cannot call add_data
-  ~TBSpline(void)   { delete _tempPoint; };
+  ~TBSpline(void)   { if( _dloc_i ) delete [] _dloc_i;
+                      if( _dloc_j ) delete [] _dloc_j;
+                    };
 
   // functions to allow incremental addition of new data points
   virtual Boolean clearDataPoints();
@@ -248,6 +254,11 @@ public:
                                              // bending energy of the spline
                  int allocate_flag = TRUE);  // TRUE -> normal usage
                                              // FALSE -> cannot call add_data
+  ~TBSplineVolume(void) { for( int i = 0; i < VDIM; i++ ) {
+                            if( _offset[i] ) delete [] _offset[i];
+                            if( _1dSpline[i] ) delete [] _1dSpline[i];
+                          }
+                        };
 
   virtual Boolean addDataPoint(int x, int y, int z, double value);
   virtual void saveState(char *filename) const;
@@ -265,14 +276,4 @@ protected:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
 

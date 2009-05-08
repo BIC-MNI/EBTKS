@@ -1,6 +1,10 @@
+New in Release 1.6.2
+--------------------
+Fixed a bug in the splines to make N3 invariant to voxel sizes.
+Added destructors for the spline classes to free the memory.
+
 New in Release 1.6.1
 --------------------
-
 Added a bug fix for TBSpline that was manifested in certain cases in nu_correct
 as "inputCompactField(): Incorrect number of coefficients"
 

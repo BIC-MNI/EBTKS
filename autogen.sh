@@ -28,8 +28,8 @@ EOF
 
 test -d ac_config_aux || mkdir ac_config_aux
 
-libtoolize --automake --copy
 aclocal -I m4
 autoheader
+libtoolize --automake
 automake --add-missing --copy
 autoconf

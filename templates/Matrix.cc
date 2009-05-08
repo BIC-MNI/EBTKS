@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.cc,v $
-$Revision: 1.5 $
-$Author: bert $
-$Date: 2004-12-08 17:02:50 $
+$Revision: 1.6 $
+$Author: claude $
+$Date: 2009-05-08 18:23:40 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -324,8 +324,10 @@ Mat<Type>::clear()
       #ifdef DEBUG
       cout << "Freeing allocated memory at " << _el << endl;
       #endif
-      delete &_el[0][0];  // delete data block
-      delete _el; // delete row of pointers  
+      if( _el[0] ) {
+        delete [] _el[0];
+      }
+      delete [] _el; // delete row of pointers  
       _el = 0;
    }
 
@@ -537,8 +539,10 @@ Mat<Type>::absorb(Mat<Type>& A)
 
   // Delete current contents;
   if (_el) {
-    delete &_el[0][0];  // delete data block
-    delete _el; // delete row of pointers  
+    if( _el[0] ) {
+      delete [] _el[0];  // delete data block
+    }
+    delete [] _el; // delete row of pointers  
   }
   
   // Copy all from A
@@ -3125,8 +3129,10 @@ Mat<Type>::_allocateEl()
 #ifdef DEBUG
     cout << "Freeing allocated memory at " << _el << endl;
 #endif
-    delete &_el[0][0];  // delete data block
-    delete _el; // delete row of pointers  
+    if( _el[0] ) {
+      delete [] _el[0];  // delete data block
+    }
+    delete [] _el; // delete row of pointers  
   }
   _el = 0;
 

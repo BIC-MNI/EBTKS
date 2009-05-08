@@ -1,5 +1,8 @@
-2006-06-29  Andrew + Claude  <a.janke@gmail.com>
+2009-05-08  Andrew + Claude  <a.janke@gmail.com>
+	* Fixed a bug in the splines to make N3 invariant to voxel sizes.
+	* Added destructors for the spline classes to free the memory.
 
+2006-06-29  Andrew + Claude  <a.janke@gmail.com>
 	* Changed the code by EPSILON for generating the number of co-efficients in
 	   a TBSpline. -- This was causing an esoteric error with nu_correct when
 	   imp files were written out with %15g and were thus rounded.

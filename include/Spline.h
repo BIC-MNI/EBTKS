@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Spline.h,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2003-04-16 17:59:52 $
+$Revision: 1.4 $
+$Author: claude $
+$Date: 2009-05-08 18:23:40 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef SPLINE_3D_H
@@ -54,6 +54,7 @@ protected:
   unsigned _nCoef;
   DblArray _coef;
   Boolean  _fitted;
+  unsigned _nsamples;
   DblMat   _AtA, _AtF, _Aj, _Ajt;
   DblMat   _J;
   double   _lambda;
@@ -76,7 +77,7 @@ public:
   Spline(const MRegion& knots);
 #endif
   Spline(const OrderedCltn& knots); // OC of MPoint3D
-  virtual ~Spline() { delete [] _tempPoint; }
+  virtual ~Spline() { if( _tempPoint ) delete [] _tempPoint; }
 
   // Returns a pointer to an internal array where the application can
   // write the coordinates of data points, both for use in the fitting

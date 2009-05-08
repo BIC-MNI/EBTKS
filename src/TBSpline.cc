@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.9 $
-$Author: rotor $
-$Date: 2006-06-29 19:51:31 $
+$Revision: 1.10 $
+$Author: claude $
+$Date: 2009-05-08 18:23:40 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -42,7 +42,7 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.9 2006-06-29 19:51:31 rotor Exp $";
+static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.10 2009-05-08 18:23:40 claude Exp $";
 #endif
 
 #include "TBSpline.h"
@@ -106,6 +106,7 @@ TBSpline::TBSpline(const DblMat &domain,
   _lambda = lambda;
   _distance = distance;
   _scale = 1.0/(distance*distance*distance);
+  _nsamples = 0;
   _domain = domain;
   unsigned int i;
   // check that domain bounds are in correct order
@@ -176,6 +177,7 @@ TBSpline::clearDataPoints(void)
 {
   _fitted = FALSE;
   _haveData = FALSE;
+  _nsamples = 0;
   if(_AtA.getrows() > 0) {
     _AtA.fill(0);
     _AtF.fill(0);
@@ -202,6 +204,7 @@ TBSpline::addDataPoint(const float *point, double value)
     
   _fitted = FALSE;
   _haveData = TRUE;
+  _nsamples++;
 
   // locate nearest knot location greater than or equal to point
   for_each_dimension(i)
@@ -277,8 +280,10 @@ TBSpline::addDataPoint(const float *point, double value)
       *D += value_k*value_k; // do diagonal elements separately
 
       --k;
-      D -= _dloc_i[k] + _dloc_j[k];
-      F -= _dloc_i[k];
+      if( k >= 0 ) {
+        D -= _dloc_i[k] + _dloc_j[k];
+        F -= _dloc_i[k];
+      }
     }
   return TRUE;
 }
@@ -294,7 +299,7 @@ TBSpline::fit(void)
   int info;
   DblMat A;
   bendingEnergyTensor(_n, A);  // create bending matrix on fly to save memory
-  A *= _lambda;
+  A *= ( _lambda * _nsamples );
   A += _AtA;
 
   _coef = solveSymmetricSystem(A, _AtF,&info).array();
@@ -462,6 +467,8 @@ TBSpline::bendingEnergyTensor(const IntArray &n, DblMat &J)
 	    J(ti.flat(),tj.flat()) += 2.0*product;
 	  }
     } 
+
+  delete [] bendingMatrix;
 }
 
 
@@ -1055,6 +1062,7 @@ TBSplineVolume::addDataPoint(int x, int y, int z, double value)
 
   _fitted = FALSE;
   _haveData = TRUE;
+  _nsamples++;
 
   // compute 4 by 4 by 4 tensor
   for(i = 0; i < 4; i++) {
@@ -1082,7 +1090,6 @@ TBSplineVolume::addDataPoint(int x, int y, int z, double value)
         *pDloc_j++ = (*pDloc_i++)*_nProduct;
       }
   }
-  
 
   // add new data to AtA and AtF
   double incr, value_k;
@@ -1116,9 +1123,12 @@ TBSplineVolume::addDataPoint(int x, int y, int z, double value)
       *D += value_k*value_k; // do diagonal elements separately
 
       --k;
-      D -= _dloc_i[k] + _dloc_j[k];
-      F -= _dloc_i[k];
+      if( k >= 0 ) {
+        D -= _dloc_i[k] + _dloc_j[k];
+        F -= _dloc_i[k];
+      }
     }
+
   return TRUE;
 }
 
@@ -1180,7 +1190,4 @@ DblMat TBSplineVolume::computeDomain(const double start[VDIM],
 
 
 #endif
-
-
-
 

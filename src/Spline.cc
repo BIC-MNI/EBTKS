@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Spline.cc,v $
-$Revision: 1.2 $
-$Author: stever $
-$Date: 2003-11-17 04:07:52 $
+$Revision: 1.3 $
+$Author: claude $
+$Date: 2009-05-08 18:23:40 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -131,6 +131,7 @@ Spline::clearDataPoints()
   assert(_nCoef);
 
   _fitted = FALSE;
+  _nsamples = 0;
 
   _AtA = Zeros<double>(_nCoef, _nCoef);
   _AtF = Zeros<double>(_nCoef, 1);
@@ -237,6 +238,7 @@ Spline::_initialize()
   _nCoef = 0;
   _fitted = FALSE; 
   _lambda = 0.0;
+  _nsamples = 0;
   assert(_nDimensions);
   _tempPoint = new float[_nDimensions];
   assert(_tempPoint);
@@ -334,6 +336,8 @@ RSpline::addDataPoint(const float *point, double value)
 {
   if (!point)
     return FALSE;
+
+  _nsamples++;
 
   double *AjPtr = (double *) _Aj[0];
   for (unsigned spline = 0; spline < _nKnots; spline++)
@@ -452,6 +456,7 @@ TPSpline::clearDataPoints()
   unsigned i, d;
 
   _fitted = FALSE;
+  _nsamples = 0;
 
   _AtA = Zeros<double>(_nKnots, _nKnots);
   _AtF = Zeros<double>(_nKnots, 1);
@@ -522,6 +527,8 @@ TPSpline::addDataPoint(const float *point, double value)
   if (!point)
     return FALSE;
 
+  _nsamples++;
+
   unsigned spline;
   // Calculate F twiddle transposed
   double *FtPtr = (double *) _Ft[0];
@@ -560,7 +567,7 @@ TPSpline::fit()
   J.pad(_nKnots, _nKnots, 0, 0);
 
   // Calculate W
-  DblMat W(inv(_AtA + _lambda*J) * _AtF);
+  DblMat W(inv(_AtA + (_lambda*_nsamples)*J) * _AtF);
 
   _coef = array(-_Psi * R * W.rows(0, _nKnots - _nDimensions - 2));
   _coef.append(array(W));
