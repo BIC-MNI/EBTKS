@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.h,v $
-$Revision: 1.4 $
-$Author: claude $
-$Date: 2009-05-08 18:23:40 $
+$Revision: 1.5 $
+$Author: rotor $
+$Date: 2010-05-18 23:01:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -28,7 +28,10 @@ $State: Exp $
 @CALLS      : 
 @CREATED    : April 21, 1996 (John G. Sled)
 @MODIFIED   : $Log: TBSpline.h,v $
-@MODIFIED   : Revision 1.4  2009-05-08 18:23:40  claude
+@MODIFIED   : Revision 1.5  2010-05-18 23:01:21  rotor
+@MODIFIED   :  * updated for gcc 4.3 build (thanks Vlad)
+@MODIFIED   :
+@MODIFIED   : Revision 1.4  2009/05/08 18:23:40  claude
 @MODIFIED   : fixed bug in splines to make N3 invariant to voxels sizes
 @MODIFIED   :
 @MODIFIED   : Revision 1.3  2003/04/16 18:04:03  bert
@@ -69,10 +72,6 @@ $State: Exp $
  *
 @COPYRIGHT  : 1996
 ---------------------------------------------------------------------------- */
-
-#ifndef lint
-static char rcsid_tbspline_h[] = "$Header: /private-cvsroot/libraries/EBTKS/include/Attic/TBSpline.h,v 1.4 2009-05-08 18:23:40 claude Exp $";
-#endif
 
 #ifndef TBSPLINE_H
 #define TBSPLINE_H

@@ -4,8 +4,10 @@
  * be included in an "appropriate" file.  What "appropriate" means
  * seems to depend upon the compiler you're using. 
  */
+#include <complex.h>
 
 using namespace std;
+
 
 #ifdef USE_COMPMAT
 template <>
@@ -402,7 +404,7 @@ Mat<dcomplex>::conj()
   
   for(unsigned i = _rows; i; i--)
     for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = ::conj(*elPtr);
+      *elPtr = std::conj(*elPtr);
   
   return(*this);
 }
@@ -417,7 +419,7 @@ Mat<fcomplex>::conj()
   
   for(unsigned i = _rows; i; i--)
     for(unsigned j = _cols; j; j--, elPtr++)
-      *elPtr = ::conj(*elPtr);
+      *elPtr = std::conj(*elPtr);
   
   return(*this);
 }

@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.cc,v $
-$Revision: 1.6 $
-$Author: claude $
-$Date: 2009-05-08 18:23:40 $
+$Revision: 1.7 $
+$Author: rotor $
+$Date: 2010-05-18 23:01:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -59,56 +59,6 @@ template <class Type> Boolean  Mat<Type>::flushToDisk = FALSE;
 //
 // Some mathematical operations
 //
-template <class T1, class T2>
-Mat<T1>& operator += (Mat<T1>& A, const Mat<T2>& B)
-{
-  unsigned nrows = A.getrows();
-  unsigned ncols = A.getcols();
-
-  if (!(A.isvector() && B.isvector() && (A.length() == B.length())) &&
-      ((B.getrows() != nrows) || (B.getcols() != ncols))) {
-    cerr << "Matrices of incompatible sizes for +=" << endl;
-    return A;
-  }
-
-  T1       *aPtr = (T1 *) A.getEl()[0];
-  const T2 *bPtr = B.getEl()[0];
-
-  for (unsigned i = nrows; i; i--)
-    for (unsigned j = ncols; j; j--)
-      *aPtr++ += (T1) *bPtr++;
-  
-  return A;
-}
-
-template <class T1, class T2>
-Mat<T1> operator + (const Mat<T1>& A, const Mat<T2>& B) 
-{
-  Mat<T1> T(A); 
-  return T += B; 
-}
-
-template <class T1, class T2>
-Mat<T1>& operator -= (Mat<T1>& A, const Mat<T2>& B)
-{
-  unsigned nrows = A.getrows();
-  unsigned ncols = A.getcols();
-
-  if (!(A.isvector() && B.isvector() && (A.length() == B.length())) &&
-      ((B.getrows() != nrows) || (B.getcols() != ncols))) {
-    cerr << "Matrices of incompatible sizes for -=" << endl;
-    return A;
-  }
-
-  T1       *aPtr = (T1 *) A.getEl()[0];
-  const T2 *bPtr = B.getEl()[0];
-
-  for (unsigned i = nrows; i; i--)
-    for (unsigned j = ncols; j; j--)
-      *aPtr++ -= (T1) *bPtr++;
-  
-  return A;
-}
 
 template <class T1, class T2>
 Mat<T1> operator * (const Mat<T1>& A, const Mat<T2>& B)

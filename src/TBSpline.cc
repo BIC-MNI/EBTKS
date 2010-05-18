@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: TBSpline.cc,v $
-$Revision: 1.10 $
-$Author: claude $
-$Date: 2009-05-08 18:23:40 $
+$Revision: 1.11 $
+$Author: rotor $
+$Date: 2010-05-18 23:01:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 /* ----------------------------- MNI Header -----------------------------------
@@ -41,14 +41,7 @@ $State: Exp $
 @COPYRIGHT  : 1996
 ---------------------------------------------------------------------------- */
 
-#ifndef lint
-static char rcsid[] = "$Header: /private-cvsroot/libraries/EBTKS/src/Attic/TBSpline.cc,v 1.10 2009-05-08 18:23:40 claude Exp $";
-#endif
-
 #include "TBSpline.h"
-//extern "C" {
-//#include "f2c.h"
-//}
 
 #undef min
 #undef max

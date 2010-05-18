@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Matrix.h,v $
-$Revision: 1.6 $
-$Author: bert $
-$Date: 2004-12-08 17:03:04 $
+$Revision: 1.7 $
+$Author: rotor $
+$Date: 2010-05-18 23:01:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #ifndef _MATRIX_H
@@ -156,15 +156,60 @@ template <class Type> Mat<fcomplex> asFcompMat(const Mat<Type>& Re, const Mat<Ty
 // Some mathematical operations. These had to be implemented as template
 // functions in order to allow different types of matrices to be operated on
 // ***************************** Addition ****************************
+//
+// Some mathematical operations
+//
 template <class T1, class T2>
-Mat<T1>& operator += (Mat<T1>& A, const Mat<T2>& B);
+Mat<T1>& operator += (Mat<T1>& A, const Mat<T2>& B)
+{
+  unsigned nrows = A.getrows();
+  unsigned ncols = A.getcols();
+
+  if (!(A.isvector() && B.isvector() && (A.length() == B.length())) &&
+      ((B.getrows() != nrows) || (B.getcols() != ncols))) {
+    std::cerr << "Matrices of incompatible sizes for +=" << std::endl;
+    return A;
+  }
+
+  T1       *aPtr = (T1 *) A.getEl()[0];
+  const T2 *bPtr = B.getEl()[0];
+
+  for (unsigned i = nrows; i; i--)
+    for (unsigned j = ncols; j; j--)
+      *aPtr++ += (T1) *bPtr++;
+  
+  return A;
+}
 
 template <class T1, class T2>
-Mat<T1> operator + (const Mat<T1>& A, const Mat<T2>& B);
+Mat<T1> operator + (const Mat<T1>& A, const Mat<T2>& B) 
+{
+  Mat<T1> T(A); 
+  return T += B; 
+}
 
 // ***************************** Substraction *************************
 template <class T1, class T2>
-Mat<T1>& operator -= (Mat<T1>& A, const Mat<T2>& B);
+Mat<T1>& operator -= (Mat<T1>& A, const Mat<T2>& B)
+{
+  unsigned nrows = A.getrows();
+  unsigned ncols = A.getcols();
+
+  if (!(A.isvector() && B.isvector() && (A.length() == B.length())) &&
+      ((B.getrows() != nrows) || (B.getcols() != ncols))) {
+    std::cerr << "Matrices of incompatible sizes for -=" << std::endl;
+    return A;
+  }
+
+  T1       *aPtr = (T1 *) A.getEl()[0];
+  const T2 *bPtr = B.getEl()[0];
+
+  for (unsigned i = nrows; i; i--)
+    for (unsigned j = ncols; j; j--)
+      *aPtr++ -= (T1) *bPtr++;
+  
+  return A;
+}
 
 template <class T1, class T2>
 Mat<T1> operator - (const Mat<T1>& A, const Mat<T2>& B) {
