@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([ebtks],[1.6.3],[Andrew Janke <a.janke@gmail.com>])
+AC_INIT([ebtks],[1.6.4],[Andrew Janke <a.janke@gmail.com>])
 AC_CONFIG_SRCDIR([src/FileIO.cc])
 
 AM_INIT_AUTOMAKE

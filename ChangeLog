@@ -1,5 +1,5 @@
-
--- Release of ebtks 1.6.2 --
+2010-06-16  Dave MacFarlane <david.macfarlane2@mcgill.ca>
+   * Moved splines from EBTKS to N3
 
 2010-05-19  Andrew Janke  <a.janke@gmail.com>
    * added some C++ fixes regarding templates via Vladimir for gcc 4.3

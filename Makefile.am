@@ -40,8 +40,6 @@ include_ebtks_HEADERS = \
 	include/Path.h \
 	include/Polynomial.h \
 	include/popen.h \
-	include/Spline.h \
-	include/TBSpline.h \
 	include/TrainingSet.h \
 	include/trivials.h \
 	templates/Array.h \
@@ -68,8 +66,6 @@ libEBTKS_la_SOURCES = version.cc \
 	src/OrderedCltn.cc \
 	src/Path.cc \
 	src/Polynomial.cc \
-	src/Spline.cc \
-	src/TBSpline.cc \
 	src/TrainingSet.cc \
 	src/amoeba.cc \
 	src/backProp.cc \

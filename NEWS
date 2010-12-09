@@ -1,3 +1,7 @@
+New in Release 1.6.4
+--------------------
+Moved splines from EBTKS to N3
+
 New in Release 1.6.3
 --------------------
 Changes for build with gcc 4.3
