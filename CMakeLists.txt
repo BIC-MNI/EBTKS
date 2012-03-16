@@ -1,0 +1,208 @@
+# CMakeFiles.txt for the bicpl library
+#
+# Vladimir S. FONOV - vladimir.fonov@gmail.com
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
+PROJECT(EBTKS)
+
+#SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules")
+# ENABLE_TESTING()
+# INCLUDE(CTest)
+
+#ADD_SUBDIRECTORY( doc )
+
+# Packaging defines
+SET(CPACK_GENERATOR TGZ)
+SET(CPACK_PACKAGE_VERSION_MAJOR 1)
+SET(CPACK_PACKAGE_VERSION_MINOR 6)
+SET(CPACK_PACKAGE_VERSION_PATCH 40)
+INCLUDE(CPack)
+
+
+SET(PACKAGE "EBTKS")
+SET(PACKAGE_BUGREPORT "a.janke@gmail.com")
+
+SET(PACKAGE_NAME "EBTKS")
+SET(PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+SET(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
+
+OPTION(BUILD_SHARED_LIBS "Build shared libraries." OFF)
+
+FIND_PACKAGE( MINC2 REQUIRED )
+INCLUDE( ${MINC2_USE_FILE} )
+
+ADD_DEFINITIONS(-DHAVE_CONFIG_H)
+
+# add for building relocatable library
+IF(UNIX)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+ENDIF(UNIX)
+
+# aliases
+SET(VERSION "${PACKAGE_VERSION}")
+
+# check for prereqs
+INCLUDE(CheckFunctionExists)
+INCLUDE(CheckIncludeFiles)
+
+CHECK_FUNCTION_EXISTS(finite   HAVE_FINITE)
+CHECK_FUNCTION_EXISTS(isfinite HAVE_ISFINITE)
+CHECK_FUNCTION_EXISTS(mkstemp  HAVE_MKSTEMP)
+
+CHECK_INCLUDE_FILES(float.h     HAVE_FLOAT_H)
+CHECK_INCLUDE_FILES(sys/dir.h   HAVE_SYS_DIR_H)
+CHECK_INCLUDE_FILES(sys/ndir.h  HAVE_SYS_NDIR_H)
+CHECK_INCLUDE_FILES(sys/stat.h  HAVE_SYS_STAT_H)
+CHECK_INCLUDE_FILES(sys/types.h HAVE_SYS_TYPES_H)
+CHECK_INCLUDE_FILES(sys/wait.h  HAVE_SYS_WAIT_H)
+CHECK_INCLUDE_FILES(values.h    HAVE_VALUES_H)
+CHECK_INCLUDE_FILES(unistd.h    HAVE_UNISTD_H)
+CHECK_INCLUDE_FILES(dirent.h    HAVE_DIRENT_H)
+CHECK_INCLUDE_FILES(memory.h    HAVE_MEMORY_H)
+CHECK_INCLUDE_FILES(malloc.h    HAVE_MALLOC_H)
+CHECK_INCLUDE_FILES(stdlib.h    HAVE_STDLIB_H)
+CHECK_INCLUDE_FILES(fcntl.h     HAVE_FCNTL_H)
+CHECK_INCLUDE_FILES(vfork.h     HAVE_VFORK_H)
+CHECK_INCLUDE_FILES(inttypes.h  HAVE_INTTYPES_H)
+CHECK_INCLUDE_FILES(string.h    HAVE_STRING_H)
+CHECK_INCLUDE_FILES(strings.h   HAVE_STRINGS_H)
+CHECK_INCLUDE_FILES(dlfcn.h     HAVE_DLFCN_H)
+
+# config files for build
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/config.h @ONLY)
+
+# others
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/epm-header.in ${CMAKE_BINARY_DIR}/epm-header)
+
+INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} include  templates )
+
+SET(EBTKS_HEADERS
+        include/amoeba.h 
+        include/assert.h 
+        include/backProp.h 
+        include/Complex.h 
+        include/dcomplex.h 
+        include/fcomplex.h 
+        include/FileIO.h 
+        include/Histogram.h 
+        include/matlabSupport.h 
+        include/Minc.h 
+        include/MPoint.h 
+        include/MString.h 
+        include/MTypes.h 
+        include/OpTimer.h 
+        include/OrderedCltn.h 
+        include/Path.h 
+        include/Polynomial.h 
+        include/popen.h 
+        include/TrainingSet.h 
+        include/trivials.h 
+        templates/Array.h 
+        templates/CachedArray.h 
+        templates/Dictionary.h 
+        templates/Matrix3D.h 
+        templates/Matrix.h 
+        templates/MatrixSupport.h 
+        templates/MatrixTest.h 
+        templates/miscTemplateFunc.h 
+        templates/Pool.h 
+        templates/SimpleArray.h 
+        templates/Stack.h 
+        templates/ValueMap.h
+)
+
+# some variables
+SET(EBTKS_LIB_SRCS
+  ${EBTKS_HEADERS}
+  version.cc
+  src/FileIO.cc 
+  src/Histogram.cc 
+  src/MPoint.cc 
+  src/MString.cc 
+  src/OpTimer.cc 
+  src/OrderedCltn.cc 
+  src/Path.cc 
+  src/Polynomial.cc 
+  src/TrainingSet.cc 
+  src/amoeba.cc 
+  src/backProp.cc 
+  src/fcomplex.cc 
+  src/dcomplex.cc 
+  templates/Array.cc 
+  templates/CachedArray.cc 
+  templates/Dictionary.cc 
+  templates/Matrix.cc 
+  templates/MatrixSupport.cc 
+  templates/Pool.cc 
+  templates/SimpleArray.cc 
+  templates/ValueMap.cc 
+  templates/miscTemplateFunc.cc 
+  templates/MatrixConv.cc 
+  clapack/dcopy.c 
+  clapack/dgemm.c 
+  clapack/dgemv.c 
+  clapack/dger.c 
+  clapack/dlasyf.c 
+  clapack/dscal.c 
+  clapack/dswap.c 
+  clapack/dsyr.c 
+  clapack/dsysv.c 
+  clapack/dsytf2.c 
+  clapack/dsytrf.c 
+  clapack/dsytrs.c 
+  clapack/idamax.c 
+  clapack/ieeeck.c 
+  clapack/ilaenv.c 
+  clapack/lsame.c 
+  clapack/s_cmp.c 
+  clapack/s_copy.c 
+  clapack/xerbla.c
+)
+
+IF(BUILD_SHARED_LIBS)
+  SET(LIBRARY_TYPE SHARED)
+  SET(LIBRARY_INSTALL LIBRARY)
+ELSE(BUILD_SHARED_LIBS)
+  SET(LIBRARY_TYPE STATIC)
+  SET(LIBRARY_INSTALL ARCHIVE)
+ENDIF(BUILD_SHARED_LIBS)
+
+
+ADD_LIBRARY(EBTKS ${LIBRARY_TYPE} ${EBTKS_LIB_SRCS})
+
+INSTALL(FILES ${EBTKS_HEADERS}
+   DESTINATION include/EBTKS)
+
+INSTALL(TARGETS EBTKS ${LIBRARY_INSTALL} DESTINATION lib)
+
+set(EBTKS_USE_FILE_CONFIG      "${CMAKE_CURRENT_BINARY_DIR}/UseEBTKS.cmake")
+set(EBTKS_INCLUDE_DIRS_CONFIG   ${CMAKE_SOURCE_DIR}/Include)
+set(EBTKS_LIBRARY_DIRS_CONFIG   ${CMAKE_CURRENT_BINARY_DIR})
+
+configure_file(EBTKSConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/EBTKSConfig.cmake @ONLY )
+
+configure_file(UseEBTKS.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/UseEBTKS.cmake @ONLY)
+
+# config for install dir
+set(EBTKS_USE_FILE_CONFIG "${CMAKE_INSTALL_PREFIX}/lib/UseEBTKS.cmake")
+set(EBTKS_INCLUDE_DIRS_CONFIG  ${CMAKE_INSTALL_PREFIX}/include)
+set(EBTKS_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib)
+
+configure_file(EBTKSConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/EBTKSConfig.cmake @ONLY )
+
+configure_file(UseEBTKS.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/UseEBTKS.cmake @ONLY)
+
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/UseEBTKS.cmake ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/EBTKSConfig.cmake
+  DESTINATION lib
+  COMPONENT Development)
+
+# testing
+# IF(BUILD_TESTING)
+#   ADD_SUBDIRECTORY( Testing )
+# ENDIF(BUILD_TESTING)
