@@ -58,6 +58,10 @@ Mat<dcomplex> asCompMat(const Mat<Type>& A)
   
   return cast;
 }
+
+template Mat<dcomplex> asCompMat(Mat<double> const &);
+template Mat<dcomplex> asCompMat(Mat<dcomplex> const &);
+
 #endif
 
 #ifdef USE_FCOMPMAT
@@ -93,8 +97,6 @@ Mat<fcomplex> asFcompMat(const Mat<Type>& Re, const Mat<Type>& Im)
 }
 #endif
 
-template Mat<dcomplex> asCompMat(Mat<double> const &);
-template Mat<dcomplex> asCompMat(Mat<dcomplex> const &);
 
 
 #if !defined(__GNUC__) && defined(__sgi)
