@@ -18,23 +18,23 @@ $Date: 2004-12-08 17:05:18 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "SimpleArray.h"
-#include "ValueMap.h"
+#include "EBTKS/SimpleArray.h"
+#include "EBTKS/ValueMap.h"
 #include <assert.h>
 #ifdef HAVE_MATLAB
 #include "matlabSupport.h"
 #endif
 
-#include "trivials.h"
+#include "EBTKS/trivials.h"
 
 using namespace std;
 
 #ifdef USE_COMPMAT
-#include "dcomplex.h"
+#include "EBTKS/dcomplex.h"
 #pragma do_not_instantiate SimpleArray<dcomplex>::log
 #endif
 #ifdef USE_FCOMPMAT
-#include "fcomplex.h"
+#include "EBTKS/fcomplex.h"
 #pragma do_not_instantiate SimpleArray<fcomplex>::log
 #endif
 

@@ -21,8 +21,8 @@ $State: Exp $
 #define DICTIONARY_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-#include "MTypes.h"
-#include "trivials.h"
+#include "EBTKS/MTypes.h"
+#include "EBTKS/trivials.h"
 
 /*************************************************************
  * Dictionary class, essentially an implementation of the Map

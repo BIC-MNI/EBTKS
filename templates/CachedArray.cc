@@ -18,9 +18,9 @@ $Date: 2004-12-08 17:02:18 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "CachedArray.h"
-#include "Histogram.h"
-#include "FileIO.h"
+#include "EBTKS/CachedArray.h"
+#include "EBTKS/Histogram.h"
+#include "EBTKS/FileIO.h"
 #include <assert.h>
 #include <stdio.h>
 #include <unistd.h>

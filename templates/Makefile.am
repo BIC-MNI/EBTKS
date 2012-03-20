@@ -1,18 +1,18 @@
 AM_CPPFLAGS = -I$(top_srcdir)/include
 
 pkginclude_HEADERS = \
-	Array.h \
-	CachedArray.h \
-	Dictionary.h \
-	Matrix3D.h \
-	Matrix.h \
-	MatrixSupport.h \
-	MatrixTest.h \
-	miscTemplateFunc.h \
-	Pool.h \
-	SimpleArray.h \
-	Stack.h \
-	ValueMap.h
+	EBTKS/Array.h \
+	EBTKS/CachedArray.h \
+	EBTKS/Dictionary.h \
+	EBTKS/Matrix3D.h \
+	EBTKS/Matrix.h \
+	EBTKS/MatrixSupport.h \
+	EBTKS/MatrixTest.h \
+	EBTKS/miscTemplateFunc.h \
+	EBTKS/Pool.h \
+	EBTKS/SimpleArray.h \
+	EBTKS/Stack.h \
+	EBTKS/ValueMap.h
 
 noinst_LTLIBRARIES = libAZgen_t.la
 libAZgen_t_la_SOURCES = \

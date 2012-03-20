@@ -17,7 +17,7 @@ $Author: bert $
 $Date: 2003-04-16 15:03:14 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include "Dictionary.h"
+#include "EBTKS/Dictionary.h"
 #include <assert.h>
 #include <iostream>		// (bert) changed from iostream.h
 using namespace std;		// (bert) added

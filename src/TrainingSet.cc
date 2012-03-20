@@ -18,7 +18,7 @@ $Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "TrainingSet.h"
+#include "EBTKS/TrainingSet.h"
 #include <assert.h>
 #include <stdlib.h>
 

@@ -18,7 +18,7 @@ $Date: 2003-04-16 18:42:39 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "Path.h"
+#include "EBTKS/Path.h"
 #include <assert.h>
 #include <dirent.h>
 #include <fstream>		// (bert) changed from fstream.h

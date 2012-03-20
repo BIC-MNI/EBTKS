@@ -18,7 +18,7 @@ $Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "Histogram.h"
+#include "EBTKS/Histogram.h"
 #include <assert.h>
 
 #ifdef HAVE_MATLAB

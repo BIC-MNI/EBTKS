@@ -18,7 +18,7 @@ $Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
-#include "ValueMap.h"
+#include "EBTKS/ValueMap.h"
 
 using namespace std;
 

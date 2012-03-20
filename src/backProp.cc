@@ -18,7 +18,7 @@ $Date: 2004-01-19 15:38:15 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "backProp.h"
+#include "EBTKS/backProp.h"
 #include <assert.h>
 
 #ifdef HAVE_MALLOC_H
@@ -30,7 +30,7 @@ $State: Exp $
 #include <string.h>
 #include <time.h>
 
-#include "MString.h"
+#include "EBTKS/MString.h"
 
 using namespace std;
 

@@ -27,8 +27,8 @@ $State: Exp $
 #include <stdio.h>
 #include <iostream>		// (bert) changed from iostream.h
 using namespace std;		// (bert) added
-#include "dcomplex.h"
-#include "MatrixSupport.h"
+#include "EBTKS/dcomplex.h"
+#include "EBTKS/MatrixSupport.h"
 
 
 /*

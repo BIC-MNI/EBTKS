@@ -17,8 +17,8 @@ $Author: jason $
 $Date: 2001-11-09 16:37:26 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include "Matrix.h"
-#include "MatrixSupport.h"
+#include "EBTKS/Matrix.h"
+#include "EBTKS/MatrixSupport.h"
 //#include "FileIO.h"  //included to load compressed data
 /*********************************************************
 template <class Type> const Mat<Type>::MATLAB = 0;

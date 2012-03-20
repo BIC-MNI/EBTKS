@@ -18,7 +18,7 @@ $Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "MPoint.h"
+#include "EBTKS/MPoint.h"
 #include <assert.h>
 //#include "MRegion.h"
 

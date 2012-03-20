@@ -21,8 +21,8 @@ $State: Exp $
 #define _MISC_TEMPLATE_FUNC_H
 
 #include <stdlib.h>
-#include "dcomplex.h"
-#include "fcomplex.h"
+#include "EBTKS/dcomplex.h"
+#include "EBTKS/fcomplex.h"
 
 inline double asDouble(dcomplex value) { return sqrt(std::norm(value)); }
 inline double asDouble(fcomplex value) { return sqrt(std::norm(value)); }

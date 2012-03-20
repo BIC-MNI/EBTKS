@@ -18,7 +18,7 @@ $Date: 2003-04-16 18:44:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
-#include "dcomplex.h"
+#include "EBTKS/dcomplex.h"
 #include <iostream>		// (bert) changed from iostream.h
 using namespace std;		// (bert) added
 

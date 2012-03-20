@@ -17,9 +17,9 @@ $Author: bert $
 $Date: 2003-04-16 15:09:37 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include "Matrix3D.h"
-#include "MatrixSupport.h"
-#include "FileIO.h"
+#include "EBTKS/Matrix3D.h"
+#include "EBTKS/MatrixSupport.h"
+#include "EBTKS/FileIO.h"
 #include <sys/stat.h>
 
 template <class Type> 

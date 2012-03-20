@@ -18,7 +18,7 @@ $Date: 2003-04-16 16:57:23 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "Pool.h"
+#include "EBTKS/Pool.h"
 #include <assert.h>
 #include <iostream>		// (bert) changed from iostream.h
 using namespace std;		// (bert) added
@@ -68,7 +68,7 @@ Pool<Type>::_grow()
 #define _INSTANTIATE_POOL(Type)                       \
          template class Pool<Type>;
 
-#include "MPoint.h"
+#include "EBTKS/MPoint.h"
 _INSTANTIATE_POOL(MPoint);
 _INSTANTIATE_POOL(MPoint3D);
 _INSTANTIATE_POOL(MWorldPoint);

@@ -20,8 +20,8 @@ $State: Exp $
 #ifndef _MATRIX_H
 #define _MATRIX_H
 
-#include "SimpleArray.h"
-#include "FileIO.h"  //included to load compressed data
+#include "EBTKS/SimpleArray.h"
+#include "EBTKS/FileIO.h"  //included to load compressed data
 
 /******************************************************************************
  * The user must use the following #defines for each matrix type that is 
@@ -50,10 +50,10 @@ $State: Exp $
  * USE_FCOMPMAT (fcomplex)        fCompMat
  *****************************************************************************/
 
-#include "dcomplex.h"
+#include "EBTKS/dcomplex.h"
 
 #ifdef USE_FCOMPMAT
-  #include "fcomplex.h"
+  #include "EBTKS/fcomplex.h"
 #endif
 
 #ifdef HAVE_MATLAB
@@ -71,9 +71,9 @@ extern "C" {
 #include <assert.h>
 #include <stddef.h>
 #include <iostream>		/* (bert) changed from iostream.h */
-#include "MTypes.h"
-#include "MatrixSupport.h"
-#include "Histogram.h"
+#include "EBTKS/MTypes.h"
+#include "EBTKS/MatrixSupport.h"
+#include "EBTKS/Histogram.h"
 
 //VF: fixing templates
 #include <sys/types.h>

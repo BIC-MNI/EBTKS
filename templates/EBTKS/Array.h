@@ -29,8 +29,8 @@ $State: Exp $
 #define ARRAY_H
 
 #include <iostream>
-#include "trivials.h"
-#include "MTypes.h"
+#include "EBTKS/trivials.h"
+#include "EBTKS/MTypes.h"
 
 
 const int DEFAULT_SIZE   = 0;

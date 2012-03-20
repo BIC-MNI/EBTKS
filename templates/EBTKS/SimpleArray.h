@@ -20,8 +20,8 @@ $State: Exp $
 #ifndef SIMPLE_ARRAY_H
 #define SIMPLE_ARRAY_H
 
-#include "trivials.h"
-#include "Array.h"
+#include "EBTKS/trivials.h"
+#include "EBTKS/Array.h"
 
 /********************************************************************
  * SimpleArray class
