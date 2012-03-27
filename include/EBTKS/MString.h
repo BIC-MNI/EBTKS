@@ -21,8 +21,8 @@ $State: Exp $
 #define MSTRING_H
 
 #include <string.h>
-#include "SimpleArray.h"
-#include "MTypes.h"
+#include "EBTKS/SimpleArray.h"
+#include "EBTKS/MTypes.h"
 
 class MStringIterator;
 

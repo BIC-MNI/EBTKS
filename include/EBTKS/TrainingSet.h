@@ -20,8 +20,8 @@ $State: Exp $
 #ifndef TRAINING_SET_H
 #define TRAINING_SET_H
 
-#include "SimpleArray.h"
-#include "OrderedCltn.h"
+#include "EBTKS/SimpleArray.h"
+#include "EBTKS/OrderedCltn.h"
 
 /***************
  * Example class

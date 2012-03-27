@@ -22,8 +22,8 @@ $State: Exp $
 
 #include <iostream>		/* (bert) changed from iostream.h */
 #include <stdio.h>
-#include "Array.h"
-#include "TrainingSet.h"
+#include "EBTKS/Array.h"
+#include "EBTKS/TrainingSet.h"
 
 typedef void (ErrorMonitor)(unsigned cycle, double error);
 

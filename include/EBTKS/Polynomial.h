@@ -20,13 +20,13 @@ $State: Exp $
 #ifndef POLYNOMIAL_H
 #define POLYNOMIAL_H
 
-#include "SimpleArray.h"
+#include "EBTKS/SimpleArray.h"
 
 #ifndef USE_FLMAT
 #define USE_FLMAT
 #endif
 
-#include "Matrix.h"
+#include "EBTKS/Matrix.h"
 
 #ifndef FloatArray
 typedef SimpleArray<float> FloatArray;

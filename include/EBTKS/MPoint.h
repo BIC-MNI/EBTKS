@@ -23,9 +23,9 @@ $State: Exp $
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>		/* (bert) changed from iostream.h */
-#include "trivials.h"
-#include "MTypes.h"
-#include "Pool.h"
+#include "EBTKS/trivials.h"
+#include "EBTKS/MTypes.h"
+#include "EBTKS/Pool.h"
 
 //class MRectangle;
 
