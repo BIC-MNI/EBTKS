@@ -13,7 +13,7 @@
 #cmakedefine01 HAVE_ISFINITE
 
 /* Define to 1 if you have the <malloc.h> header file. */
-#cmakedefine01 HAVE_MALLOC_H
+#cmakedefine  HAVE_MALLOC_H 1
 
 /* Define to 1 if you have the <memory.h> header file. */
 #cmakedefine01 HAVE_MEMORY_H

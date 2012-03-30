@@ -20,7 +20,7 @@ $State: Exp $
 #ifndef MTYPES_H
 #define MTYPES_H
 
-#ifdef HAVE_VALUES_H
+#if HAVE_VALUES_H
 #include <values.h>
 #else
 // JPL: values.h does not exist on OS X, so here I'm adding a hack and
