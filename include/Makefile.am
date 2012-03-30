@@ -1,22 +1,23 @@
-pkginclude_HEADERS = amoeba.h \
-	assert.h \
-	backProp.h \
-	Complex.h \
-	dcomplex.h \
-	fcomplex.h \
-	FileIO.h \
-	Histogram.h \
-	matlabSupport.h \
-	Minc.h \
-	MPoint.h \
-	MString.h \
-	MTypes.h \
-	OpTimer.h \
-	OrderedCltn.h \
-	Path.h \
-	Polynomial.h \
-	popen.h \
-	Spline.h \
-	TBSpline.h \
-	TrainingSet.h \
-	trivials.h
+pkginclude_HEADERS = \
+	EBTKS/amoeba.h \
+	EBTKS/assert.h \
+	EBTKS/backProp.h \
+	EBTKS/Complex.h \
+	EBTKS/dcomplex.h \
+	EBTKS/fcomplex.h \
+	EBTKS/FileIO.h \
+	EBTKS/Histogram.h \
+	EBTKS/matlabSupport.h \
+	EBTKS/Minc.h \
+	EBTKS/MPoint.h \
+	EBTKS/MString.h \
+	EBTKS/MTypes.h \
+	EBTKS/OpTimer.h \
+	EBTKS/OrderedCltn.h \
+	EBTKS/Path.h \
+	EBTKS/Polynomial.h \
+	EBTKS/popen.h \
+	EBTKS/Spline.h \
+	EBTKS/TBSpline.h \
+	EBTKS/TrainingSet.h \
+	EBTKS/trivials.h

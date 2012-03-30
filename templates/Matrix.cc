@@ -18,13 +18,13 @@ $Date: 2010-05-18 23:01:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "Matrix.h"
+#include "EBTKS/Matrix.h"
 #include <sys/stat.h>
 #include "unistd.h"
 #ifdef HAVE_MATLAB
 #include "matlabSupport.h"
 #endif
-#include "miscTemplateFunc.h"
+#include "EBTKS/miscTemplateFunc.h"
 
 using namespace std;
 

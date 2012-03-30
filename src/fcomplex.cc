@@ -18,7 +18,7 @@ $Date: 2003-04-16 18:44:21 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 
-#include "fcomplex.h"
+#include "EBTKS/fcomplex.h"
 #include <iostream>		// (bert) moved from fcomplex.h
 using namespace std;		// (bert) added
 

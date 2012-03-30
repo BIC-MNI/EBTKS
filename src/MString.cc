@@ -18,11 +18,11 @@ $Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "MString.h"
+#include "EBTKS/MString.h"
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
-#include "OrderedCltn.h"
+#include "EBTKS/OrderedCltn.h"
 
 using namespace std;
 

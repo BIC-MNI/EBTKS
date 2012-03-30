@@ -18,8 +18,8 @@ $Date: 2004-12-08 16:43:44 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "Array.h"
-#include "dcomplex.h"
+#include "EBTKS/Array.h"
+#include "EBTKS/dcomplex.h"
 #include <assert.h>
 #include <iostream>		// (bert) changed from iostream.h
 #include <math.h>
@@ -739,11 +739,11 @@ _INSTANTIATE_ARRAY(unsigned short);
 _INSTANTIATE_ARRAY(float);
 _INSTANTIATE_ARRAY(double);
 _INSTANTIATE_ARRAY(dcomplex);
-#include "Path.h"
+#include "EBTKS/Path.h"
 _INSTANTIATE_ARRAY(Path);
-#include "ValueMap.h"
+#include "EBTKS/ValueMap.h"
 _INSTANTIATE_ARRAY(LinearMap);
-#include "SimpleArray.h"
+#include "EBTKS/SimpleArray.h"
 _INSTANTIATE_ARRAY(SimpleArray<unsigned> );
 _INSTANTIATE_ARRAY(SimpleArray<float> );
 #endif

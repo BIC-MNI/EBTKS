@@ -17,7 +17,7 @@ $Author: jason $
 $Date: 2001-11-09 16:37:25 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include "popen.h"
+#include "EBTKS/popen.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>

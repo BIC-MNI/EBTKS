@@ -21,9 +21,9 @@ $State: Exp $
 #define HISTOGRAM_H
 
 #include <iostream>		/* (bert) changed from iostream.h */
-#include "MTypes.h"
-#include "ValueMap.h"
-#include "SimpleArray.h"
+#include "EBTKS/MTypes.h"
+#include "EBTKS/ValueMap.h"
+#include "EBTKS/SimpleArray.h"
 
 class Histogram : private SimpleArray<unsigned> {
   double    _min, _max; // True extrema (i.e., not the bin centers)

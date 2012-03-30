@@ -24,7 +24,7 @@ using namespace std;		// (bert) added
 #include <malloc.h>
 #endif
 
-#include "OrderedCltn.h"
+#include "EBTKS/OrderedCltn.h"
 
 /*
  * ordered collection iterator class functions

@@ -39,7 +39,7 @@ $State: Exp $
 
 #include <math.h>
 #include <stdlib.h>
-#include "miscTemplateFunc.h"
+#include "EBTKS/miscTemplateFunc.h"
 
 #ifdef FALSE
 #undef FALSE

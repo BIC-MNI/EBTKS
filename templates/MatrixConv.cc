@@ -20,7 +20,7 @@ $State: Exp $
 #include <config.h>
 #include <iostream>
 using namespace std;
-#include "Matrix.h"
+#include "EBTKS/Matrix.h"
 //#include "miscTemplateFunc.h"
 
 //

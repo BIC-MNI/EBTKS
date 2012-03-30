@@ -18,7 +18,7 @@ $Date: 2006-03-02 13:22:17 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
-#include "FileIO.h"
+#include "EBTKS/FileIO.h"
 #include <assert.h>
 #include <stdlib.h>
 // #include <stream.h> - (bert) removed unnecessary header

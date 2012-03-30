@@ -17,8 +17,8 @@ $Author: stever $
 $Date: 2003-11-17 04:07:52 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include "OpTimer.h"
-#include "trivials.h"
+#include "EBTKS/OpTimer.h"
+#include "EBTKS/trivials.h"
 #include <assert.h>
 #include <string.h>
 #include <sys/time.h>

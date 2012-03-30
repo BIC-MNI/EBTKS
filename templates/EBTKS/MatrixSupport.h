@@ -21,10 +21,10 @@ $State: Exp $
 #define _MATRIX_SUPPORT_H
 
 #ifdef USE_COMPMAT
-  #include "dcomplex.h"
+  #include "EBTKS/dcomplex.h"
 #endif
 #ifdef USE_FCOMPMAT
-  #include "fcomplex.h"
+  #include "EBTKS/fcomplex.h"
 #endif
 
 typedef void (*FFTFUNC)(int n, double *real, double *imag);

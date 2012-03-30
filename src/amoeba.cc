@@ -32,9 +32,9 @@ $State: Exp $
 ---------------------------------------------------------------------------- */
 
 #include <config.h>
-#include "amoeba.h"
+#include "EBTKS/amoeba.h"
 #include <assert.h>
-#include "trivials.h"
+#include "EBTKS/trivials.h"
 
 #define  FLIP_RATIO      1.0
 #define  CONTRACT_RATIO  0.5

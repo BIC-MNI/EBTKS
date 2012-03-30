@@ -1,35 +1,38 @@
-# CMakeFiles.txt for the bicpl library
+# CMakeFiles.txt for the EBTKS library
 #
 # Vladimir S. FONOV - vladimir.fonov@gmail.com
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+SET(EBTKS_PACKAGE_VERSION_MAJOR 1)
+SET(EBTKS_PACKAGE_VERSION_MINOR 6)
+SET(EBTKS_PACKAGE_VERSION_PATCH 40)
 
-PROJECT(EBTKS)
-
-#SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules")
-# ENABLE_TESTING()
-# INCLUDE(CTest)
-
-#ADD_SUBDIRECTORY( doc )
 
 # Packaging defines
-SET(CPACK_GENERATOR TGZ)
-SET(CPACK_PACKAGE_VERSION_MAJOR 1)
-SET(CPACK_PACKAGE_VERSION_MINOR 6)
-SET(CPACK_PACKAGE_VERSION_PATCH 40)
+IF(NOT MINC_TOOLKIT_BUILD)
+  PROJECT(EBTKS)
+  SET(CPACK_GENERATOR TGZ)
+  SET(CPACK_PACKAGE_VERSION_MAJOR ${EBTKS_PACKAGE_VERSION_MAJOR})
+  SET(CPACK_PACKAGE_VERSION_MINOR ${EBTKS_PACKAGE_VERSION_MINOR})
+  SET(CPACK_PACKAGE_VERSION_PATCH ${EBTKS_PACKAGE_VERSION_PATCH})
 INCLUDE(CPack)
 
+ENDIF(NOT MINC_TOOLKIT_BUILD)
 
 SET(PACKAGE "EBTKS")
 SET(PACKAGE_BUGREPORT "a.janke@gmail.com")
 
 SET(PACKAGE_NAME "EBTKS")
-SET(PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+SET(PACKAGE_VERSION "${EBTKS_PACKAGE_VERSION_MAJOR}.${EBTKS_PACKAGE_VERSION_MINOR}.${EBTKS_PACKAGE_VERSION_PATCH}")
 SET(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
 
 OPTION(BUILD_SHARED_LIBS "Build shared libraries." OFF)
 
-FIND_PACKAGE( MINC2 REQUIRED )
+
+IF(NOT MINC_TOOLKIT_BUILD)
+	FIND_PACKAGE( MINC2 REQUIRED )
+ENDIF(NOT MINC_TOOLKIT_BUILD)
+
 INCLUDE( ${MINC2_USE_FILE} )
 
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
@@ -73,46 +76,46 @@ CHECK_INCLUDE_FILES(strings.h   HAVE_STRINGS_H)
 CHECK_INCLUDE_FILES(dlfcn.h     HAVE_DLFCN_H)
 
 # config files for build
-CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/config.h @ONLY)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
 
 # others
-CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/epm-header.in ${CMAKE_BINARY_DIR}/epm-header)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/epm-header.in ${CMAKE_CURRENT_BINARY_DIR}/epm-header)
 
-INCLUDE_DIRECTORIES( ${CMAKE_BINARY_DIR} include  templates )
+INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include  ${CMAKE_CURRENT_SOURCE_DIR}/templates )
 
 SET(EBTKS_HEADERS
-        include/amoeba.h 
-        include/assert.h 
-        include/backProp.h 
-        include/Complex.h 
-        include/dcomplex.h 
-        include/fcomplex.h 
-        include/FileIO.h 
-        include/Histogram.h 
-        include/matlabSupport.h 
-        include/Minc.h 
-        include/MPoint.h 
-        include/MString.h 
-        include/MTypes.h 
-        include/OpTimer.h 
-        include/OrderedCltn.h 
-        include/Path.h 
-        include/Polynomial.h 
-        include/popen.h 
-        include/TrainingSet.h 
-        include/trivials.h 
-        templates/Array.h 
-        templates/CachedArray.h 
-        templates/Dictionary.h 
-        templates/Matrix3D.h 
-        templates/Matrix.h 
-        templates/MatrixSupport.h 
-        templates/MatrixTest.h 
-        templates/miscTemplateFunc.h 
-        templates/Pool.h 
-        templates/SimpleArray.h 
-        templates/Stack.h 
-        templates/ValueMap.h
+        include/EBTKS/amoeba.h 
+        include/EBTKS/assert.h 
+        include/EBTKS/backProp.h 
+        include/EBTKS/Complex.h 
+        include/EBTKS/dcomplex.h 
+        include/EBTKS/fcomplex.h 
+        include/EBTKS/FileIO.h 
+        include/EBTKS/Histogram.h 
+        include/EBTKS/matlabSupport.h 
+        include/EBTKS/Minc.h 
+        include/EBTKS/MPoint.h 
+        include/EBTKS/MString.h 
+        include/EBTKS/MTypes.h 
+        include/EBTKS/OpTimer.h 
+        include/EBTKS/OrderedCltn.h 
+        include/EBTKS/Path.h 
+        include/EBTKS/Polynomial.h 
+        include/EBTKS/popen.h 
+        include/EBTKS/TrainingSet.h 
+        include/EBTKS/trivials.h 
+        templates/EBTKS/Array.h 
+        templates/EBTKS/CachedArray.h 
+        templates/EBTKS/Dictionary.h 
+        templates/EBTKS/Matrix3D.h 
+        templates/EBTKS/Matrix.h 
+        templates/EBTKS/MatrixSupport.h 
+        templates/EBTKS/MatrixTest.h 
+        templates/EBTKS/miscTemplateFunc.h 
+        templates/EBTKS/Pool.h 
+        templates/EBTKS/SimpleArray.h 
+        templates/EBTKS/Stack.h 
+        templates/EBTKS/ValueMap.h
 )
 
 # some variables
@@ -181,8 +184,9 @@ INSTALL(FILES ${EBTKS_HEADERS}
 INSTALL(TARGETS EBTKS ${LIBRARY_INSTALL} DESTINATION lib)
 
 set(EBTKS_USE_FILE_CONFIG      "${CMAKE_CURRENT_BINARY_DIR}/UseEBTKS.cmake")
-set(EBTKS_INCLUDE_DIRS_CONFIG   ${CMAKE_SOURCE_DIR}/Include)
+set(EBTKS_INCLUDE_DIRS_CONFIG   ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/templates)
 set(EBTKS_LIBRARY_DIRS_CONFIG   ${CMAKE_CURRENT_BINARY_DIR})
+set(EBTKS_LIBRARIES_CONFIG      EBTKS)
 
 configure_file(EBTKSConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/EBTKSConfig.cmake @ONLY )
@@ -191,9 +195,9 @@ configure_file(UseEBTKS.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/UseEBTKS.cmake @ONLY)
 
 # config for install dir
-set(EBTKS_USE_FILE_CONFIG "${CMAKE_INSTALL_PREFIX}/lib/UseEBTKS.cmake")
+set(EBTKS_USE_FILE_CONFIG     "${CMAKE_INSTALL_PREFIX}/lib/UseEBTKS.cmake")
 set(EBTKS_INCLUDE_DIRS_CONFIG  ${CMAKE_INSTALL_PREFIX}/include)
-set(EBTKS_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib)
+set(EBTKS_LIBRARY_DIRS_CONFIG  ${CMAKE_INSTALL_PREFIX}/lib)
 
 configure_file(EBTKSConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/EBTKSConfig.cmake @ONLY )

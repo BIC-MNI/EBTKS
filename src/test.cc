@@ -17,7 +17,7 @@ $Author: jason $
 $Date: 2001-11-09 16:37:24 $
 $State: Exp $
 --------------------------------------------------------------------------*/
-#include "CachedArray.h"
+#include "EBTKS/CachedArray.h"
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <assert.h>
