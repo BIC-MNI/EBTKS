@@ -744,6 +744,13 @@ _INSTANTIATE_ARRAY(Path);
 #include "EBTKS/ValueMap.h"
 _INSTANTIATE_ARRAY(LinearMap);
 #include "EBTKS/SimpleArray.h"
-_INSTANTIATE_ARRAY(SimpleArray<unsigned> );
+_INSTANTIATE_ARRAY(SimpleArray<char> );
+_INSTANTIATE_ARRAY(SimpleArray<unsigned char> );
+_INSTANTIATE_ARRAY(SimpleArray<short> );
+_INSTANTIATE_ARRAY(SimpleArray<int> );
+_INSTANTIATE_ARRAY(SimpleArray<unsigned int> );
+_INSTANTIATE_ARRAY(SimpleArray<unsigned short> );
 _INSTANTIATE_ARRAY(SimpleArray<float> );
+_INSTANTIATE_ARRAY(SimpleArray<double> );
+_INSTANTIATE_ARRAY(Array< SimpleArray<double> >);
 #endif
