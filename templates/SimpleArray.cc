@@ -1700,6 +1700,15 @@ operator ^ (double base, const SimpleArray<Type>& array) {
          template class IndexStruct<Type>;                \
          template ostream& operator << (ostream&, const SimpleArray<Type>&); \
          template istream& operator >> (istream&, SimpleArray<Type>&); \
+         template SimpleArray<float> asFloatArray(const SimpleArray<Type>&); \
+         template SimpleArray<double> asDblArray(const SimpleArray<Type>&); \
+         template<> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
+
+#define _INSTANTIATE_SIMPLEARRAY_COMPLEX(Type)            \
+         template class SimpleArray<Type>;                \
+         template class IndexStruct<Type>;                \
+         template ostream& operator << (ostream&, const SimpleArray<Type>&); \
+         template istream& operator >> (istream&, SimpleArray<Type>&); \
          template SimpleArray<double> asDblArray(const SimpleArray<Type>&); \
          template<> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
 
@@ -1722,10 +1731,10 @@ template SimpleArray<float> operator^(double, SimpleArray<float> const&);
 template SimpleArray<double> operator^(double, SimpleArray<double> const&);
 
 #ifdef USE_COMPMAT
-_INSTANTIATE_SIMPLEARRAY(dcomplex);
+_INSTANTIATE_SIMPLEARRAY_COMPLEX(dcomplex);
 #endif // USE_COMPMAT
 #ifdef USE_FCOMPMAT
-_INSTANTIATE_SIMPLEARRAY(fcomplex);
+_INSTANTIATE_SIMPLEARRAY_COMPLEX(fcomplex);
 #endif // USE_FCOMPMAT
 #endif // __GNUC__
 
