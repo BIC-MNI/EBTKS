@@ -104,6 +104,7 @@ SET(EBTKS_HEADERS
         include/EBTKS/popen.h 
         include/EBTKS/TrainingSet.h 
         include/EBTKS/trivials.h 
+        
         templates/EBTKS/Array.h 
         templates/EBTKS/CachedArray.h 
         templates/EBTKS/Dictionary.h 
@@ -135,6 +136,7 @@ SET(EBTKS_LIB_SRCS
   src/backProp.cc 
   src/fcomplex.cc 
   src/dcomplex.cc 
+  
   templates/Array.cc 
   templates/CachedArray.cc 
   templates/Dictionary.cc 
@@ -145,6 +147,7 @@ SET(EBTKS_LIB_SRCS
   templates/ValueMap.cc 
   templates/miscTemplateFunc.cc 
   templates/MatrixConv.cc 
+  
   clapack/dcopy.c 
   clapack/dgemm.c 
   clapack/dgemv.c 
@@ -174,6 +177,10 @@ ELSE(EBTKS_BUILD_SHARED_LIBS)
   SET(LIBRARY_INSTALL ARCHIVE)
 ENDIF(EBTKS_BUILD_SHARED_LIBS)
 
+
+# to fix a bug with diverging N3
+STRING(REGEX REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+STRING(REGEX REPLACE "-O3" "-O2" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 
 ADD_LIBRARY(EBTKS ${LIBRARY_TYPE} ${EBTKS_LIB_SRCS})
 SET(EBTKS_LIBRARIES EBTKS)
@@ -206,8 +213,10 @@ configure_file(UseEBTKS.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/UseEBTKS.cmake @ONLY)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/UseEBTKS.cmake ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/EBTKSConfig.cmake
-  DESTINATION lib
-  COMPONENT Development)
+  DESTINATION 
+   lib
+  COMPONENT 
+   Development)
 
 # testing
 # IF(BUILD_TESTING)
