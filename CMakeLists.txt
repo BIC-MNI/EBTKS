@@ -104,6 +104,8 @@ SET(EBTKS_HEADERS
         include/EBTKS/popen.h 
         include/EBTKS/TrainingSet.h 
         include/EBTKS/trivials.h 
+#        include/EBTKS/Spline.h
+#        include/EBTKS/TBSpline.h
         
         templates/EBTKS/Array.h 
         templates/EBTKS/CachedArray.h 
@@ -136,6 +138,8 @@ SET(EBTKS_LIB_SRCS
   src/backProp.cc 
   src/fcomplex.cc 
   src/dcomplex.cc 
+#  src/Spline.cc
+#  src/TBSpline.cc 
   
   templates/Array.cc 
   templates/CachedArray.cc 
@@ -176,7 +180,6 @@ ELSE(EBTKS_BUILD_SHARED_LIBS)
   SET(LIBRARY_TYPE STATIC)
   SET(LIBRARY_INSTALL ARCHIVE)
 ENDIF(EBTKS_BUILD_SHARED_LIBS)
-
 
 # to fix a bug with diverging N3
 STRING(REGEX REPLACE "-O3" "-O2" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
