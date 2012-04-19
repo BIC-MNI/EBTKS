@@ -39,6 +39,8 @@ class MPoint {
 public:
   short x;
   short y;
+  //dummy data, to satisfy assert in Pool
+  void * dummy;
 
   MPoint(short x1 = 0, short y1 = 0)     { x = x1; y = y1; }
   MPoint(const MPoint& point)        { x = point.x; y = point.y; }

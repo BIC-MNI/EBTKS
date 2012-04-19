@@ -75,7 +75,6 @@ extern "C" {
 #include "EBTKS/MatrixSupport.h"
 #include "EBTKS/Histogram.h"
 
-//VF: fixing templates
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -887,8 +886,8 @@ public:
   Mat& fft(unsigned nrows = 0, unsigned ncols = 0) {
     return _fft(nrows, ncols, ::fft); }
   // Const fft function
-  Mat  fft(unsigned nrows = 0, unsigned ncols = 0) const { 
-    return fftConst(nrows, ncols); }
+//   Mat  fft(unsigned nrows = 0, unsigned ncols = 0) const { 
+//     return fftConst(nrows, ncols); }
   // Explicit const fft function
   Mat  fftConst(unsigned nrows = 0, unsigned ncols = 0) const { 
     Mat<Type> A(*this); return A.fft(nrows, ncols); }
@@ -896,8 +895,8 @@ public:
   // Non-const ifft function
   Mat& ifft(unsigned nrows = 0, unsigned ncols = 0);
   // Const ifft function
-  Mat  ifft(unsigned nrows = 0, unsigned ncols = 0) const { 
-    return ifftConst(nrows, ncols); }
+//   Mat  ifft(unsigned nrows = 0, unsigned ncols = 0) const { 
+//     return ifftConst(nrows, ncols); }
   // Explicit const ifft function
   Mat  ifftConst(unsigned nrows = 0, unsigned ncols = 0) const { 
     Mat<Type> A(*this); return A.ifft(nrows, ncols); }
