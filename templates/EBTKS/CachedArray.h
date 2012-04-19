@@ -30,6 +30,11 @@ $State: Exp $
  * by caching to disk.
  ********************************************************************/
 
+#ifndef REALLY_USE_CACHED_ARRAY
+#define CachedArray SimpleArray
+
+#else
+
 template <class Type> class CachedArray;
 template <class Type> class CacheBlock;
 
@@ -240,5 +245,6 @@ public:
   Boolean     read(std::fstream& s, unsigned ID); // Read new block; flushes existing one 
   Boolean     write(std::fstream&) const;
 };
+#endif //REALLY_USE_CACHED_ARRAY
 
 #endif

@@ -25,6 +25,7 @@ $State: Exp $
 #include <stdio.h>
 #include <unistd.h>
 
+#ifdef REALLY_USE_CACHED_ARRAY
 
 using namespace std;
 
@@ -1083,3 +1084,6 @@ CacheBlock<Type>::write(fstream& s) const
 _INSTANTIATE_CACHEDARRAY(char);
 _INSTANTIATE_CACHEDARRAY(float);
 #endif // __GNUC__ defined
+
+
+#endif //REALLY_USE_CACHED_ARRAY
