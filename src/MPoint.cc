@@ -25,9 +25,9 @@ $State: Exp $
 using namespace std;
 
 
-Pool<MPoint>      MPoint::_pool; //      = Pool<MPoint>();
-//Pool<MPoint3D>    MPoint3D::_pool    = Pool<MPoint3D>();
-Pool<MWorldPoint> MWorldPoint::_pool; // = Pool<MWorldPoint>();
+// Pool<MPoint>      MPoint::_pool; //      = Pool<MPoint>();
+// Pool<MPoint3D>    MPoint3D::_pool    = Pool<MPoint3D>();
+// Pool<MWorldPoint> MWorldPoint::_pool; // = Pool<MWorldPoint>();
 
 MPoint&
 MPoint::magnify(int mag)
@@ -73,10 +73,3 @@ operator << (ostream& os, const MPoint& point)
   os << point.x << " " << point.y; 
   return os;
 }
-
-
-
-
-
-
-

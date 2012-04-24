@@ -34,19 +34,17 @@ $State: Exp $
  **************/
 
 class MPoint {
-  static Pool<MPoint> _pool;
+//   static Pool<MPoint> _pool;
 
 public:
   short x;
   short y;
-  //dummy data, to satisfy assert in Pool
-  void * dummy;
 
   MPoint(short x1 = 0, short y1 = 0)     { x = x1; y = y1; }
   MPoint(const MPoint& point)        { x = point.x; y = point.y; }
 
-  void *operator new(size_t)         { return _pool.alloc(); }
-  void  operator delete(void *point) { _pool.free(point); }
+//   void *operator new(size_t)         { return _pool.alloc(); }
+//   void  operator delete(void *point) { _pool.free(point); }
 
   MPoint& operator = (const MPoint& point) {
     x = point.x; y = point.y; return *this; }
@@ -181,15 +179,15 @@ public:
  *******************/
 
 class MWorldPoint {
-  static Pool<MWorldPoint> _pool;
+//   static Pool<MWorldPoint> _pool;
 
 public:
   float x;
   float y;
   float z;
 
-  void *operator new(size_t)         { return _pool.alloc(); }
-  void  operator delete(void *point) { _pool.free(point); }
+//   void *operator new(size_t)         { return _pool.alloc(); }
+//   void  operator delete(void *point) { _pool.free(point); }
 
   MWorldPoint(float x1 = 0.0, float y1 = 0.0, float z1 = 0.0) { 
     x = x1; y = y1; z = z1; }
