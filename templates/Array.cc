@@ -21,6 +21,7 @@ $State: Exp $
 #include "EBTKS/Array.h"
 #include "EBTKS/dcomplex.h"
 #include <assert.h>
+#include <string.h>
 #include <iostream>		// (bert) changed from iostream.h
 #include <math.h>
 //#include <string>		// (bert) changed from string.h
