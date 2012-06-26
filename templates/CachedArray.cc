@@ -949,8 +949,8 @@ CachedArray<Type>::_randomizedPartition(int p, int r)
 // Swap elements p and i
 
   Type temp = getElConst(p);
-  setEl(p, getElConst(i));
-  setEl(i, temp);
+  this->setEl(p, getElConst(i));
+  this->setEl(i, temp);
 
   return _partition(p, r);
 }
@@ -969,8 +969,8 @@ CachedArray<Type>::_partition(int p, int r)
     
     if (i < j) {
       Type temp = getElConst(i);
-      setEl(i, getElConst(j));
-      setEl(j, temp);
+      this->setEl(i, getElConst(j));
+      this->setEl(j, temp);
     }
     else
       return j;

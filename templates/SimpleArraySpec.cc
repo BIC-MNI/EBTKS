@@ -24,7 +24,7 @@ SimpleArray<dcomplex>::prune()
     dcomplex value = getElConst(i);
     if (FINITE(real(value)) && FINITE(imag(value))) {
       if (i != j)
-	setEl(j, value);
+        this->setEl(j, value);
       j++;
     }
   }
@@ -44,7 +44,7 @@ SimpleArray<fcomplex>::prune()
     fcomplex value = getElConst(i);
     if (FINITE(real(value)) && FINITE(imag(value))) {
       if (i != j)
-	setEl(j, value);
+        this->setEl(j, value);
       j++;
     }
   }
