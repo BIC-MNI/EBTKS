@@ -63,12 +63,16 @@ template <class Type> Boolean  Mat<Type>::flushToDisk = FALSE;
  */
 #include "MatrixSpec.cc"
 
-#define _INSTANTIATE_MAT(Type) \
+#if 0
          template class Mat<Type>;                   \
          template Mat<Type>& pmultEquals(Mat<Type>&, const Mat<Type> &); \
          template Mat<Type>& pdivEquals(Mat<Type>&, const Mat<Type> &); \
          template Mat<Type> inv(const Mat<Type> &); \
-         template Mat<Type> operator*<Type>(double, const Mat<Type> &); \
+         template Mat<Type> operator*<Type>(double, const Mat<Type> &); 
+#endif //0
+
+
+#define _INSTANTIATE_MAT(Type) \
          template<> unsigned Mat<Type>::_rangeErrorCount = 25; \
          template<> Boolean  Mat<Type>::flushToDisk = FALSE;
 
@@ -87,7 +91,7 @@ template Mat<dcomplex> fft(const Mat<dcomplex> &, unsigned, unsigned);
 template Mat<dcomplex> ifft(const Mat<double> &, unsigned, unsigned);
 template Mat<dcomplex> ifft(const Mat<dcomplex> &, unsigned, unsigned);
 #endif // USE_COMPMAT
-#else
+#else // __GNUC__ not defined
 #ifdef USE_COMPMAT
 template Mat<dcomplex>& pmultEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
 template Mat<dcomplex>& pdivEquals(Mat<dcomplex>&, const Mat<dcomplex> &);

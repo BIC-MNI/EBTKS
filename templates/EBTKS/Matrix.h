@@ -4572,20 +4572,19 @@ template <class Type>
 Mat<Type>&
 Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
 {
-  using std::max;		// (bert) force it to use the right max()
-  using std::abs;		// (bert) and force the right abs()!
+  using std::max;    // (bert) force it to use the right max()
 
   // Verify dimensions of FFT
   if ((nrows > 1) && ((nrows < _rows) || !isPowerOf2(nrows))) {
     cerr << "Warning! Mat<Type>::fft():" << endl
-	 << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
+         << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
     nrows = max(unsigned(4), nextPowerOf2(max(nrows, _rows)));
     cerr << "  increased to " << nrows << endl;
   }
 
   if ((ncols > 1) && ((ncols < _cols) || !isPowerOf2(ncols))) {
     cerr << "Warning! Mat<Type>::fft():" << endl
-	 << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
+         << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
     ncols = max(unsigned(4), nextPowerOf2(max(ncols, _cols)));
     cerr << "  increased to " << ncols << endl;
   }
@@ -4625,9 +4624,9 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       double  *imagPtr   = imag;
       Type *sourcePtr = _el[row];
       for(col = _cols; col != 0; col--) {
-	dcomplex value(*sourcePtr++);
-	*realPtr++ = value.real();
-	*imagPtr++ = value.imag();
+        dcomplex value(*sourcePtr++);
+        *realPtr++ = value.real();
+        *imagPtr++ = value.imag();
       }
 
       // Calculate 1D FFT
@@ -4638,7 +4637,7 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       imagPtr   = imag;
       sourcePtr = _el[row];
       for(col = _cols; col != 0; col--)
-	*sourcePtr++ = Type(abs(dcomplex(*realPtr++, *imagPtr++)));
+        *sourcePtr++ = Type(*realPtr++, *imagPtr++);
     }
 
   // Take 1D FFT in Y (column) direction
@@ -4647,12 +4646,12 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       // Fill temporary FFT array
       double  *realPtr   = real;
       double  *imagPtr   = imag;
-      Type    *sourcePtr = _el[0] + col;
+      Type *sourcePtr = _el[0] + col;
       for(row = _rows; row != 0; row--) {
-	dcomplex value(*sourcePtr);
-	*realPtr++ = value.real();
-	*imagPtr++ = value.imag();
-	sourcePtr += _cols;
+        dcomplex value(*sourcePtr);
+        *realPtr++ = value.real();
+        *imagPtr++ = value.imag();
+        sourcePtr += _cols;
       }
 
       // Calculate 1D FFT
@@ -4663,8 +4662,8 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
       imagPtr   = imag;
       sourcePtr = _el[0] + col;
       for(row = _rows; row != 0; row--) {
-	*sourcePtr = Type(abs(dcomplex(*realPtr++, *imagPtr++)));
-	sourcePtr += _cols;
+        *sourcePtr = Type(*realPtr++, *imagPtr++);
+        sourcePtr += _cols;
       }
     }
 
@@ -4673,6 +4672,7 @@ Mat<Type>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
   freeArray(imag);
 
   return *this;
+
 }
 
 template <class Type>
