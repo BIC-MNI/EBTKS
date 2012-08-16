@@ -152,14 +152,18 @@ template <class Type> Mat<unsigned char> asUChrMat(const Mat<Type>&);
 
 #ifdef USE_COMPMAT
 typedef Mat<dcomplex> CompMat;
-template <class Type> Mat<dcomplex> asCompMat(const Mat<Type>& A);
-template <class Type> Mat<dcomplex> asCompMat(const Mat<Type>& Re, const Mat<Type>& Im);
+
+template <class Type> Mat<dcomplex> asDcompMat(const Mat<Type>& A);
+template <class Type> Mat<dcomplex> asDcompMat(const Mat<Type>& Re, const Mat<Type>& Im);
+
 #endif
 
 #ifdef USE_FCOMPMAT
 typedef Mat<fcomplex> fCompMat;
-template <class Type> Mat<fcomplex> asFcompMat(const Mat<Type>&);
+
+template <class Type> Mat<fcomplex> asFcompMat(const Mat<Type>& A);
 template <class Type> Mat<fcomplex> asFcompMat(const Mat<Type>& Re, const Mat<Type>& Im);
+
 #endif
 
 // Some mathematical operations. These had to be implemented as template
@@ -657,7 +661,7 @@ public:
     return applyElementWiseConstC2C(function); }
   Mat   applyElementWiseConstC2C(dcomplex (*function)(dcomplex)) const {
     Mat<Type> A(*this); return A.applyElementWiseC2C(function); }
-  
+    
   Mat& applyIndexFunction(IndexFunction F);
   Mat  applyIndexFunction(IndexFunction F) const {
     return applyIndexFunctionConst(F); }
@@ -1111,25 +1115,6 @@ void remake(Mat<T>& A, unsigned nrows, unsigned ncols)
   A(Mat<T>(nrows, ncols));
 }
   
-#ifdef USE_COMPMAT
-#ifdef USE_DBLMAT
-extern Mat<double> applyElementWiseC2D(const Mat<dcomplex>& A,
-				       double (*function)(const dcomplex&));
-extern Mat<double> arg(const Mat<dcomplex>& A);
-extern Mat<double> real(const Mat<dcomplex>& A);
-extern Mat<double> imag(const Mat<dcomplex>& A);
-#endif
-#endif
-#ifdef USE_FCOMPMAT
-#ifdef USE_FLMAT
-extern Mat<float> applyElementWiseC2D(const Mat<fcomplex>& A,
-					double (*function)(const dcomplex&));
-extern Mat<float> arg(const Mat<fcomplex>& A);
-extern Mat<float> real(const Mat<fcomplex>& A);
-extern Mat<float> imag(const Mat<fcomplex>& A);
-#endif
-#endif
-
 template <class T> 
 Mat<T>& operator += (double addend, Mat<T>& A) { return A+=addend; }
 
@@ -1326,17 +1311,13 @@ Boolean saveAscii(const Mat<T>& A, const char *filename)
 }
 
 #ifdef USE_COMPMAT
-template <class T>
-Mat<dcomplex> fft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
-template <class T>
-Mat<dcomplex> ifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+template <class T> Mat<dcomplex> fft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+template <class T> Mat<dcomplex> ifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
 #endif /* USE_COMPMAT */
 
 #ifdef USE_FCOMPMAT
-template <class T>
-Mat<fcomplex> ffft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
-template <class T>
-Mat<fcomplex> fifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+template <class T> Mat<fcomplex> ffft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
+template <class T> Mat<fcomplex> fifft(const Mat<T>& A, unsigned nrows = 0, unsigned ncols = 0);
 #endif /* USE_FCOMPMAT */
 
 template <class T> std::ostream& operator << (std::ostream&, const Mat<T>&);
@@ -1577,7 +1558,7 @@ Mat<Type>::Mat(const Mat<Type>& A)
   _rows = A._rows; _cols = A._cols;
   _maxrows = A._maxrows; _maxcols = A._maxcols;
   _el = 0;
-   
+  
   _allocateEl();
 
   if (_maxrows && _maxcols && _el)
@@ -1623,8 +1604,7 @@ Mat<Type>::Mat(unsigned nrows, unsigned ncols, Type value)
    
    _allocateEl();
    
-   if (value != 0.0)
-      fill(value);
+   fill(value);
 }
 
 //
@@ -2592,12 +2572,13 @@ template <class Type>
 Mat<Type>&
 Mat<Type>::operator *= (dcomplex x)
 {
-  double scale = real(x);
+  double scale = real(x);//VF: this is really suspicious
 
   Type *elPtr = _el[0];
   for (unsigned i=_rows ; i != 0 ; i--)
     for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr = Type(scale * *elPtr);
+      *elPtr *= scale;
+      //*elPtr = Type(scale * *elPtr);
   
   return *this;
 }
@@ -4786,6 +4767,28 @@ operator << (ostream& os, const Mat<Type>& A)
   return A.display(os);
 }
 
+
+//VF 
+template<class IN,class OUT> Mat<OUT>
+applyElementWiseT(const Mat<IN>& A, OUT (*function)(const IN&))
+{
+  unsigned nrows = A.getrows();
+  unsigned ncols = A.getcols();
+
+  Mat<OUT> T(nrows, ncols);
+   
+  OUT  *TelPtr = (OUT *) T.getEl()[0];
+  IN *AelPtr = (IN *) A.getEl()[0];
+  
+  for(unsigned i = nrows; i; i--)
+    for(unsigned j = ncols ; j != 0 ; j--)
+      *TelPtr++ = function(*AelPtr++);
+
+  return T;
+}
+
+
+
 // 
 // Type conversions
 //
@@ -4932,7 +4935,152 @@ SimpleArray<Type> array(const Mat<Type>& A, Type minVal, Type maxVal)
 {
     return A.array(minVal, maxVal); 
 }
-
 //////////////////////////////////////////////////////////////////////
 
+#ifdef USE_COMPMAT
+
+static double __compmat_real(const dcomplex& d)
+{
+    return d.real();
+}
+
+static double __compmat_imag(const dcomplex& d)
+{
+    return d.imag();
+}
+
+static double __compmat_arg(const dcomplex& d)
+{
+    return arg(d);
+}
+
+
+static Mat<double> real(const Mat<dcomplex>& A)
+{
+  return applyElementWiseT<dcomplex,double>(A, &__compmat_real);
+}
+
+static  Mat<double> imag(const Mat<dcomplex>& A)
+{
+  return applyElementWiseT<dcomplex,double>(A, &__compmat_imag);
+}
+
+static Mat<double> arg(const Mat<dcomplex>& A)
+{
+  return applyElementWiseT<dcomplex,double>(A, &__compmat_arg);
+}
+
+template <class Type>  Mat<dcomplex> asCompMat(const Mat<Type>& Re, const Mat<Type>& Im)
+{
+  if ((Im.getcols() != Re.getcols()) || (Im.getrows() != Re.getrows())) {
+    cerr << "asCompMat: Re and Im matrices don't have the same dimensions; using Re only"
+   << endl;
+    return asCompMat(Re);
+  }
+
+  Mat<dcomplex> cast(Re.getrows(), Re.getcols());
+  dcomplex     *castPtr = (dcomplex *) cast.getEl()[0];
+  const Type  *rePtr   = Re.getEl()[0];
+  const Type  *imPtr   = Im.getEl()[0];
+  for (unsigned i=Re.nElements(); i; i--)
+    *castPtr++ = dcomplex(*rePtr++, *imPtr++);
+  
+  return cast;
+}
+
+template <class Type> 
+Mat<dcomplex> asCompMat(const Mat<Type>& A)
+{
+  Mat<dcomplex> cast(A.getrows(), A.getcols());
+  dcomplex     *castPtr = (dcomplex *) cast.getEl()[0];
+  Type         *aPtr    = (Type *) A.getEl()[0];
+  for (unsigned i=A.nElements(); i; i--)
+    *castPtr++  = dcomplex(*aPtr++);
+  
+  return cast;
+}
+
+template <class Type> Mat<dcomplex>  fft(const Mat<Type>& A, unsigned nrows, unsigned ncols) 
+{
+  return asCompMat(A).fft(nrows, ncols); 
+}
+
+template <class Type> Mat<dcomplex>  ifft(const Mat<Type>& A, unsigned nrows, unsigned ncols) 
+{
+  return asCompMat(A).ifft(nrows, ncols); 
+}
+#endif //USE_COMPMAT
+
+#ifdef USE_FCOMPMAT
+static float __fcompmat_real(const fcomplex& d)
+{
+    return d.real();
+}
+
+static float __fcompmat_imag(const fcomplex& d)
+{
+    return d.imag();
+}
+
+static float __fcompmat_arg(const fcomplex& d)
+{
+    return arg(d);
+}
+
+static Mat<float> real(const Mat<fcomplex>& A)
+{
+  return applyElementWiseT<fcomplex,float>(A, &__fcompmat_real);
+}
+
+static Mat<float> imag(const Mat<fcomplex>& A)
+{
+  return applyElementWiseT<fcomplex,float>(A, &__fcompmat_imag);
+}
+
+static Mat<float> arg(const Mat<fcomplex>& A)
+{
+  return applyElementWiseT<fcomplex,float>(A, &__fcompmat_arg);
+}
+
+template <class Type> Mat<fcomplex> asFcompMat(const Mat<Type>& A)
+{
+  Mat<fcomplex> cast(A.getrows(), A.getcols());
+  fcomplex     *castPtr = (fcomplex *) cast.getEl()[0];
+  const Type  *aPtr    = A.getEl()[0];
+  for (unsigned i=A.nElements(); i; i--)
+    *castPtr++  = fcomplex(*aPtr++);
+  
+  return cast;
+}
+
+template <class Type> Mat<fcomplex> asFcompMat(const Mat<Type>& Re, const Mat<Type>& Im)
+{
+  if ((Im.getcols() != Re.getcols()) || (Im.getrows() != Re.getrows())) 
+  {
+    cerr << "asCompMat: Re and Im matrices don't have the same dimensions; using Re only"<< endl;
+    return asFcompMat(Re);
+  }
+
+  Mat<fcomplex> cast(Re.getrows(), Re.getcols());
+  fcomplex     *castPtr = (fcomplex *) cast.getEl()[0];
+  const Type  *rePtr   = Re.getEl()[0];
+  const Type  *imPtr   = Im.getEl()[0];
+  for (unsigned i=Re.nElements(); i; i--)
+    *castPtr++ = fcomplex(*rePtr++, *imPtr++);
+  
+  return cast;
+}
+
+template <class Type> Mat<fcomplex>  ffft(const Mat<Type>& A, unsigned nrows, unsigned ncols) 
+{
+  return asFcompMat(A).fft(nrows, ncols); 
+}
+
+template <class Type> Mat<fcomplex>  iffft(const Mat<Type>& A, unsigned nrows, unsigned ncols) 
+{
+  return asFcompMat(A).ifft(nrows, ncols); 
+}
+
+
+#endif
 #endif

@@ -62,7 +62,7 @@ public:
   SimpleArray(const Type *init, unsigned nElements) : Array<Type>(init, nElements) {}
   SimpleArray(const Array<Type>& array) : Array<Type>(array) {}
   SimpleArray(const SimpleArray<Type>& array) : Array<Type>(array) {}
-  SimpleArray(Type minVal, double step, Type maxVal);
+  SimpleArray(Type minVal, Type step, Type maxVal);
   virtual ~SimpleArray() {}
 
   // Binary I/O functions

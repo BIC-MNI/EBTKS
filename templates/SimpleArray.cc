@@ -21,6 +21,8 @@ $State: Exp $
 #include "EBTKS/SimpleArray.h"
 #include "EBTKS/ValueMap.h"
 #include <assert.h>
+#include <stdlib.h>
+
 #ifdef HAVE_MATLAB
 #include "matlabSupport.h"
 #endif
@@ -96,8 +98,8 @@ SimpleArray<Type>::compareDescending(const void *ptr1, const void *ptr2)
 }
 
 template <class Type>
-SimpleArray<Type>::SimpleArray(Type minVal, double step, Type maxVal)
-: Array<Type>(unsigned(fabs((asDouble(maxVal) - asDouble(minVal))/step)) + 1)
+SimpleArray<Type>::SimpleArray(Type minVal, Type step, Type maxVal)
+: Array<Type>(unsigned(std::abs((maxVal - minVal)/step)) + 1)
 {
   register Type *elementPtr = this->_contents;
   Type value = minVal;
@@ -1076,7 +1078,7 @@ SimpleArray<Type>::operator == (double value) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
     for (register unsigned i = this->_size; i; i--)
-      *boolPtr++ = *valuePtr++ == value;
+      *boolPtr++ = *valuePtr++ == static_cast<Type>(value);
   }
 
   return boolArray;
@@ -1092,7 +1094,7 @@ SimpleArray<Type>::operator != (double value) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
     for (register unsigned i = this->_size; i; i--)
-      *boolPtr++ = *valuePtr++ != value;
+      *boolPtr++ = *valuePtr++ != static_cast<Type>(value);
   }
 
   return boolArray;
@@ -1733,8 +1735,10 @@ template SimpleArray<double> operator^(double, SimpleArray<double> const&);
 #ifdef USE_COMPMAT
 _INSTANTIATE_SIMPLEARRAY_COMPLEX(dcomplex);
 #endif // USE_COMPMAT
+
 #ifdef USE_FCOMPMAT
 _INSTANTIATE_SIMPLEARRAY_COMPLEX(fcomplex);
 #endif // USE_FCOMPMAT
+
 #endif // __GNUC__
 

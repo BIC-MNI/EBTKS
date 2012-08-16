@@ -9,33 +9,33 @@
 using namespace std;
 
 
-#ifdef USE_COMPMAT
-template <>
-Mat<dcomplex>& 
-Mat<dcomplex>::operator += (dcomplex addend)
-{
-  dcomplex *elPtr = _el[0];
-  for (unsigned i=_rows ; i != 0 ; i--)
-    for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr += addend;
-  
-  return *this;
-}
-#endif // USE_COMPMAT
+// #ifdef USE_COMPMAT
+// template <>
+// Mat<dcomplex>& 
+// Mat<dcomplex>::operator += (dcomplex addend)
+// {
+//   dcomplex *elPtr = _el[0];
+//   for (unsigned i=_rows ; i != 0 ; i--)
+//     for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
+//       *elPtr += addend;
+//   
+//   return *this;
+// }
+// #endif // USE_COMPMAT
 
-#ifdef USE_FCOMPMAT
-template <>
-Mat<fcomplex>& 
-Mat<fcomplex>::operator += (dcomplex addend)
-{
-  fcomplex *elPtr = _el[0];
-  for (unsigned i=_rows ; i != 0 ; i--)
-    for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
-      *elPtr += addend;
-  
-  return *this;
-}
-#endif // USE_FCOMPMAT
+// #ifdef USE_FCOMPMAT
+// template <>
+// Mat<fcomplex>& 
+// Mat<fcomplex>::operator += (dcomplex addend)
+// {
+//   fcomplex *elPtr = _el[0];
+//   for (unsigned i=_rows ; i != 0 ; i--)
+//     for (unsigned j=_cols ; j != 0 ; j--, elPtr++)
+//       *elPtr += addend;
+//   
+//   return *this;
+// }
+// #endif // USE_FCOMPMAT
 
 #ifdef USE_COMPMAT
 template <>
@@ -812,221 +812,6 @@ Mat<fcomplex>::saveAscii(const char *) const
 }
 #endif // USE_FCOMPMAT
 
-#ifdef USE_COMPMAT
-// template <>
-// Mat<dcomplex>&
-// Mat<dcomplex>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
-// {
-//   using std::max;		// (bert) force it to use the right max()
-// 
-//   // Verify dimensions of FFT
-//   if ((nrows > 1) && ((nrows < _rows) || !isPowerOf2(nrows))) {
-//     cerr << "Warning! Mat<dcomplex>::fft():" << endl
-//          << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
-//     nrows = max(unsigned(4), nextPowerOf2(max(nrows, _rows)));
-//     cerr << "  increased to " << nrows << endl;
-//   }
-// 
-//   if ((ncols > 1) && ((ncols < _cols) || !isPowerOf2(ncols))) {
-//     cerr << "Warning! Mat<dcomplex>::fft():" << endl
-//          << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
-//     ncols = max(unsigned(4), nextPowerOf2(max(ncols, _cols)));
-//     cerr << "  increased to " << ncols << endl;
-//   }
-// 
-//   Boolean doX = (ncols != 1) && (_cols > 1) ? TRUE : FALSE;
-//   Boolean doY = (nrows != 1) && (_rows > 1) ? TRUE : FALSE;
-// 
-//   if (!nrows)
-//     nrows = max(unsigned(4), nextPowerOf2(_rows));
-//   else if (nrows == 1)
-//     nrows = _rows;
-// 
-//   if (!ncols)
-//     ncols = max(unsigned(4), nextPowerOf2(_cols));
-//   else if (ncols == 1)
-//     ncols = _cols;
-// 
-//   // Pad matrix to the final FFT dimensions
-//   pad(nrows, ncols, (nrows - _rows)/2, (ncols - _cols)/2, 0);
-// 
-//   // Allocate temporary arrays
-//   double *real = 0;
-//   double *imag = 0;
-//   unsigned maxDim = max(doX ? _cols : 1, doY ? _rows : 1);
-// 
-//   allocateArray(maxDim, real);
-//   allocateArray(maxDim, imag);
-//   assert(real && imag);
-// 
-//   unsigned row, col;
-// 
-//   // Take 1D FFT in X (row) direction
-//   if (doX)
-//     for(row = 0; row < _rows; row++) {
-//       // Fill temporary FFT array
-//       double  *realPtr   = real;
-//       double  *imagPtr   = imag;
-//       dcomplex *sourcePtr = _el[row];
-//       for(col = _cols; col != 0; col--) {
-//         dcomplex value(*sourcePtr++);
-//         *realPtr++ = value.real();
-//         *imagPtr++ = value.imag();
-//       }
-// 
-//       // Calculate 1D FFT
-//       fftFunc(_cols, real, imag);
-// 
-//       // Put results back
-//       realPtr   = real;
-//       imagPtr   = imag;
-//       sourcePtr = _el[row];
-//       for(col = _cols; col != 0; col--)
-//         *sourcePtr++ = dcomplex(*realPtr++, *imagPtr++);
-//     }
-// 
-//   // Take 1D FFT in Y (column) direction
-//   if (doY)
-//     for(col = 0; col < _cols; col++) {
-//       // Fill temporary FFT array
-//       double  *realPtr   = real;
-//       double  *imagPtr   = imag;
-//       dcomplex *sourcePtr = _el[0] + col;
-//       for(row = _rows; row != 0; row--) {
-//         dcomplex value(*sourcePtr);
-//         *realPtr++ = value.real();
-//         *imagPtr++ = value.imag();
-//         sourcePtr += _cols;
-//       }
-// 
-//       // Calculate 1D FFT
-//       fftFunc(_rows, real, imag);
-// 
-//       // Put results back
-//       realPtr   = real;
-//       imagPtr   = imag;
-//       sourcePtr = _el[0] + col;
-//       for(row = _rows; row != 0; row--) {
-//         *sourcePtr = dcomplex(*realPtr++, *imagPtr++);
-//         sourcePtr += _cols;
-//       }
-//     }
-// 
-//   // Free temporary arrays
-//   freeArray(real);
-//   freeArray(imag);
-// 
-//   return *this;
-// }
-#endif // USE_COMPMAT
-
-// #ifdef USE_FCOMPMAT
-// template <>
-// Mat<fcomplex>&
-// Mat<fcomplex>::_fft(unsigned nrows, unsigned ncols, FFTFUNC fftFunc)
-// {
-//   using std::max;		// (bert) force it to use the right max()
-// 
-//   // Verify dimensions of FFT
-//   if ((nrows > 1) && ((nrows < _rows) || !isPowerOf2(nrows))) {
-//     cerr << "Warning! Mat<fcomplex>::fft():" << endl
-// 	 << "  Requested # _rows for FFT (" << nrows << ") invalid;" << endl;
-//     nrows = max(unsigned(4), nextPowerOf2(max(nrows, _rows)));
-//     cerr << "  increased to " << nrows << endl;
-//   }
-// 
-//   if ((ncols > 1) && ((ncols < _cols) || !isPowerOf2(ncols))) {
-//     cerr << "Warning! Mat<fcomplex>::fft():" << endl
-// 	 << "  Requested # _cols for FFT (" << ncols << ") invalid;" << endl;
-//     ncols = max(unsigned(4), nextPowerOf2(max(ncols, _cols)));
-//     cerr << "  increased to " << ncols << endl;
-//   }
-// 
-//   Boolean doX = (ncols != 1) && (_cols > 1) ? TRUE : FALSE;
-//   Boolean doY = (nrows != 1) && (_rows > 1) ? TRUE : FALSE;
-// 
-//   if (!nrows)
-//     nrows = max(unsigned(4), nextPowerOf2(_rows));
-//   else if (nrows == 1)
-//     nrows = _rows;
-// 
-//   if (!ncols)
-//     ncols = max(unsigned(4), nextPowerOf2(_cols));
-//   else if (ncols == 1)
-//     ncols = _cols;
-// 
-//   // Pad matrix to the final FFT dimensions
-//   pad(nrows, ncols, (nrows - _rows)/2, (ncols - _cols)/2, 0);
-// 
-//   // Allocate temporary arrays
-//   double *real = 0;
-//   double *imag = 0;
-//   unsigned maxDim = ::max(doX ? _cols : 1, doY ? _rows : 1);
-//   allocateArray(maxDim, real);
-//   allocateArray(maxDim, imag);
-//   assert(real && imag);
-// 
-//   unsigned row, col;
-// 
-//   // Take 1D FFT in X (row) direction
-//   if (doX)
-//     for(row = 0; row < _rows; row++) {
-//       // Fill temporary FFT array
-//       double  *realPtr   = real;
-//       double  *imagPtr   = imag;
-//       fcomplex *sourcePtr = _el[row];
-//       for(col = _cols; col != 0; col--) {
-//         fcomplex value(*sourcePtr++);
-//         *realPtr++ = value.real();
-//         *imagPtr++ = value.imag();
-//       }
-// 
-//       // Calculate 1D FFT
-//       fftFunc(_cols, real, imag);
-// 
-//       // Put results back
-//       realPtr   = real;
-//       imagPtr   = imag;
-//       sourcePtr = _el[row];
-//       for(col = _cols; col != 0; col--)
-//         *sourcePtr++ = fcomplex(*realPtr++, *imagPtr++);
-//     }
-// 
-//   // Take 1D FFT in Y (column) direction
-//   if (doY)
-//     for(col = 0; col < _cols; col++) {
-//       // Fill temporary FFT array
-//       double  *realPtr   = real;
-//       double  *imagPtr   = imag;
-//       fcomplex *sourcePtr = _el[0] + col;
-//       for(row = _rows; row != 0; row--) {
-//         fcomplex value(*sourcePtr);
-//         *realPtr++ = value.real();
-//         *imagPtr++ = value.imag();
-//         sourcePtr += _cols;
-//       }
-// 
-//       // Calculate 1D FFT
-//       fftFunc(_rows, real, imag);
-// 
-//       // Put results back
-//       realPtr   = real;
-//       imagPtr   = imag;
-//       sourcePtr = _el[0] + col;
-//       for(row = _rows; row != 0; row--) {
-//         *sourcePtr = fcomplex(*realPtr++, *imagPtr++);
-//         sourcePtr += _cols;
-//       }
-//     }
-// 
-//   // Free temporary arrays
-//   freeArray(real);
-//   freeArray(imag);
-// 
-//   return *this;
-// }
-// #endif // USE_FCOMPMAT
-
 #ifdef HAVE_MATLAB
 #ifdef USE_COMPMAT
 template <>
@@ -1130,19 +915,6 @@ Mat<fcomplex>::mat2Matlab(const char *) const
 #endif // HAVE_MATLAB
 
 #ifdef USE_COMPMAT
-template <class Type>
-Mat<dcomplex> 
-fft(const Mat<Type>& A, unsigned nrows, unsigned ncols) 
-{
-  return asCompMat(A).fft(nrows, ncols); 
-}
-
-template <class Type>
-Mat<dcomplex> 
-ifft(const Mat<Type>& A, unsigned nrows, unsigned ncols) 
-{
-  return asCompMat(A).ifft(nrows, ncols); 
-}
 
 #ifdef USE_DBLMAT
 Mat<double>
@@ -1181,29 +953,6 @@ arg(const Mat<dcomplex>& A)
   return T;
 }
 
-static double
-real(const dcomplex& d)
-{
-    return d.real();
-}
-
-static double
-imag(const dcomplex& d)
-{
-    return d.imag();
-}
-
-Mat<double>
-real(const Mat<dcomplex>& A)
-{
-  return applyElementWiseC2D(A, &real);
-}
-
-Mat<double>
-imag(const Mat<dcomplex>& A)
-{
-  return applyElementWiseC2D(A, &imag);
-}
 #endif // USE_DBLMAT
 #endif // USE_COMPMAT
 

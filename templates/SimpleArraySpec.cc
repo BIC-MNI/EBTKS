@@ -40,7 +40,8 @@ template<>
 SimpleArray<fcomplex>&
 SimpleArray<fcomplex>::prune()
 {
-  for (unsigned i = 0, j = 0; i < _size; i++) {
+  unsigned i ,j;
+  for ( i = 0, j = 0; i < _size; i++) {
     fcomplex value = getElConst(i);
     if (FINITE(real(value)) && FINITE(imag(value))) {
       if (i != j)
@@ -134,7 +135,7 @@ operator ^ (double base, const SimpleArray<fcomplex>& array) {
   const fcomplex *sourcePtr = array.contents();
   fcomplex *resultPtr = result.contents();
   for (unsigned i = N; i != 0; i--)
-    *resultPtr++ = fcomplex(pow(base, *sourcePtr++));
+    *resultPtr++ = fcomplex(pow((float)base, *sourcePtr++));
   return result;
 } 
 #endif

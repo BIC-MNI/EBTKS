@@ -153,12 +153,15 @@ OutputFile::OutputFile(const Path& path, int mode, int compress)
   if (tempPath.exists()) {
     if (isCompressed && ((mode == ios::app) || (mode == ios::ate))) {
       MString command("gunzip " + tempPath);
-      system(command);
+      
+      if(system(command)) //VF: gunzip failed, what to do next?
+        return;
     }
 
     if (mode == ios::out) {
       MString command("mv " + tempPath + " " + tempPath + "~");
-      system(command);
+      if(system(command)) //VF: mv failed what to do next?
+        return; 
     }
   }
   
@@ -173,7 +176,7 @@ OutputFile::~OutputFile()
 
   if (good && (_compress == COMPRESS)) {
     MString command("gzip -f " + _path); // Compress fast
-    system(command);
+    system(command); //VF: what to do if this fails?
   }
 }
 
@@ -213,21 +216,25 @@ openFile(const Path& path, const char *mode)
   if (tempPath.exists()) {
     if (isCompressed) {
       if (strcmp(mode, "a") == 0) {
-	MString command("gunzip " + expandedPath);
-	system(command);
-	FILE *file = fopen(expandedPath, mode);
-	return file;
+        MString command("gunzip " + expandedPath);
+  
+        if(system(command))
+          return NULL;
+        
+        FILE *file = fopen(expandedPath, mode);
+        return file;
       }
       else if (strcmp(mode, "r") == 0) {
-	MString command("gunzip -c " + expandedPath);
-	FILE *file = popen(command, mode);
-	return file;
+        MString command("gunzip -c " + expandedPath);
+        FILE *file = popen(command, mode);
+        return file;
       }
     }
 
     if (strcmp(mode, "w") == 0) {
       MString command("mv " + tempPath + " " + tempPath + "~");
-      system(command);
+      if(system(command))
+        return NULL;
       FILE *file = fopen(tempPath, mode);
       return file;
     }
@@ -325,7 +332,7 @@ int
 get_temp_filename(char *pathname)
 {
 #ifdef HAVE_MKSTEMP
-  char *tmp_dir = getenv("TMPDIR");
+  const char *tmp_dir = getenv("TMPDIR");
   if (tmp_dir == NULL) {
 #ifdef P_tmpdir
     tmp_dir = P_tmpdir;

@@ -740,6 +740,7 @@ _INSTANTIATE_ARRAY(unsigned short);
 _INSTANTIATE_ARRAY(float);
 _INSTANTIATE_ARRAY(double);
 _INSTANTIATE_ARRAY(dcomplex);
+_INSTANTIATE_ARRAY(fcomplex);
 #include "EBTKS/Path.h"
 _INSTANTIATE_ARRAY(Path);
 #include "EBTKS/ValueMap.h"

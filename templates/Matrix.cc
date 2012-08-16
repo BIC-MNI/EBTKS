@@ -61,9 +61,10 @@ template <class Type> Boolean  Mat<Type>::flushToDisk = FALSE;
 /* For the GNU compiler, include the explicit specializations in this file,
  * so they can be seen during class instantiation.
  */
+#if 0
+
 #include "MatrixSpec.cc"
 
-#if 0
          template class Mat<Type>;                   \
          template Mat<Type>& pmultEquals(Mat<Type>&, const Mat<Type> &); \
          template Mat<Type>& pdivEquals(Mat<Type>&, const Mat<Type> &); \
@@ -78,7 +79,7 @@ template <class Type> Boolean  Mat<Type>::flushToDisk = FALSE;
 
 _INSTANTIATE_MAT(int);
 _INSTANTIATE_MAT(float);
-_INSTANTIATE_MAT(double);
+
 template class Zeros<double>;
 template class Ones<double>;
 template class Eye<double>;
@@ -86,16 +87,29 @@ template ostream & operator<<(ostream &, Mat<double> const &);
 template SimpleArray<double> array(Mat<double> const &, double, double);
 #ifdef USE_COMPMAT
 _INSTANTIATE_MAT(dcomplex);
-template Mat<dcomplex> fft(const Mat<double> &, unsigned, unsigned);
-template Mat<dcomplex> fft(const Mat<dcomplex> &, unsigned, unsigned);
-template Mat<dcomplex> ifft(const Mat<double> &, unsigned, unsigned);
-template Mat<dcomplex> ifft(const Mat<dcomplex> &, unsigned, unsigned);
+// template Mat<dcomplex> fft(const Mat<double> &, unsigned, unsigned);
+// template Mat<dcomplex> fft(const Mat<dcomplex> &, unsigned, unsigned);
+// template Mat<dcomplex> ifft(const Mat<double> &, unsigned, unsigned);
+// template Mat<dcomplex> ifft(const Mat<dcomplex> &, unsigned, unsigned);
 #endif // USE_COMPMAT
+#ifdef USE_FCOMPMAT
+_INSTANTIATE_MAT(fcomplex);
+// template Mat<dcomplex> fft(const Mat<double> &, unsigned, unsigned);
+// template Mat<dcomplex> fft(const Mat<dcomplex> &, unsigned, unsigned);
+// template Mat<dcomplex> ifft(const Mat<double> &, unsigned, unsigned);
+// template Mat<dcomplex> ifft(const Mat<dcomplex> &, unsigned, unsigned);
+#endif // USE_COMPMAT
+
+#ifdef USE_DBLMAT
+_INSTANTIATE_MAT(double);
+#endif //USE_DBLMAT
+
+
 #else // __GNUC__ not defined
-#ifdef USE_COMPMAT
-template Mat<dcomplex>& pmultEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
-template Mat<dcomplex>& pdivEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
-#endif // USE_COMPMAT
-template Mat<double>& pmultEquals(Mat<double>&, const Mat<double> &);
-template Mat<double>& pdivEquals(Mat<double>&, const Mat<double> &);
+// #ifdef USE_COMPMAT
+// template Mat<dcomplex>& pmultEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
+// template Mat<dcomplex>& pdivEquals(Mat<dcomplex>&, const Mat<dcomplex> &);
+// #endif // USE_COMPMAT
+// template Mat<double>& pmultEquals(Mat<double>&, const Mat<double> &);
+// template Mat<double>& pdivEquals(Mat<double>&, const Mat<double> &);
 #endif // __GNUC__ not defined

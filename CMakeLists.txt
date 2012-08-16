@@ -10,6 +10,9 @@ SET(EBTKS_PACKAGE_VERSION_PATCH 40)
 # WARNING: compiling library as shared library produces wrong code for some reason
 # Untill this problem is solved the code should be compiled as static
 
+ENABLE_TESTING()
+INCLUDE(CTest)
+
 SET(EBTKS_BUILD_SHARED_LIBS OFF) 
 # Packaging defines
 IF(NOT MINC_TOOLKIT_BUILD)
@@ -18,16 +21,12 @@ IF(NOT MINC_TOOLKIT_BUILD)
   SET(CPACK_PACKAGE_VERSION_MAJOR ${EBTKS_PACKAGE_VERSION_MAJOR})
   SET(CPACK_PACKAGE_VERSION_MINOR ${EBTKS_PACKAGE_VERSION_MINOR})
   SET(CPACK_PACKAGE_VERSION_PATCH ${EBTKS_PACKAGE_VERSION_PATCH})
-  
   #OPTION(EBTKS_BUILD_SHARED_LIBS "Build shared libraries." OFF) 
-  
-INCLUDE(CPack)
-
+  INCLUDE(CPack)
 ENDIF(NOT MINC_TOOLKIT_BUILD)
 
 SET(PACKAGE "EBTKS")
 SET(PACKAGE_BUGREPORT "a.janke@gmail.com")
-
 SET(PACKAGE_NAME "EBTKS")
 SET(PACKAGE_VERSION "${EBTKS_PACKAGE_VERSION_MAJOR}.${EBTKS_PACKAGE_VERSION_MINOR}.${EBTKS_PACKAGE_VERSION_PATCH}")
 SET(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
@@ -42,6 +41,7 @@ INCLUDE( ${MINC2_USE_FILE} )
 
 ADD_DEFINITIONS(-DHAVE_CONFIG_H)
 ADD_DEFINITIONS(-DUSE_COMPMAT)
+ADD_DEFINITIONS(-DUSE_FCOMPMAT)
 ADD_DEFINITIONS(-DUSE_DBLMAT)
 
 # add for building relocatable library
@@ -109,9 +109,7 @@ SET(EBTKS_HEADERS
         include/EBTKS/popen.h 
         include/EBTKS/TrainingSet.h 
         include/EBTKS/trivials.h 
-#        include/EBTKS/Spline.h
-#        include/EBTKS/TBSpline.h
-        
+
         templates/EBTKS/Array.h 
         templates/EBTKS/CachedArray.h 
         templates/EBTKS/Dictionary.h 
@@ -143,8 +141,6 @@ SET(EBTKS_LIB_SRCS
   src/backProp.cc 
   src/fcomplex.cc 
   src/dcomplex.cc 
-#  src/Spline.cc
-#  src/TBSpline.cc 
   
   templates/Array.cc 
   templates/CachedArray.cc 
@@ -194,7 +190,8 @@ ADD_LIBRARY(EBTKS ${LIBRARY_TYPE} ${EBTKS_LIB_SRCS})
 SET(EBTKS_LIBRARIES EBTKS)
 
 INSTALL(FILES ${EBTKS_HEADERS}
-   DESTINATION include/EBTKS)
+   DESTINATION include/EBTKS 
+   COMPONENT  Development)
 
 INSTALL(TARGETS EBTKS ${LIBRARY_INSTALL} DESTINATION lib)
 
@@ -233,6 +230,6 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/UseEBTKS.cmake ${CMAKE_CURR
    Development)
 
 # testing
-# IF(BUILD_TESTING)
-#   ADD_SUBDIRECTORY( Testing )
-# ENDIF(BUILD_TESTING)
+IF(BUILD_TESTING)
+   ADD_SUBDIRECTORY( testing )
+ENDIF(BUILD_TESTING)
