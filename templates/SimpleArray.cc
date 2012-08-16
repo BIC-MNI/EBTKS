@@ -22,12 +22,21 @@ $State: Exp $
 #include "EBTKS/ValueMap.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <cstdlib>
+#include <cmath>
 
 #ifdef HAVE_MATLAB
 #include "matlabSupport.h"
 #endif
 
 #include "EBTKS/trivials.h"
+
+namespace std //VF:fix for missing functions
+{
+  unsigned int abs(unsigned int v) { return v;}
+  unsigned long abs(unsigned long v) { return v;}
+  unsigned char abs(unsigned char v) { return v;}
+};
 
 using namespace std;
 
