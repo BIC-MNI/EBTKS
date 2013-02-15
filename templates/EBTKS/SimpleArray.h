@@ -56,7 +56,7 @@ class SimpleArray : public Array<Type> {
 public:
   static int     compareAscending(const void *, const void *);
   static int     compareDescending(const void *, const void *);
-  static unsigned     _rangeErrorCount;
+//   static unsigned     _rangeErrorCount;
 
 // Manager functions
   SimpleArray(unsigned sz = DEFAULT_SIZE) : Array<Type>(sz) {}
@@ -465,10 +465,10 @@ SimpleArray<Type>::saveBinary(std::ostream& os, unsigned n, unsigned start) cons
 {
   if (start >= this->_size) {
     if (this->_size)
-      if (_rangeErrorCount) {
-  _rangeErrorCount--;
-  std::cerr << "SimpleArray::saveBinary: start out of range" << std::endl; 
-      }
+//       if (_rangeErrorCount) {
+//         _rangeErrorCount--;
+        std::cerr << "SimpleArray::saveBinary: start out of range" << std::endl; 
+//       }
 
     return os;
   }
@@ -477,10 +477,10 @@ SimpleArray<Type>::saveBinary(std::ostream& os, unsigned n, unsigned start) cons
     n = this->_size - start;
   else if (start + n > this->_size) {
     n = this->_size - start;
-    if (_rangeErrorCount) {
-      _rangeErrorCount--;
+//     if (_rangeErrorCount) {
+//       _rangeErrorCount--;
       std::cerr << "SimpleArray::saveBinary: n too large; truncated" << std::endl;
-    }
+//     }
   }
     
   os.write((char *) this->_contents + start, n*sizeof(Type));
@@ -513,11 +513,10 @@ SimpleArray<Type>::saveAscii(std::ostream& os, unsigned n, unsigned start) const
 {
   if (start >= this->_size) {
     if (this->_size)
-      if (_rangeErrorCount) {
-  _rangeErrorCount--;
-  std::cerr << "SimpleArray::saveAscii: start out of range" << std::endl; 
-      }
-
+//       if (_rangeErrorCount) {
+//         _rangeErrorCount--;
+        std::cerr << "SimpleArray::saveAscii: start out of range" << std::endl; 
+//       }
     return os;
   }
 
@@ -525,10 +524,10 @@ SimpleArray<Type>::saveAscii(std::ostream& os, unsigned n, unsigned start) const
     n = this->_size - start;
   else if (start + n > this->_size) {
     n = this->_size - start;
-    if (_rangeErrorCount) {
-      _rangeErrorCount--;
+//     if (_rangeErrorCount) {
+//       _rangeErrorCount--;
       std::cerr << "SimpleArray::saveAscii: n too large; truncated" << std::endl;
-    }
+//     }
   }
 
   this->resetIterator(start);
@@ -717,11 +716,11 @@ SimpleArray<Type>::operator () (const UnsignedArray& indices) const
   const unsigned *index   = indices.contents();
   for (unsigned i = N; i; i--, index++) {
     if (*index >= this->_size) {
-      if (_rangeErrorCount) {
-  _rangeErrorCount--;
-  std::cerr << "Warning! SimpleArray::operator(): index " << *index 
+//       if (_rangeErrorCount) {
+//   _rangeErrorCount--;
+        std::cerr << "Warning! SimpleArray::operator(): index " << *index 
        << "out of range!" << std::endl;
-      }
+//       }
     }
     else {
       *destPtr++ = this->_contents[*index];
@@ -1132,8 +1131,8 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
 
   *max = *min = (*this)++;
 
-  if (this->_debug)
-      std::cout << this->_size << " :: " << *max << " :: " << *min << std::endl;
+//   if (this->_debug)
+//       std::cout << this->_size << " :: " << *max << " :: " << *min << std::endl;
 
   for (unsigned i = 1; i < this->_size; i++) {
     Type value = (*this)++;
@@ -1143,8 +1142,8 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
       *max = value;
   }
 
-  if (this->_debug) 
-      std::cout << this->_size << " :: " << *max << " :: " << *min << std::endl;
+//   if (this->_debug) 
+//       std::cout << this->_size << " :: " << *max << " :: " << *min << std::endl;
 }
 
 template <class Type>
@@ -2041,7 +2040,7 @@ operator ^ (double base, const SimpleArray<Type>& array) {
   return result;
 } 
 
-template <class Type> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
+// template <class Type> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
 
 
 #endif

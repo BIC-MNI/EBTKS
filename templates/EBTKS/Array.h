@@ -52,9 +52,9 @@ class Array {
   Array<Type> *_self; // Provided to circumvent the const mechanism for the iterator
 
 protected:
-  static unsigned int _arrayCtr;
-  static Boolean  _debug;
-  static unsigned int _rangeErrorCount;
+//   static unsigned int _arrayCtr;
+//   static Boolean  _debug;
+//   static unsigned int _rangeErrorCount;
 
   unsigned  _size;
   unsigned  _maxSize;
@@ -301,12 +301,13 @@ template <class Type>
 unsigned
 Array<Type>::debug(Boolean on) 
 {
-  unsigned N = _arrayCtr;
-
-  if (_debug = on)
-    _arrayCtr = 0;
-    
-  return N;
+//   unsigned N = _arrayCtr;
+// 
+//   if (_debug = on)
+//     _arrayCtr = 0;
+//     
+//   return N;
+  return 0;
 }
 
 //
@@ -326,10 +327,10 @@ Array<Type>::Array (unsigned sz)
   else
     _contents = 0;
 
-  if (_debug) {
-    _arrayCtr++;
-    std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
-  }
+//   if (_debug) {
+//     _arrayCtr++;
+//     std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
+//   }
 }
 
 template <class Type>
@@ -346,10 +347,10 @@ Array<Type>::Array (const Type& value, unsigned sz)
   else
     _contents = 0;
 
-  if (_debug) {
-    _arrayCtr++;
-    std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
-  }
+//   if (_debug) {
+//     _arrayCtr++;
+//     std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
+//   }
 }
 
 template <class Type>
@@ -366,10 +367,10 @@ Array<Type>::Array(const Type *initArray, unsigned nElements)
   else
     _contents = 0;
 
-  if (_debug) {
-    _arrayCtr++;
-    std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
-  }
+//   if (_debug) {
+//     _arrayCtr++;
+//     std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
+//   }
 }
 
 //
@@ -385,10 +386,10 @@ Array<Type>::Array (const Array<Type>& array)
 
   operator = (array);
 
-  if (_debug) {
-    _arrayCtr++;
-    std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
-  }
+//   if (_debug) {
+//     _arrayCtr++;
+//     std::cout << "C" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
+//   }
 }
 
 //
@@ -398,10 +399,10 @@ Array<Type>::Array (const Array<Type>& array)
 template <class Type>
 Array<Type>::~Array ()
 {
-  if (_debug) {
-    _arrayCtr--;
-    std::cout << "D" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
-  }
+//   if (_debug) {
+//     _arrayCtr--;
+//     std::cout << "D" << _arrayCtr << ":" << long(this) << ":" << _size << " " << std::flush;
+//   }
 
   destroy();
 }
@@ -441,11 +442,11 @@ Array<Type>
 Array<Type>::operator () (unsigned nElements) const
 {
   if (nElements > _size) {
-    if (_rangeErrorCount) {
+//     if (_rangeErrorCount) {
       std::cerr << "Warning! Array::operator(" << nElements 
      << ") called with on array of size " << _size << ". Value truncated!" << std::endl;
-      _rangeErrorCount--;
-    }
+//       _rangeErrorCount--;
+//     }
     nElements = _size;
   }
   
@@ -464,11 +465,11 @@ Array<Type>::operator () (unsigned start, unsigned end) const
 {
   unsigned n = end - start + 1;
   if (start + n > _size) {
-    if (_rangeErrorCount) {
+//     if (_rangeErrorCount) {
       std::cerr << "Warning! Array::operator(" << start << ", " << end
      << ") called with on array of size " << _size << ". Truncated!" << std::endl;
-      _rangeErrorCount--;
-    }
+//       _rangeErrorCount--;
+//     }
     n = _size - start;
   }
 
@@ -642,10 +643,10 @@ Array<Type>&
 Array<Type>::insert(const Type& value, unsigned index)
 {
   if (index > _size) {
-    if (_rangeErrorCount) {
+//     if (_rangeErrorCount) {
       std::cerr << "Warning! Attempt to insert element outside range of array" << std::endl;
-      _rangeErrorCount--;
-    }
+//       _rangeErrorCount--;
+//     }
     return *this;
   }
   
@@ -713,10 +714,10 @@ Type
 Array<Type>::remove(unsigned index)
 {
   if (!_size) {
-    if (_rangeErrorCount) {
-      _rangeErrorCount--;
+//     if (_rangeErrorCount) {
+//       _rangeErrorCount--;
       std::cerr << "Warning! Attempt to remove element from empty array" << std::endl;
-    }
+//     }
       
     return _contents[0];
   }
@@ -745,10 +746,10 @@ Type
 Array<Type>::removeLast()
 {
   if (!_size) {
-    if (_rangeErrorCount) {
-      _rangeErrorCount--;
+//     if (_rangeErrorCount) {
+//       _rangeErrorCount--;
       std::cerr << "Warning! Attempt to remove element from empty array" << std::endl;
-    }
+//     }
     return _contents[0];
   }
     
@@ -952,11 +953,11 @@ template <class Type>
 void
 Array<Type>::_rangeError(unsigned& index) const
 {
-  if (_rangeErrorCount) {
-    _rangeErrorCount--;
+//   if (_rangeErrorCount) {
+//     _rangeErrorCount--;
     std::cerr << "Corrected: index " << index << " into array of size " << _size 
    << " !" << std::endl;
-  }
+//   }
 
   index = size() - 1;
 }
@@ -983,9 +984,9 @@ operator << (std::ostream& os, const Array<Type>& array)
   return array.print(os); 
 }
 
-template <class Type> unsigned int Array<Type>::_arrayCtr = 0;
-template <class Type> Boolean  Array<Type>::_debug = FALSE;
-template <class Type> unsigned int Array<Type>::_rangeErrorCount = 25;
+// template <class Type> unsigned int Array<Type>::_arrayCtr = 0;
+// template <class Type> Boolean  Array<Type>::_debug = FALSE;
+// template <class Type> unsigned int Array<Type>::_rangeErrorCount = 25;
 
 
 #endif
