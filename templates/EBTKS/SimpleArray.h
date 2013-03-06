@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------
 @COPYRIGHT  :
-              Copyright 1996, Alex P. Zijdenbos, 
+              Copyright 1996, Alex P. Zijdenbos,
               McConnell Brain Imaging Centre,
               Montreal Neurological Institute, McGill University.
               Permission to use, copy, modify, and distribute this
@@ -10,7 +10,7 @@
               make no representations about the suitability of this
               software for any purpose.  It is provided "as is" without
               express or implied warranty.
----------------------------------------------------------------------------- 
+----------------------------------------------------------------------------
 $RCSfile: SimpleArray.h,v $
 $Revision: 1.5 $
 $Author: bert $
@@ -29,7 +29,7 @@ $State: Exp $
  * SimpleArray class
  *
  * This class is derived from Array. It extends the functionality of
- * Array with various mathematical operations; as a result, these 
+ * Array with various mathematical operations; as a result, these
  * operations must be defined for the objects stored in the array.
  * SimpleArray is therefore most suitable for simple types.
  ********************************************************************/
@@ -81,7 +81,7 @@ public:
 
   // Matlab I/O functions
 #ifdef HAVE_MATLAB
-  virtual Boolean saveMatlab(const char *fileName, const char *varName = "A", 
+  virtual Boolean saveMatlab(const char *fileName, const char *varName = "A",
 			     const char *option = "u") const;
 #endif
 
@@ -101,15 +101,15 @@ public:
   unsigned occurrencesOf(Type value) const {
     return occurrencesOf(value, 0, this->_size - 1); }
   // Total number of occurrences of object present in a range
-  unsigned occurrencesOf(Type, unsigned start, unsigned end) const; 
+  unsigned occurrencesOf(Type, unsigned start, unsigned end) const;
   // Index of first (dir > 0) or last (dir < 0) occurrence of value
   int    indexOf(Type, int dir, unsigned start) const;
-  int    indexOf(Type value, int dir = 1) const { 
+  int    indexOf(Type value, int dir = 1) const {
     return indexOf(value, dir, (dir > 0) ? 0 : this->_size - 1); }
-  int    indexOf(Type value, unsigned start) const { 
+  int    indexOf(Type value, unsigned start) const {
     return indexOf(value, 1, start); }
 
-  void  removeAll(Type value); 
+  void  removeAll(Type value);
   // Remove all elements equal to <value>
   void  removeAllIn(Type floor, Type ceil, unsigned *N = 0);
   // Remove all elements in [floor, ceil]
@@ -117,10 +117,10 @@ public:
   // Remove all elements not in [floor, ceil]
   UnsignedArray indicesOf(Type value) const;
   // Return an array containing the (unique) elements common with <array>
-  SimpleArray common(const SimpleArray<Type>& array) const; 
+  SimpleArray common(const SimpleArray<Type>& array) const;
 
   // Removes all infinite and NaN values
-  SimpleArray& prune(); 
+  SimpleArray& prune();
   // Fills array with uniformly distributed numbers
   SimpleArray& randuniform(double min = 0, double max = 1);
   // Fills array with normally distributed numbers
@@ -128,9 +128,9 @@ public:
 
   // Quicksort all elements
   virtual void qsort() { qsortAscending(); }
-  virtual void qsort(int (*compare) (const void *, const void *)) { 
+  virtual void qsort(int (*compare) (const void *, const void *)) {
     ::qsort(this->_contents, this->_size, sizeof(Type), compare); }
-  virtual void qsortAscending() { 
+  virtual void qsortAscending() {
     ::qsort(this->_contents, this->_size, sizeof(Type), compareAscending); }
   virtual void qsortDescending() {
     ::qsort(this->_contents, this->_size, sizeof(Type), compareDescending); }
@@ -168,8 +168,8 @@ public:
 
   // Boolean operations
   // Elementwise inequality/equality
-  Boolean operator != (const SimpleArray&) const; 
-  Boolean operator == (const SimpleArray& array) const { 
+  Boolean operator != (const SimpleArray&) const;
+  Boolean operator == (const SimpleArray& array) const {
     return !((*this) != array); }
 
   BoolArray operator && (const SimpleArray<Type>& array) const;
@@ -191,22 +191,22 @@ public:
   SimpleArray  operator - () const {
     SimpleArray<Type> result(Type(0), this->_size); return result -= *this; }
 
-  SimpleArray& operator += (Type);         
-  SimpleArray  operator +  (Type value) const { 
+  SimpleArray& operator += (Type);
+  SimpleArray  operator +  (Type value) const {
     SimpleArray<Type> result(*this); return result += value; }
-  SimpleArray& operator += (const SimpleArray&);  
-  SimpleArray  operator +  (const SimpleArray& array) const { 
+  SimpleArray& operator += (const SimpleArray&);
+  SimpleArray  operator +  (const SimpleArray& array) const {
     SimpleArray<Type> result(*this); return result += array; }
 
   SimpleArray& operator -= (Type);
-  SimpleArray  operator -  (Type value) const { 
+  SimpleArray  operator -  (Type value) const {
     SimpleArray<Type> result(*this); return result -= value; }
   SimpleArray& operator -= (const SimpleArray&);
   SimpleArray  operator -  (const SimpleArray& array) const {
     SimpleArray<Type> result(*this); return result -= array; }
 
   SimpleArray& operator *= (double);
-  SimpleArray  operator *  (double value) const { 
+  SimpleArray  operator *  (double value) const {
     SimpleArray<Type> result(*this); return result *= value; }
   SimpleArray& operator *= (const SimpleArray&);
   SimpleArray  operator *  (const SimpleArray& array) const {
@@ -214,7 +214,7 @@ public:
 
   SimpleArray& operator /= (double value) {
     return (*this) *= 1.0/value; }
-  SimpleArray  operator /  (double value) const { 
+  SimpleArray  operator /  (double value) const {
     SimpleArray<Type> result(*this); return result /= value; }
   SimpleArray& operator /= (const SimpleArray&);
   SimpleArray  operator /  (const SimpleArray& array) const {
@@ -247,16 +247,16 @@ protected:
 template <class Type>
 unsigned size(const SimpleArray<Type>& array) { return array.size(); }
 
-template <class Type> 
+template <class Type>
 Type min(const SimpleArray<Type>& array) { return array.min(); }
 
 template <class Type>
 Type max(const SimpleArray<Type>& array) { return array.max(); }
 
 template <class Type>
-Type range(const SimpleArray<Type>& array, unsigned *minIndex = 0, 
+Type range(const SimpleArray<Type>& array, unsigned *minIndex = 0,
 	   unsigned *maxIndex = 0)
-{ 
+{
   return array.range(minIndex, maxIndex);
 }
 
@@ -306,27 +306,27 @@ template <class Type>
 SimpleArray<Type> log(const SimpleArray<Type>& array) { return array.log(); }
 
 template <class Type>
-SimpleArray<Type> max(const SimpleArray<Type>& array1, 
+SimpleArray<Type> max(const SimpleArray<Type>& array1,
 		      const SimpleArray<Type>& array2);
 
 template <class Type>
-SimpleArray<Type> min(const SimpleArray<Type>& array1, 
+SimpleArray<Type> min(const SimpleArray<Type>& array1,
 		      const SimpleArray<Type>& array2);
 
 template <class Type>
-SimpleArray<double> cumSum(const SimpleArray<Type>& array) 
-{ 
+SimpleArray<double> cumSum(const SimpleArray<Type>& array)
+{
   return array.cumSum();
 }
 
 template <class Type>
-SimpleArray<double> cumProd(const SimpleArray<Type>& array) 
-{ 
+SimpleArray<double> cumProd(const SimpleArray<Type>& array)
+{
   return array.cumProd();
 }
 
 template <class Type>
-SimpleArray<Type> exp(const SimpleArray<Type>& array) 
+SimpleArray<Type> exp(const SimpleArray<Type>& array)
 {
   return ::exp(1.0) ^ array;
 }
@@ -337,15 +337,15 @@ SimpleArray<Type> exp10(const SimpleArray<Type>& array) { return 10^array; }
 template <class Type>
 SimpleArray<Type> operator ^ (double base, const SimpleArray<Type>& array);
 
-// I/O  
-template <class T> std::ostream& operator << (std::ostream& os, const SimpleArray<T>& A) 
+// I/O
+template <class T> std::ostream& operator << (std::ostream& os, const SimpleArray<T>& A)
 {
-  return A.saveAscii(os); 
+  return A.saveAscii(os);
 }
 
-template <class T> std::istream& operator >> (std::istream& is, SimpleArray<T>& A) 
+template <class T> std::istream& operator >> (std::istream& is, SimpleArray<T>& A)
 {
-  return A.loadAscii(is); 
+  return A.loadAscii(is);
 }
 
 // Type conversions
@@ -359,36 +359,36 @@ template <class Type>
 SimpleArray<double> asDblArray(const SimpleArray<Type>&);
 
 #ifdef USE_COMPMAT
-template <> 
+template <>
 SimpleArray<dcomplex> SimpleArray<dcomplex>::round(unsigned n) const;
 
-template <> 
+template <>
 SimpleArray<dcomplex>& SimpleArray<dcomplex>::prune();
 
-template <> 
+template <>
 SimpleArray<dcomplex> operator ^ (double, const SimpleArray<dcomplex>&);
 #endif /* USE_COMPMAT */
 
 #ifdef USE_FCOMPMAT
-template <> 
+template <>
 SimpleArray<fcomplex> SimpleArray<fcomplex>::round(unsigned n) const;
 
-template <> 
+template <>
 SimpleArray<fcomplex>& SimpleArray<fcomplex>::prune();
 
-template <> 
+template <>
 SimpleArray<fcomplex> operator ^ (double, const SimpleArray<fcomplex>&);
 #endif /* USE_FCOMPMAT */
 
 template <class Type>
-SimpleArray<Type> round(const SimpleArray<Type>& array, unsigned n = 0) 
-{ 
+SimpleArray<Type> round(const SimpleArray<Type>& array, unsigned n = 0)
+{
   return array.round(n);
 }
 
 template <class Type>
 void prune(SimpleArray<Type>& array)
-{ 
+{
   array.prune();
 }
 
@@ -445,7 +445,7 @@ SimpleArray<Type>::compareDescending(const void *ptr1, const void *ptr2)
 
 template <class Type>
 SimpleArray<Type>::SimpleArray(Type minVal, Type step, Type maxVal)
-: Array<Type>(unsigned(std::abs((maxVal - minVal)/step)) + 1)
+: Array<Type>(unsigned(std::abs((double)(maxVal - minVal)/step)) + 1)
 {
   register Type *elementPtr = this->_contents;
   Type value = minVal;
@@ -467,7 +467,7 @@ SimpleArray<Type>::saveBinary(std::ostream& os, unsigned n, unsigned start) cons
     if (this->_size)
 //       if (_rangeErrorCount) {
 //         _rangeErrorCount--;
-        std::cerr << "SimpleArray::saveBinary: start out of range" << std::endl; 
+        std::cerr << "SimpleArray::saveBinary: start out of range" << std::endl;
 //       }
 
     return os;
@@ -482,7 +482,7 @@ SimpleArray<Type>::saveBinary(std::ostream& os, unsigned n, unsigned start) cons
       std::cerr << "SimpleArray::saveBinary: n too large; truncated" << std::endl;
 //     }
   }
-    
+
   os.write((char *) this->_contents + start, n*sizeof(Type));
 
   return os;
@@ -507,7 +507,7 @@ SimpleArray<Type>::loadBinary(std::istream& is, unsigned n, unsigned start)
 // Ascii I/O functions
 //
 
-template <class Type> 
+template <class Type>
 std::ostream&
 SimpleArray<Type>::saveAscii(std::ostream& os, unsigned n, unsigned start) const
 {
@@ -515,7 +515,7 @@ SimpleArray<Type>::saveAscii(std::ostream& os, unsigned n, unsigned start) const
     if (this->_size)
 //       if (_rangeErrorCount) {
 //         _rangeErrorCount--;
-        std::cerr << "SimpleArray::saveAscii: start out of range" << std::endl; 
+        std::cerr << "SimpleArray::saveAscii: start out of range" << std::endl;
 //       }
     return os;
   }
@@ -540,7 +540,7 @@ SimpleArray<Type>::saveAscii(std::ostream& os, unsigned n, unsigned start) const
   return os;
 }
 
-template <class Type> 
+template <class Type>
 std::istream&
 SimpleArray<Type>::loadAscii(std::istream& is, unsigned n, unsigned start)
 {
@@ -558,7 +558,7 @@ SimpleArray<Type>::loadAscii(std::istream& is, unsigned n, unsigned start)
 
 #ifdef HAVE_MATLAB
 Boolean
-SimpleArray<double>::saveMatlab(const char *fileName, const char *varName, 
+SimpleArray<double>::saveMatlab(const char *fileName, const char *varName,
         const char *option) const
 {
   return ::saveMatlab(fileName, varName, option, _size, 1, this->_contents);
@@ -566,7 +566,7 @@ SimpleArray<double>::saveMatlab(const char *fileName, const char *varName,
 
 #ifdef USE_COMPMAT
 Boolean
-SimpleArray<dcomplex>::saveMatlab(const char *fileName, const char *varName, 
+SimpleArray<dcomplex>::saveMatlab(const char *fileName, const char *varName,
          const char *option) const
 {
   double *real = 0;
@@ -578,13 +578,13 @@ SimpleArray<dcomplex>::saveMatlab(const char *fileName, const char *varName,
       std::cerr << "Couldn't allocate temporary real array for MATLAB conversion" << std::endl;
       return FALSE;
     }
-    
+
     imag = new double[_size];
     if (!imag) {
       std::cerr << "Couldn't allocate temporary imag array for MATLAB conversion" << std::endl;
       return FALSE;
     }
-    
+
     double        *realPtr = real;
     double        *imagPtr = imag;
     const dcomplex *contentsPtr = this->_contents;
@@ -597,7 +597,7 @@ SimpleArray<dcomplex>::saveMatlab(const char *fileName, const char *varName,
   }
 
   Boolean status = ::saveMatlab(fileName, varName, option, _size, 1, real, imag);
-   
+
   if (real)
     delete [] real;
   if (imag)
@@ -609,7 +609,7 @@ SimpleArray<dcomplex>::saveMatlab(const char *fileName, const char *varName,
 
 template <class Type>
 Boolean
-SimpleArray<Type>::saveMatlab(const char *fileName, const char *varName, 
+SimpleArray<Type>::saveMatlab(const char *fileName, const char *varName,
             const char *option) const
 {
   double *temp = 0;
@@ -619,7 +619,7 @@ SimpleArray<Type>::saveMatlab(const char *fileName, const char *varName,
       std::cerr << "Couldn't allocate temporary double array for MATLAB conversion" << std::endl;
       return FALSE;
     }
-    
+
     double     *tempPtr     = temp;
     const Type *contentsPtr = this->_contents;
     for (unsigned i = _size; i; i--)
@@ -627,7 +627,7 @@ SimpleArray<Type>::saveMatlab(const char *fileName, const char *varName,
   }
 
   Boolean status = ::saveMatlab(fileName, varName, option, _size, 1, temp);
-   
+
   if (temp)
     delete [] temp;
 
@@ -639,16 +639,16 @@ SimpleArray<Type>::saveMatlab(const char *fileName, const char *varName,
 // Get functions
 //
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
 SimpleArray<Type>::operator () (unsigned nElements) const
 {
   if (nElements > this->_size) {
-    std::cerr << "Warning! Array::operator(" << nElements 
+    std::cerr << "Warning! Array::operator(" << nElements
    << ") called with on array of size " << this->_size << ". Value truncated!" << std::endl;
     nElements = this->_size;
   }
-  
+
   SimpleArray<Type> subArray(nElements);
 
   Type *sourcePtr = this->_contents;
@@ -659,7 +659,7 @@ SimpleArray<Type>::operator () (unsigned nElements) const
   return(subArray);
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
 SimpleArray<Type>::operator () (unsigned start, unsigned end) const
 {
@@ -691,7 +691,7 @@ SimpleArray<Type>::operator () (const BoolArray& boolArray) const
   for (i = size; i; i--)
     if (*boolPtr++)
       newSize++;
-  
+
   SimpleArray<Type> array(newSize);
   boolPtr = boolArray.contents();
   Type    *sourcePtr = this->_contents;
@@ -718,7 +718,7 @@ SimpleArray<Type>::operator () (const UnsignedArray& indices) const
     if (*index >= this->_size) {
 //       if (_rangeErrorCount) {
 //   _rangeErrorCount--;
-        std::cerr << "Warning! SimpleArray::operator(): index " << *index 
+        std::cerr << "Warning! SimpleArray::operator(): index " << *index
        << "out of range!" << std::endl;
 //       }
     }
@@ -750,7 +750,7 @@ Boolean
 SimpleArray<Type>::contains(Type value, unsigned start, unsigned end) const
 {
   if ((end < start) || (end >= this->_size) || (start >= this->_size)) {
-    std::cerr << "SimpleArray::contains called with invalid start (" << start 
+    std::cerr << "SimpleArray::contains called with invalid start (" << start
    << ") and end (" << end << ") arguments (array size: " << this->_size << ")" << std::endl;
     return FALSE;
   }
@@ -780,7 +780,7 @@ Boolean
 SimpleArray<Type>::containsOnly(Type value, unsigned start, unsigned end) const
 {
   if ((end < start) || (end >= this->_size) || (start >= this->_size)) {
-    std::cerr << "SimpleArray::containsOnly called with invalid start (" << start 
+    std::cerr << "SimpleArray::containsOnly called with invalid start (" << start
    << ") and end (" << end << ") arguments (array size: " << this->_size << ")" << std::endl;
     return FALSE;
   }
@@ -797,13 +797,13 @@ template <class Type> unsigned
 SimpleArray<Type>::occurrencesOf(Type value, unsigned start, unsigned end) const
 {
   if (end > this->_size - 1) {
-    std::cerr << "Warning! SimpleArray::occurrencesOf() called with end=" << end 
+    std::cerr << "Warning! SimpleArray::occurrencesOf() called with end=" << end
    << " on array of size " << this->_size << ". Truncated!" << std::endl;
     end = this->_size - 1;
   }
 
   if (start > end) {
-    std::cerr << "Warning! SimpleArray::occurrencesOf() called with start > end" 
+    std::cerr << "Warning! SimpleArray::occurrencesOf() called with start > end"
    << std::endl;
     return 0;
   }
@@ -814,11 +814,11 @@ SimpleArray<Type>::occurrencesOf(Type value, unsigned start, unsigned end) const
   for (unsigned i = end - start + 1; i; i--)
     if ((*this)++ == value)
       N++;
-  
+
   return N;
 }
 
-template <class Type> 
+template <class Type>
 int
 SimpleArray<Type>::indexOf(Type value, int dir, unsigned start) const
 {
@@ -834,7 +834,7 @@ SimpleArray<Type>::indexOf(Type value, int dir, unsigned start) const
       if ((*this)-- == value)
   return this->_itIndex + 1;
   }
-  
+
   return -1;
 }
 
@@ -854,7 +854,7 @@ SimpleArray<Type>::removeAll(Type value)
       j++;
     }
   }
-  
+
   this->newSize(j);
 }
 
@@ -883,7 +883,7 @@ SimpleArray<Type>::removeAllIn(Type floor, Type ceil, unsigned *N)
       j++;
     }
   }
-  
+
   this->newSize(j);
 
   if (N)
@@ -892,7 +892,7 @@ SimpleArray<Type>::removeAllIn(Type floor, Type ceil, unsigned *N)
 
 template <class Type>
 void
-SimpleArray<Type>::removeAllNotIn(Type floor, Type ceil, 
+SimpleArray<Type>::removeAllNotIn(Type floor, Type ceil,
           unsigned *nBelow, unsigned *nAbove)
 {
   if (!this->_size)
@@ -999,7 +999,7 @@ SimpleArray<Type>::randuniform(double min, double max)
 
   for (unsigned i = 0; i < this->_size; i++)
     this->setEl(i, Type(drand48() * range + min));
-  
+
   return *this;
 }
 
@@ -1030,7 +1030,7 @@ SimpleArray<Type>::qsortIndexAscending() const
     (indexStructPtr++)->index = i;
   }
 
-  ::qsort(indexStructArray, this->_size, sizeof(IndexStruct<Type>), 
+  ::qsort(indexStructArray, this->_size, sizeof(IndexStruct<Type>),
     IndexStruct<Type>::compareAscending);
 
   UnsignedArray sortedIndices(this->_size);
@@ -1038,7 +1038,7 @@ SimpleArray<Type>::qsortIndexAscending() const
   indexStructPtr = indexStructArray;
   for (i = 0; i < this->_size; i++)
     *sortedIndicesPtr++ = (indexStructPtr++)->index;
-  
+
   delete [] indexStructArray;
 
   return sortedIndices;
@@ -1061,7 +1061,7 @@ SimpleArray<Type>::qsortIndexDescending() const
     (indexStructPtr++)->index   = i;
   }
 
-  ::qsort(indexStructArray, this->_size, sizeof(IndexStruct<Type>), 
+  ::qsort(indexStructArray, this->_size, sizeof(IndexStruct<Type>),
     IndexStruct<Type>::compareDescending);
 
   UnsignedArray sortedIndices(this->_size);
@@ -1069,7 +1069,7 @@ SimpleArray<Type>::qsortIndexDescending() const
   indexStructPtr = indexStructArray;
   for (i = 0; i < this->_size; i++)
     *sortedIndicesPtr++ = (indexStructPtr++)->index;
-  
+
   delete [] indexStructArray;
 
   return sortedIndices;
@@ -1142,7 +1142,7 @@ SimpleArray<Type>::extrema(Type *min, Type *max) const
       *max = value;
   }
 
-//   if (this->_debug) 
+//   if (this->_debug)
 //       std::cout << this->_size << " :: " << *max << " :: " << *min << std::endl;
 }
 
@@ -1168,7 +1168,7 @@ SimpleArray<Type>::range(unsigned *minIndex, unsigned *maxIndex) const
       if (minIndex)
   *minIndex = i;
     }
-      
+
     if (value > max) {
       max = value;
       if (maxIndex)
@@ -1238,7 +1238,7 @@ SimpleArray<Type>::prod2() const
       prod2 *= value*value;
     }
   }
-  
+
   return prod2;
 }
 
@@ -1262,7 +1262,7 @@ SimpleArray<Type>::var() const
   return sum2/this->_size - SQR(sum/this->_size);
 }
 
-template <class Type> 
+template <class Type>
 Type
 SimpleArray<Type>::median() const
 {
@@ -1273,17 +1273,17 @@ SimpleArray<Type>::median() const
   return array.medianVolatile();
 }
 
-template <class Type> 
+template <class Type>
 Type
 SimpleArray<Type>::medianVolatile()
 {
   assert(this->_size);
 
-  return _randomizedSelect(0, this->_size - 1, 
+  return _randomizedSelect(0, this->_size - 1,
                            (this->_size % 2) ? (this->_size + 1) / 2 : this->_size / 2);
 }
 
-template <class Type> 
+template <class Type>
 Type
 SimpleArray<Type>::mode(const Type) const
 {
@@ -1310,7 +1310,7 @@ SimpleArray<Type>::cumSum() const
     value += asDouble((*this)++);
     result++ = value;
   }
-  
+
   return result;
 }
 
@@ -1329,7 +1329,7 @@ SimpleArray<Type>::cumProd() const
     value *= asDouble((*this)++);
     result++ = value;
   }
-  
+
   return result;
 }
 
@@ -1361,7 +1361,7 @@ SimpleArray<Type>::floor(Type floor)
 // Boolean operations
 //
 
-template <class Type> 
+template <class Type>
 Boolean
 SimpleArray<Type>::operator != (const SimpleArray<Type>& array) const
 {
@@ -1374,11 +1374,11 @@ SimpleArray<Type>::operator != (const SimpleArray<Type>& array) const
   for (unsigned i = this->_size; i; i--)
     if ((*this)++ != array++)
       return TRUE;
-  
+
   return FALSE;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator && (const SimpleArray<Type>& array) const
 {
@@ -1392,11 +1392,11 @@ SimpleArray<Type>::operator && (const SimpleArray<Type>& array) const
     for (register unsigned i = nElements; i; i--, value1ptr++, value2ptr++)
       *boolPtr++ = *value1ptr && *value2ptr;
   }
-  
+
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator || (const SimpleArray<Type>& array) const
 {
@@ -1410,11 +1410,11 @@ SimpleArray<Type>::operator || (const SimpleArray<Type>& array) const
     for (register unsigned i = nElements; i; i--, value1ptr++, value2ptr++)
       *boolPtr++ = *value1ptr || *value2ptr;
   }
-  
+
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator == (double value) const
 {
@@ -1430,7 +1430,7 @@ SimpleArray<Type>::operator == (double value) const
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator != (double value) const
 {
@@ -1446,7 +1446,7 @@ SimpleArray<Type>::operator != (double value) const
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator >= (double value) const
 {
@@ -1462,7 +1462,7 @@ SimpleArray<Type>::operator >= (double value) const
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator > (double value) const
 {
@@ -1478,7 +1478,7 @@ SimpleArray<Type>::operator > (double value) const
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator <= (double value) const
 {
@@ -1494,7 +1494,7 @@ SimpleArray<Type>::operator <= (double value) const
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator < (double value) const
 {
@@ -1510,7 +1510,7 @@ SimpleArray<Type>::operator < (double value) const
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator >= (const SimpleArray<Type>& array) const
 {
@@ -1524,11 +1524,11 @@ SimpleArray<Type>::operator >= (const SimpleArray<Type>& array) const
     for (register unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ >= *value2ptr++;
   }
-  
+
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator > (const SimpleArray<Type>& array) const
 {
@@ -1542,11 +1542,11 @@ SimpleArray<Type>::operator > (const SimpleArray<Type>& array) const
     for (register unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ > *value2ptr++;
   }
-  
+
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator <= (const SimpleArray<Type>& array) const
 {
@@ -1560,11 +1560,11 @@ SimpleArray<Type>::operator <= (const SimpleArray<Type>& array) const
     for (register unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ <= *value2ptr++;
   }
-  
+
   return boolArray;
 }
 
-template <class Type> 
+template <class Type>
 BoolArray
 SimpleArray<Type>::operator < (const SimpleArray<Type>& array) const
 {
@@ -1578,7 +1578,7 @@ SimpleArray<Type>::operator < (const SimpleArray<Type>& array) const
     for (register unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ < *value2ptr++;
   }
-  
+
   return boolArray;
 }
 
@@ -1586,18 +1586,18 @@ SimpleArray<Type>::operator < (const SimpleArray<Type>& array) const
 // Arithmetic operations
 //
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator += (Type value)
 {
   this->resetIterator();
   for (unsigned i = this->_size; i; i--)
     (*this)++ += value;
-  
+
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator += (const SimpleArray<Type>& array)
 {
@@ -1611,18 +1611,18 @@ SimpleArray<Type>::operator += (const SimpleArray<Type>& array)
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator -= (Type value)
 {
   this->resetIterator();
   for (unsigned i = this->_size; i; i--)
     (*this)++ -= value;
-  
+
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator -= (const SimpleArray<Type>& array)
 {
@@ -1632,22 +1632,22 @@ SimpleArray<Type>::operator -= (const SimpleArray<Type>& array)
   array.resetIterator();
   for (unsigned i = this->_size; i; i--)
     (*this)++ -= array++;
-  
+
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator *= (double value)
 {
   this->resetIterator();
   for (unsigned i = this->_size; i; i--)
     (*this)++ *= (Type)value;
-  
+
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator *= (const SimpleArray<Type>& array)
 {
@@ -1661,7 +1661,7 @@ SimpleArray<Type>::operator *= (const SimpleArray<Type>& array)
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>&
 SimpleArray<Type>::operator /= (const SimpleArray<Type>& array)
 {
@@ -1671,13 +1671,13 @@ SimpleArray<Type>::operator /= (const SimpleArray<Type>& array)
   array.resetIterator();
   for (unsigned i = this->_size; i; i--)
     (*this)++ /= array++;
-  
+
   return *this;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
-SimpleArray<Type>::abs() const 
+SimpleArray<Type>::abs() const
 {
   SimpleArray<Type> result(this->_size);
 
@@ -1691,9 +1691,9 @@ SimpleArray<Type>::abs() const
   return result;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
-SimpleArray<Type>::round(unsigned n) const 
+SimpleArray<Type>::round(unsigned n) const
 {
   SimpleArray<Type> result(this->_size);
 
@@ -1711,11 +1711,11 @@ SimpleArray<Type>::round(unsigned n) const
       *destPtr++ = ROUND(double(*sourcePtr));
       sourcePtr++;
     }
-  
+
   return result;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
 SimpleArray<Type>::sqr() const
 {
@@ -1730,7 +1730,7 @@ SimpleArray<Type>::sqr() const
   return result;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
 SimpleArray<Type>::sqrt() const
 {
@@ -1745,7 +1745,7 @@ SimpleArray<Type>::sqrt() const
   return result;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
 SimpleArray<Type>::operator ^ (int power) const
 {
@@ -1760,7 +1760,7 @@ SimpleArray<Type>::operator ^ (int power) const
   return result;
 }
 
-template <class Type> 
+template <class Type>
 SimpleArray<Type>
 SimpleArray<Type>::ln() const
 {
@@ -1814,10 +1814,10 @@ SimpleArray<Type>::sample(unsigned maxN) const
     return SimpleArray<Type>(*this);
 
   SimpleArray<Type> result(maxN);
-  
+
   Type *destPtr = result._contents;
   double offset = 0;
-  
+
   for (unsigned i = maxN; i; i--, offset += step)
     *destPtr++ = *(this->_contents + unsigned(::floor(offset)));
 
@@ -1859,7 +1859,7 @@ SimpleArray<Type>::map(const ValueMap& map) const
 //
 
 template <class Type>
-SimpleArray<int> 
+SimpleArray<int>
 asIntArray(const SimpleArray<Type>& array)
 {
   IntArray cast(array.size());
@@ -1874,7 +1874,7 @@ asIntArray(const SimpleArray<Type>& array)
 }
 
 template <class Type>
-SimpleArray<float> 
+SimpleArray<float>
 asFloatArray(const SimpleArray<Type>& array)
 {
   SimpleArray<float> cast(array.size());
@@ -1889,7 +1889,7 @@ asFloatArray(const SimpleArray<Type>& array)
 }
 
 template <class Type>
-SimpleArray<double> 
+SimpleArray<double>
 asDblArray(const SimpleArray<Type>& array)
 {
   DblArray cast(array.size());
@@ -1908,7 +1908,7 @@ asDblArray(const SimpleArray<Type>& array)
 //
 
 template <class Type>
-SimpleArray<Type> 
+SimpleArray<Type>
 max(const SimpleArray<Type>& array1, const SimpleArray<Type>& array2)
 {
   unsigned n = size(array1);
@@ -1931,7 +1931,7 @@ max(const SimpleArray<Type>& array1, const SimpleArray<Type>& array2)
 }
 
 template <class Type>
-SimpleArray<Type> 
+SimpleArray<Type>
 min(const SimpleArray<Type>& array1, const SimpleArray<Type>& array2)
 {
   unsigned n = size(array1);
@@ -1957,7 +1957,7 @@ min(const SimpleArray<Type>& array1, const SimpleArray<Type>& array2)
 // Private functions
 //
 
-// Computes the i'th order statistic (the i'th smallest element) of 
+// Computes the i'th order statistic (the i'th smallest element) of
 // an array.  This is the routine that does the real work, and is
 // analogous to quicksort.
 
@@ -1970,7 +1970,7 @@ SimpleArray<Type>::_randomizedSelect(int p, int r, int i)
 
   if (p == r)
     return this->_contents[p];
-   
+
 // Partition the array slice A[p..r].  This rearranges the array so that
 // all elements of A[p..q] are less than all elements of A[q+1..r].
 // (Nothing fancy here, this is just a slight variation on the standard
@@ -1981,7 +1981,7 @@ SimpleArray<Type>::_randomizedSelect(int p, int r, int i)
 
 // Now that we have partitioned A, its i'th order statistic is either
 // the i'th order statistic of the lower partition A[p..q], or the
-// (i-k)'th order stat. of the upper partition A[q+1..r] -- so 
+// (i-k)'th order stat. of the upper partition A[q+1..r] -- so
 // recursively find it.
 
   if (i <= k)
@@ -2014,20 +2014,20 @@ SimpleArray<Type>::_partition(int p, int r)
   Type x = this->_contents[p];
   int i  = p-1;
   int j  = r+1;
-  
+
   while (1) {
     do { j--; } while (this->_contents[j] > x);
     do { i++; } while (this->_contents[i] < x);
-    
+
     if (i < j)
       std::swap(this->_contents[i], this->_contents[j]);
     else
       return j;
-  }      
+  }
 }
 
 template <class Type>
-SimpleArray<Type> 
+SimpleArray<Type>
 operator ^ (double base, const SimpleArray<Type>& array) {
   unsigned N = array.size();
 
@@ -2038,7 +2038,7 @@ operator ^ (double base, const SimpleArray<Type>& array) {
     *resultPtr++ = Type(pow(base, double(*sourcePtr++)));
 
   return result;
-} 
+}
 
 // template <class Type> unsigned SimpleArray<Type>::_rangeErrorCount = 25;
 
