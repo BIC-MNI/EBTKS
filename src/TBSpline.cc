@@ -633,7 +633,7 @@ TBSpline::solveSymmetricSystem(DblMat &A, DblMat b, int *info)
       return x;
     }
   
-  char uplo = 'u';
+  /*char *uplo = "U";*/
   _integer n = A.getcols();
   _integer nrhs = 1;
   _integer lda = n;
@@ -642,9 +642,8 @@ TBSpline::solveSymmetricSystem(DblMat &A, DblMat b, int *info)
   _doublereal work;
   _integer lwork = 1;
 
-  dsysv_(&uplo, &n, &nrhs, (_doublereal *) *A.getEl(), &lda, ipiv, 
-	 (_doublereal *) *b.getEl(), &ldb,
-	 &work, &lwork, (_integer *)info);
+  dsysv_("UU", &n, &nrhs, (_doublereal *) *A.getEl(), &lda, ipiv, 
+    (_doublereal *) *b.getEl(), &ldb, &work, &lwork, (_integer *)info);
 
   delete [] ipiv;
   return(b);

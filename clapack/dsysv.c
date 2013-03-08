@@ -1,9 +1,10 @@
 #include "blaswrap.h"
 #include "f2c.h"
+#include <stdio.h>
 
 /* Subroutine */ int dsysv_(char *uplo, integer *n, integer *nrhs, doublereal 
-	*a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, 
-	doublereal *work, integer *lwork, integer *info)
+                            *a, integer *lda, integer *ipiv, doublereal *b, integer *ldb, 
+                             doublereal *work, integer *lwork, integer *info)
 {
 /*  -- LAPACK driver routine (version 3.0) --   
        Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,   
@@ -123,7 +124,6 @@
 	    doublereal *, integer *, integer *, doublereal *, integer *, 
 	    integer *);
 
-
     a_dim1 = *lda;
     a_offset = 1 + a_dim1 * 1;
     a -= a_offset;
@@ -137,32 +137,31 @@
     *info = 0;
     lquery = *lwork == -1;
     if (! lsame_(uplo, "U") && ! lsame_(uplo, "L")) {
-	*info = -1;
+      *info = -1;
     } else if (*n < 0) {
-	*info = -2;
+      *info = -2;
     } else if (*nrhs < 0) {
-	*info = -3;
+      *info = -3;
     } else if (*lda < max(1,*n)) {
-	*info = -5;
+      *info = -5;
     } else if (*ldb < max(1,*n)) {
-	*info = -8;
+      *info = -8;
     } else if (*lwork < 1 && ! lquery) {
-	*info = -10;
+      *info = -10;
     }
 
     if (*info == 0) {
-	nb = ilaenv_(&c__1, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1, (ftnlen)6,
-		 (ftnlen)1);
-	lwkopt = *n * nb;
-	work[1] = (doublereal) lwkopt;
+      nb = ilaenv_(&c__1, "DSYTRF", uplo, n, &c_n1, &c_n1, &c_n1, (ftnlen)6, (ftnlen)1);
+      lwkopt = *n * nb;
+      work[1] = (doublereal) lwkopt;
     }
 
     if (*info != 0) {
-	i__1 = -(*info);
-	xerbla_("DSYSV ", &i__1);
-	return 0;
+      i__1 = -(*info);
+      xerbla_("DSYSV ", &i__1);
+      return 0;
     } else if (lquery) {
-	return 0;
+      return 0;
     }
 
 /*     Compute the factorization A = U*D*U' or A = L*D*L'. */
@@ -172,8 +171,8 @@
 
 /*        Solve the system A*X = B, overwriting B with X. */
 
-	dsytrs_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
-		 info);
+      dsytrs_(uplo, n, nrhs, &a[a_offset], lda, &ipiv[1], &b[b_offset], ldb,
+        info);
 
     }
 

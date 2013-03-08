@@ -35,7 +35,7 @@ logical lsame_(char *ca, char *cb)
 
     ret_val = *(unsigned char *)ca == *(unsigned char *)cb;
     if (ret_val) {
-	return ret_val;
+      return ret_val;
     }
 
 /*     Now test for equivalence if both characters are alphabetic. */
