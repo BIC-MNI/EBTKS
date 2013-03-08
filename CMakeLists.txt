@@ -13,7 +13,7 @@ SET(EBTKS_PACKAGE_VERSION_PATCH 40)
 ENABLE_TESTING()
 INCLUDE(CTest)
 
-SET(EBTKS_BUILD_SHARED_LIBS OFF) 
+SET(EBTKS_BUILD_SHARED_LIBS OFF)
 # Packaging defines
 IF(NOT MINC_TOOLKIT_BUILD)
   PROJECT(EBTKS)
@@ -21,7 +21,7 @@ IF(NOT MINC_TOOLKIT_BUILD)
   SET(CPACK_PACKAGE_VERSION_MAJOR ${EBTKS_PACKAGE_VERSION_MAJOR})
   SET(CPACK_PACKAGE_VERSION_MINOR ${EBTKS_PACKAGE_VERSION_MINOR})
   SET(CPACK_PACKAGE_VERSION_PATCH ${EBTKS_PACKAGE_VERSION_PATCH})
-  #OPTION(EBTKS_BUILD_SHARED_LIBS "Build shared libraries." OFF) 
+  #OPTION(EBTKS_BUILD_SHARED_LIBS "Build shared libraries." OFF)
   INCLUDE(CPack)
 ENDIF(NOT MINC_TOOLKIT_BUILD)
 
@@ -79,6 +79,8 @@ CHECK_INCLUDE_FILES(inttypes.h  HAVE_INTTYPES_H)
 CHECK_INCLUDE_FILES(string.h    HAVE_STRING_H)
 CHECK_INCLUDE_FILES(strings.h   HAVE_STRINGS_H)
 CHECK_INCLUDE_FILES(dlfcn.h     HAVE_DLFCN_H)
+CHECK_INCLUDE_FILES(complex     HAVE_COMPLEX)
+CHECK_INCLUDE_FILES(complex.h   HAVE_COMPLEX_H)
 
 # config files for build
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h @ONLY)
@@ -89,38 +91,38 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/epm-header.in ${CMAKE_CURRENT_BINARY_
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include  ${CMAKE_CURRENT_SOURCE_DIR}/templates )
 
 SET(EBTKS_HEADERS
-        include/EBTKS/amoeba.h 
-        include/EBTKS/assert.h 
-        include/EBTKS/backProp.h 
-        include/EBTKS/Complex.h 
-        include/EBTKS/dcomplex.h 
-        include/EBTKS/fcomplex.h 
-        include/EBTKS/FileIO.h 
-        include/EBTKS/Histogram.h 
-        include/EBTKS/matlabSupport.h 
-        include/EBTKS/Minc.h 
-        include/EBTKS/MPoint.h 
-        include/EBTKS/MString.h 
-        include/EBTKS/MTypes.h 
-        include/EBTKS/OpTimer.h 
-        include/EBTKS/OrderedCltn.h 
-        include/EBTKS/Path.h 
-        include/EBTKS/Polynomial.h 
-        include/EBTKS/popen.h 
-        include/EBTKS/TrainingSet.h 
-        include/EBTKS/trivials.h 
+        include/EBTKS/amoeba.h
+        include/EBTKS/assert.h
+        include/EBTKS/backProp.h
+        include/EBTKS/Complex.h
+        include/EBTKS/dcomplex.h
+        include/EBTKS/fcomplex.h
+        include/EBTKS/FileIO.h
+        include/EBTKS/Histogram.h
+        include/EBTKS/matlabSupport.h
+        include/EBTKS/Minc.h
+        include/EBTKS/MPoint.h
+        include/EBTKS/MString.h
+        include/EBTKS/MTypes.h
+        include/EBTKS/OpTimer.h
+        include/EBTKS/OrderedCltn.h
+        include/EBTKS/Path.h
+        include/EBTKS/Polynomial.h
+        include/EBTKS/popen.h
+        include/EBTKS/TrainingSet.h
+        include/EBTKS/trivials.h
 
-        templates/EBTKS/Array.h 
-        templates/EBTKS/CachedArray.h 
-        templates/EBTKS/Dictionary.h 
-        templates/EBTKS/Matrix3D.h 
-        templates/EBTKS/Matrix.h 
-        templates/EBTKS/MatrixSupport.h 
-        templates/EBTKS/MatrixTest.h 
-        templates/EBTKS/miscTemplateFunc.h 
-        templates/EBTKS/Pool.h 
-        templates/EBTKS/SimpleArray.h 
-        templates/EBTKS/Stack.h 
+        templates/EBTKS/Array.h
+        templates/EBTKS/CachedArray.h
+        templates/EBTKS/Dictionary.h
+        templates/EBTKS/Matrix3D.h
+        templates/EBTKS/Matrix.h
+        templates/EBTKS/MatrixSupport.h
+        templates/EBTKS/MatrixTest.h
+        templates/EBTKS/miscTemplateFunc.h
+        templates/EBTKS/Pool.h
+        templates/EBTKS/SimpleArray.h
+        templates/EBTKS/Stack.h
         templates/EBTKS/ValueMap.h
 )
 
@@ -128,49 +130,49 @@ SET(EBTKS_HEADERS
 SET(EBTKS_LIB_SRCS
   ${EBTKS_HEADERS}
   version.cc
-  src/FileIO.cc 
-  src/Histogram.cc 
-  src/MPoint.cc 
-  src/MString.cc 
-  src/OpTimer.cc 
-  src/OrderedCltn.cc 
-  src/Path.cc 
-  src/Polynomial.cc 
-  src/TrainingSet.cc 
-  src/amoeba.cc 
-  src/backProp.cc 
-  src/fcomplex.cc 
-  src/dcomplex.cc 
-  
-  templates/Array.cc 
-  templates/CachedArray.cc 
-  templates/Dictionary.cc 
-  templates/Matrix.cc 
-  templates/MatrixSupport.cc 
-  templates/Pool.cc 
-  templates/SimpleArray.cc 
-  templates/ValueMap.cc 
-  templates/miscTemplateFunc.cc 
-  templates/MatrixConv.cc 
-  
-  clapack/dcopy.c 
-  clapack/dgemm.c 
-  clapack/dgemv.c 
-  clapack/dger.c 
-  clapack/dlasyf.c 
-  clapack/dscal.c 
-  clapack/dswap.c 
-  clapack/dsyr.c 
-  clapack/dsysv.c 
-  clapack/dsytf2.c 
-  clapack/dsytrf.c 
-  clapack/dsytrs.c 
-  clapack/idamax.c 
-  clapack/ieeeck.c 
-  clapack/ilaenv.c 
-  clapack/lsame.c 
-  clapack/s_cmp.c 
-  clapack/s_copy.c 
+  src/FileIO.cc
+  src/Histogram.cc
+  src/MPoint.cc
+  src/MString.cc
+  src/OpTimer.cc
+  src/OrderedCltn.cc
+  src/Path.cc
+  src/Polynomial.cc
+  src/TrainingSet.cc
+  src/amoeba.cc
+  src/backProp.cc
+  src/fcomplex.cc
+  src/dcomplex.cc
+
+  templates/Array.cc
+  templates/CachedArray.cc
+  templates/Dictionary.cc
+  templates/Matrix.cc
+  templates/MatrixSupport.cc
+  templates/Pool.cc
+  templates/SimpleArray.cc
+  templates/ValueMap.cc
+  templates/miscTemplateFunc.cc
+  templates/MatrixConv.cc
+
+  clapack/dcopy.c
+  clapack/dgemm.c
+  clapack/dgemv.c
+  clapack/dger.c
+  clapack/dlasyf.c
+  clapack/dscal.c
+  clapack/dswap.c
+  clapack/dsyr.c
+  clapack/dsysv.c
+  clapack/dsytf2.c
+  clapack/dsytrf.c
+  clapack/dsytrs.c
+  clapack/idamax.c
+  clapack/ieeeck.c
+  clapack/ilaenv.c
+  clapack/lsame.c
+  clapack/s_cmp.c
+  clapack/s_copy.c
   clapack/xerbla.c
 )
 
@@ -190,7 +192,7 @@ ADD_LIBRARY(EBTKS ${LIBRARY_TYPE} ${EBTKS_LIB_SRCS})
 SET(EBTKS_LIBRARIES EBTKS)
 
 INSTALL(FILES ${EBTKS_HEADERS}
-   DESTINATION include/EBTKS 
+   DESTINATION include/EBTKS
    COMPONENT  Development)
 
 INSTALL(TARGETS EBTKS ${LIBRARY_INSTALL} DESTINATION lib${LIB_SUFFIX})
@@ -225,7 +227,7 @@ configure_file(UseEBTKS.cmake.in
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/UseEBTKS.cmake ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/EBTKSConfig.cmake
   DESTINATION lib${LIB_SUFFIX}
-  COMPONENT 
+  COMPONENT
    Development)
 
 # testing
