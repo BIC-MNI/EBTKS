@@ -245,7 +245,7 @@ template <class T1, class T2>
 Mat<T1>& operator /= (Mat<T1>& A, const Mat<T2>& B) {
   A = A * inv(B); return A; }
 
-// *********************** Point multiplication ***********************
+// *********************** VIO_Point multiplication ***********************
 template <class T1, class T2>
 Mat<T1>& pmultEquals(Mat<T1>& A, const Mat<T2>& B);
 
@@ -253,7 +253,7 @@ template <class T1, class T2>
 Mat<T1> pmult(const Mat<T1>& A, const Mat<T2>& B) {
   Mat<T1> T(A); return pmultEquals(T, B); }
 
-// ************************* Point division ***************************
+// ************************* VIO_Point division ***************************
 template <class T1, class T2>
 Mat<T1>& pdivEquals(Mat<T1>& A, const Mat<T2>& B);
 

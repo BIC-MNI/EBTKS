@@ -149,7 +149,7 @@ void  initialize_amoeba(
     amoeba->values = new double[n_parameters + 1];
     amoeba->sum    = new double[n_parameters];
 /*
-    ALLOC2D( amoeba->parameters, n_parameters+1, n_parameters );
+    VIO_ALLOC2D( amoeba->parameters, n_parameters+1, n_parameters );
     ALLOC( amoeba->values, n_parameters+1 );
     ALLOC( amoeba->sum, n_parameters );
 */
@@ -226,7 +226,7 @@ void  terminate_amoeba(
   delete [] amoeba->values;
   delete [] amoeba->sum;
 /*
-  FREE2D( amoeba->parameters );
+  VIO_FREE2D( amoeba->parameters );
   FREE( amoeba->values );
   FREE( amoeba->sum );
 */

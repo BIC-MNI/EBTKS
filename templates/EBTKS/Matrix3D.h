@@ -157,7 +157,7 @@ template <class T1, class T2>
 Mat3D<T1>& operator /= (Mat3D<T1>& A, const Mat3D<T2>& B) {
   A = A * inv(B); return A; }
 
-// *********************** Point multiplication ***********************
+// *********************** VIO_Point multiplication ***********************
 template <class T1, class T2>
 Mat3D<T1>& pmultEquals(Mat3D<T1>& A, const Mat3D<T2>& B);
 
@@ -165,7 +165,7 @@ template <class T1, class T2>
 Mat3D<T1> pmult(const Mat3D<T1>& A, const Mat3D<T2>& B) {
   Mat3D<T1> T(A); return pmultEquals(T, B); }
 
-// ************************* Point division ***************************
+// ************************* VIO_Point division ***************************
 template <class T1, class T2>
 Mat3D<T1>& pdivEquals(Mat3D<T1>& A, const Mat3D<T2>& B);
 

@@ -23,7 +23,7 @@ $State: Exp $
 #ifndef _MIDAS_MINC_H
 #define _MIDAS_MINC_H
 
-#undef Status
+#undef VIO_Status
 
 #ifdef ROUND
 #undef ROUND
