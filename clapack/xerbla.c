@@ -1,6 +1,7 @@
+#include <stdio.h>
+
 #include "blaswrap.h"
 #include "f2c.h"
-#include <stdio.h>
 /* Subroutine */ int xerbla_(char *srname, integer *info)
 {
 /*  -- LAPACK auxiliary routine (version 2.0) --   
@@ -34,7 +35,7 @@
 */
 
     printf("** On entry to %6s, parameter number %2i had an illegal value\n",
-           srname, *info);
+           srname, (int)*info);
 
 /*     End of XERBLA */
 
