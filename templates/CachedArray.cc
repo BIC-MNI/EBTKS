@@ -866,7 +866,7 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
   }
 
   Type floor, ceil;
-  extrema(&floor, &ceil);
+  this->extrema(&floor, &ceil);
 
   if (this->_debug)
       cout << "Floor and Ceiling: " << floor << " : " << ceil << endl;
@@ -893,7 +893,7 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
       cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
 
   unsigned nBelow2, nAbove2;
-  removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
+  this->removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
 		 &nBelow2, &nAbove2);
 
   if (this->_debug)
