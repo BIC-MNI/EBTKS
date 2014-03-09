@@ -40,8 +40,8 @@ InputFile::InputFile()
 
 InputFile::operator void *() const
 {
-  if (_ipipe)
-    return *_ipipe;
+  if (this->_ipipe)
+    return this->_ipipe;
   return 0;
 }
 
