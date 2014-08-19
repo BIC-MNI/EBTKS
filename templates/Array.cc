@@ -24,6 +24,7 @@ $State: Exp $
 #include <iostream>		// (bert) changed from iostream.h
 #include <math.h>
 //#include <string>		// (bert) changed from string.h
+#include <cstring>
 using namespace std;		// (bert) added
 
 /******************
