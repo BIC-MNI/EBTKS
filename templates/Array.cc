@@ -12,19 +12,19 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: Array.cc,v $
-$Revision: 1.3 $
-$Author: bert $
-$Date: 2004-12-08 16:43:44 $
+$Revision: 1.4 $
+$Author: claude $
+$Date: 2014-10-28 17:56:38 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
 #include "Array.h"
 #include "dcomplex.h"
 #include <assert.h>
-#include <iostream>		// (bert) changed from iostream.h
+#include <iostream>
 #include <math.h>
-//#include <string>		// (bert) changed from string.h
-using namespace std;		// (bert) added
+#include <cstring>
+using namespace std;
 
 /******************
  * Array base class
@@ -100,7 +100,7 @@ Array<Type>::Array(const Type *initArray, unsigned nElements)
   if (_size) {
     _contents = new Type[_size];
     assert(_contents);
-    memcpy(_contents, initArray, _size*sizeof(Type));
+    std::memcpy(_contents, initArray, _size*sizeof(Type));
   }
   else
     _contents = 0;

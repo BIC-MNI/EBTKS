@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: CachedArray.cc,v $
-$Revision: 1.10 $
-$Author: bert $
-$Date: 2004-12-08 17:02:18 $
+$Revision: 1.11 $
+$Author: claude $
+$Date: 2014-10-28 17:56:38 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -866,7 +866,7 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
   }
 
   Type floor, ceil;
-  extrema(&floor, &ceil);
+  this->extrema(&floor, &ceil);
 
   if (this->_debug)
       cout << "Floor and Ceiling: " << floor << " : " << ceil << endl;
@@ -893,8 +893,8 @@ CachedArray<Type>::_histMedian(unsigned nBelow, unsigned nAbove)
       cout << "(" << bin << " : " << hist[bin] << " : " << histMedian << ") " << flush;
 
   unsigned nBelow2, nAbove2;
-  removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
-		 &nBelow2, &nAbove2);
+  this->removeAllNotIn(Type(hist.binStart(bin)), Type(hist.binStart(bin + 1)), 
+		       &nBelow2, &nAbove2);
 
   if (this->_debug)
       cout << "nBelow2 : nAbove2 " << nBelow2 << " : " << nAbove2 << endl;

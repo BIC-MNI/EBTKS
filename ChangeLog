@@ -1,3 +1,6 @@
+2014-10-28  Claude Lepage <claude@bic.mni.mcgill.ca>
+   * Changes (in templates/) for build with gcc 4.8
+
 2010-06-16  Dave MacFarlane <david.macfarlane2@mcgill.ca>
    * Moved splines from EBTKS to N3
 

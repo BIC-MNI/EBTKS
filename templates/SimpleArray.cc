@@ -12,9 +12,9 @@
               express or implied warranty.
 ---------------------------------------------------------------------------- 
 $RCSfile: SimpleArray.cc,v $
-$Revision: 1.9 $
-$Author: bert $
-$Date: 2004-12-08 17:05:18 $
+$Revision: 1.10 $
+$Author: claude $
+$Date: 2014-10-28 17:56:38 $
 $State: Exp $
 --------------------------------------------------------------------------*/
 #include <config.h>
@@ -503,7 +503,7 @@ SimpleArray<Type>::removeAll(Type value)
     Type el = this->getElConst(i);
     if (el != value) {
       if (i != j)
-	setEl(j, el);
+	this->setEl(j, el);
       j++;
     }
   }
@@ -532,7 +532,7 @@ SimpleArray<Type>::removeAllIn(Type floor, Type ceil, unsigned *N)
       n++;
     else {
       if (i != j)
-	setEl(j, value);
+	this->setEl(j, value);
       j++;
     }
   }
@@ -566,7 +566,7 @@ SimpleArray<Type>::removeAllNotIn(Type floor, Type ceil,
       aboveCtr++;
     else {
       if (i != j)
-        setEl(j, value);
+        this->setEl(j, value);
       j++;
     }
   }
@@ -633,7 +633,7 @@ SimpleArray<Type>::prune()
     double value = double(this->getElConst(i));
     if (FINITE(value)) {
       if (i != j)
-	setEl(j, Type(value));
+	this->setEl(j, Type(value));
       j++;
     }
   }
@@ -650,7 +650,7 @@ SimpleArray<Type>::randuniform(double min, double max)
   double range = max - min;
 
   for (unsigned i = 0; i < this->_size; i++)
-    setEl(i, Type(drand48() * range + min));
+    this->setEl(i, Type(drand48() * range + min));
   
   return *this;
 }
@@ -660,7 +660,7 @@ SimpleArray<Type>&
 SimpleArray<Type>::randnormal(double mean, double std)
 {
   for (unsigned i = 0; i < this->_size; i++)
-    setEl(i, Type(gauss(mean, std)));
+    this->setEl(i, Type(gauss(mean, std)));
 
   return *this;
 }
@@ -996,7 +996,7 @@ SimpleArray<Type>::ceil(Type ceil)
   this->resetIterator();
   for (register unsigned i = 0; i < this->_size; i++)
     if ((*this)++ > ceil)
-      setEl(i, ceil);
+      this->setEl(i, ceil);
 }
 
 template <class Type>
@@ -1006,7 +1006,7 @@ SimpleArray<Type>::floor(Type floor)
   this->resetIterator();
   for (register unsigned i = 0; i < this->_size; i++)
     if ((*this)++ < floor)
-      setEl(i, floor);
+      this->setEl(i, floor);
 }
 
 //
