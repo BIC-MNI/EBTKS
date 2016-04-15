@@ -84,7 +84,7 @@ template class Zeros<double>;
 template class Ones<double>;
 template class Eye<double>;
 template ostream & operator<<(ostream &, Mat<double> const &);
-template SimpleArray<double> array(Mat<double> const &, double, double);
+// template SimpleArray<double> array(Mat<double> const &, double, double);
 #ifdef USE_COMPMAT
 _INSTANTIATE_MAT(dcomplex);
 // template Mat<dcomplex> fft(const Mat<double> &, unsigned, unsigned);

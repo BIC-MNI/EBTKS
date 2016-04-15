@@ -350,7 +350,7 @@ Polynomial::_fit(const FlMat& X, const DblArray& F)
     // Raise X to all necessary powers
 
     for (unsigned power = 0; power < nPow; power++)
-      powers[coord][power] = asDblArray(array(X.col(coord))) ^ power;
+      powers[coord][power] = asDblArray(::array(X.col(coord))) ^ power;
   }
 
   DblMat A(_nCoef, _nCoef);
