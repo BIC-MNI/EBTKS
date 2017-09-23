@@ -10,9 +10,6 @@ SET(EBTKS_PACKAGE_VERSION_PATCH 40)
 # WARNING: compiling library as shared library produces wrong code for some reason
 # Untill this problem is solved the code should be compiled as static
 
-ENABLE_TESTING()
-INCLUDE(CTest)
-
 SET(EBTKS_BUILD_SHARED_LIBS OFF)
 # Packaging defines
 IF(NOT MINC_TOOLKIT_BUILD)
@@ -24,6 +21,9 @@ IF(NOT MINC_TOOLKIT_BUILD)
   #OPTION(EBTKS_BUILD_SHARED_LIBS "Build shared libraries." OFF)
   INCLUDE(CPack)
 ENDIF(NOT MINC_TOOLKIT_BUILD)
+
+ENABLE_TESTING()
+INCLUDE(CTest)
 
 SET(PACKAGE "EBTKS")
 SET(PACKAGE_BUGREPORT "a.janke@gmail.com")
