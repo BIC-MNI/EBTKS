@@ -22,6 +22,7 @@ $State: Exp $
 
 #include <math.h>
 
+#include "config.h"
 #include "EBTKS/trivials.h"
 #include "EBTKS/Array.h"
 
@@ -961,7 +962,7 @@ SimpleArray<Type>::common(const SimpleArray<Type>& array) const
 // #ifndef finite
 // extern "C" int finite(double);
 // #endif /* finite() not defined (as macro) */
-#define FINITE(x) finite(x)
+// #define FINITE(x) finite(x)
 // #elif HAVE_ISFINITE
 // #ifndef isfinite
 // extern "C" int isfinite(double);
@@ -971,6 +972,11 @@ SimpleArray<Type>::common(const SimpleArray<Type>& array) const
 // #error "Neither finite() nor isfinite() is defined on your system"
 // #endif /* HAVE_ISFINITE */
 
+#if HAVE_ISFINITE
+#define FINITE(x) isfinite(x)
+#else
+#define FINITE(x) finite(x)
+#endif /* HAVE_ISFINITE */
 
 template <class Type>
 SimpleArray<Type>&
