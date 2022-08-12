@@ -17,6 +17,7 @@ $Author: bert $
 $Date: 2003-04-16 15:09:37 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#include <config.h>
 #include "EBTKS/Matrix3D.h"
 #include "EBTKS/MatrixSupport.h"
 #include "EBTKS/FileIO.h"

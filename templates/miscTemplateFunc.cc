@@ -17,6 +17,7 @@ $Author: bert $
 $Date: 2003-04-16 17:56:57 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#include <config.h>
 #include "EBTKS/miscTemplateFunc.h"
 #include "EBTKS/Histogram.h"
 #include "EBTKS/dcomplex.h"

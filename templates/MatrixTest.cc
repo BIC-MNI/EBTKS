@@ -17,6 +17,7 @@ $Author: jason $
 $Date: 2001-11-09 16:37:26 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#include <config.h>
 #include "EBTKS/Matrix.h"
 #include "EBTKS/MatrixSupport.h"
 //#include "FileIO.h"  //included to load compressed data

@@ -1,18 +1,19 @@
+#include <config.h>
 /* From SimpleArray.cc */
 
-#if HAVE_FINITE
-#ifndef finite
-extern "C" int finite(double);
-#endif /* finite() not defined (as macro) */
-#define FINITE(x) finite(x)
-#elif HAVE_ISFINITE
-#ifndef isfinite
-extern "C" int isfinite(double);
-#endif /* isfinite() not defined (as macro) */
-#define FINITE(x) isfinite(x)
-#else
-#error "Neither finite() nor isfinite() is defined on your system"
-#endif /* HAVE_ISFINITE */
+// #if HAVE_FINITE
+// #ifndef finite
+// extern "C" int finite(double);
+// #endif /* finite() not defined (as macro) */
+// #define FINITE(x) finite(x)
+// #elif HAVE_ISFINITE
+// #ifndef isfinite
+// extern "C" int isfinite(double);
+// #endif /* isfinite() not defined (as macro) */
+// #define FINITE(x) isfinite(x)
+// #else
+// #error "Neither finite() nor isfinite() is defined on your system"
+// #endif /* HAVE_ISFINITE */
 
 #ifdef USE_COMPMAT
 template <>

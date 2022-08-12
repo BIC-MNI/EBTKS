@@ -54,4 +54,10 @@
 #define VERSION PACKAGE_VERSION
 
 
-
+#if defined(HAVE_ISFINITE)
+#define FINITE(x) isfinite(x)
+#elif defined(HAVE_FINITE)
+#define FINITE(x) finite(x)
+#else
+#error "Need isfinite or finite"
+#endif /* HAVE_ISFINITE */
