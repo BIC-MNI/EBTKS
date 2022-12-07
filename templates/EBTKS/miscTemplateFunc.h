@@ -46,8 +46,8 @@ inline double intPower(double x, int y) {
   if (!x) return(0.0);
   if (x == 1.0) return(1.0);
 
-  register double result = x;
-  for (register unsigned i = abs(y) - 1; i; i--) 
+  double result = x;
+  for (unsigned i = abs(y) - 1; i; i--) 
     result *= x;
 
   return (y < 0) ? 1.0/result : (double) result;

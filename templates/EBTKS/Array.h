@@ -454,7 +454,7 @@ Array<Type>::operator () (unsigned nElements) const
 
   Type *sourcePtr = _contents;
   Type *destPtr   = subArray._contents;
-  for (register unsigned i = nElements; i != 0; i--)
+  for (unsigned i = nElements; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return(subArray);
@@ -477,7 +477,7 @@ Array<Type>::operator () (unsigned start, unsigned end) const
 
   Type *sourcePtr = _contents + start;
   Type *destPtr   = subArray._contents;
-  for (register unsigned i = n; i != 0; i--)
+  for (unsigned i = n; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return(subArray);
@@ -581,9 +581,9 @@ Array<Type>::operator () (const Type *newContents, unsigned size)
   else
     _size = size;
 
-  register const Type *sourcePtr = newContents;
-  register Type *destPtr   = _contents;
-  for (register unsigned i = _size; i != 0; i--)
+  const Type *sourcePtr = newContents;
+  Type *destPtr   = _contents;
+  for (unsigned i = _size; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return(*this);
@@ -601,7 +601,7 @@ Array<Type>::asCarray(Type *destPtr) const
 
   if (destPtr) {
     const Type *sourcePtr = _contents;
-    for (register unsigned i = _size; i; i--)
+    for (unsigned i = _size; i; i--)
       *destPtr++ = *sourcePtr++;
   }
 
@@ -632,7 +632,7 @@ Array<Type>::append(const Array<Type>& array)
 
   const Type *sourcePtr = array._contents;
   Type *destPtr         = _contents + oldSize;
-  for (register unsigned i = nToAdd; i != 0; i--)
+  for (unsigned i = nToAdd; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return *this;
@@ -656,9 +656,9 @@ Array<Type>::insert(const Type& value, unsigned index)
   if (_maxSize <= _size)
     _grow(SIZE_INCREMENT);
 
-  register Type *sourcePtr = _contents + _size - 1;
-  register Type *destPtr   = sourcePtr + 1;
-  for (register unsigned i = _size - index; i != 0; i--)
+  Type *sourcePtr = _contents + _size - 1;
+  Type *destPtr   = sourcePtr + 1;
+  for (unsigned i = _size - index; i != 0; i--)
     *destPtr-- = *sourcePtr--;
   *destPtr = value;
 
@@ -701,9 +701,9 @@ Array<Type>::replace(const Array<Type>& array, unsigned index)
   if (index + array._size > _size)
     newSize(index + array._size);
 
-  register Type *sourcePtr = array._contents;
-  register Type *destPtr   = _contents + index;
-  for (register unsigned i = array._size; i != 0; i--)
+  Type *sourcePtr = array._contents;
+  Type *destPtr   = _contents + index;
+  for (unsigned i = array._size; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return *this;
@@ -732,8 +732,8 @@ Array<Type>::remove(unsigned index)
 
   Type value(_contents[index]);
 
-  register Type *destPtr   = _contents + index;
-  register Type *sourcePtr = destPtr + 1;
+  Type *destPtr   = _contents + index;
+  Type *sourcePtr = destPtr + 1;
   for (unsigned i = _size - index - 1; i != 0; i--)
     *destPtr++ = *sourcePtr++;
   _size--;
@@ -816,9 +816,9 @@ Array<Type>::newSize(unsigned size)
   assert(newContents);
 
   if (_size) {
-    register Type *sourcePtr = _contents;
-    register Type *destPtr   = newContents;
-    for (register unsigned i = _size; i != 0; i--)
+    Type *sourcePtr = _contents;
+    Type *destPtr   = newContents;
+    for (unsigned i = _size; i != 0; i--)
       *destPtr++ = *sourcePtr++;
   }
 

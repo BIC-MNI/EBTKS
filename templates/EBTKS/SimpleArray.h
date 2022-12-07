@@ -447,9 +447,9 @@ template <class Type>
 SimpleArray<Type>::SimpleArray(Type minVal, Type step, Type maxVal)
 : Array<Type>(unsigned(std::abs((double)(maxVal - minVal)/step)) + 1)
 {
-  register Type *elementPtr = this->_contents;
+  Type *elementPtr = this->_contents;
   Type value = minVal;
-  for (register unsigned i = this->_size; i; i--) {
+  for (unsigned i = this->_size; i; i--) {
     *elementPtr++ = value;
     value = Type(step + value);
   }
@@ -653,7 +653,7 @@ SimpleArray<Type>::operator () (unsigned nElements) const
 
   Type *sourcePtr = this->_contents;
   Type *destPtr   = subArray._contents;
-  for (register unsigned i = nElements; i != 0; i--)
+  for (unsigned i = nElements; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return(subArray);
@@ -674,7 +674,7 @@ SimpleArray<Type>::operator () (unsigned start, unsigned end) const
 
   Type *sourcePtr = this->_contents + start;
   Type *destPtr   = subArray._contents;
-  for (register unsigned i = n; i != 0; i--)
+  for (unsigned i = n; i != 0; i--)
     *destPtr++ = *sourcePtr++;
 
   return(subArray);
@@ -737,8 +737,8 @@ template <class Type>
 Boolean
 SimpleArray<Type>::contains(Type value) const
 {
-  register Type *contentsPtr = this->_contents;
-  for (register unsigned i = this->_size; i; i--)
+  Type *contentsPtr = this->_contents;
+  for (unsigned i = this->_size; i; i--)
     if (*contentsPtr++ == value)
       return TRUE;
 
@@ -755,8 +755,8 @@ SimpleArray<Type>::contains(Type value, unsigned start, unsigned end) const
     return FALSE;
   }
 
-  register Type *contentsPtr = this->_contents + start;
-  for (register unsigned i = end - start + 1; i; i--)
+  Type *contentsPtr = this->_contents + start;
+  for (unsigned i = end - start + 1; i; i--)
     if (*contentsPtr++ == value)
       return TRUE;
 
@@ -767,8 +767,8 @@ template <class Type>
 Boolean
 SimpleArray<Type>::containsOnly(Type value) const
 {
-  register Type *contentsPtr = this->_contents;
-  for (register unsigned i = this->_size; i; i--)
+  Type *contentsPtr = this->_contents;
+  for (unsigned i = this->_size; i; i--)
     if (*contentsPtr++ != value)
       return FALSE;
 
@@ -785,8 +785,8 @@ SimpleArray<Type>::containsOnly(Type value, unsigned start, unsigned end) const
     return FALSE;
   }
 
-  register Type *contentsPtr = this->_contents + start;
-  for (register unsigned i = end - start + 1; i; i--)
+  Type *contentsPtr = this->_contents + start;
+  for (unsigned i = end - start + 1; i; i--)
     if (*contentsPtr++ != value)
       return FALSE;
 
@@ -825,12 +825,12 @@ SimpleArray<Type>::indexOf(Type value, int dir, unsigned start) const
   this->resetIterator(start);
 
   if (dir > 0) {
-    for (register int i = this->_size - start; i; i--)
+    for (int i = this->_size - start; i; i--)
       if ((*this)++ == value)
   return this->_itIndex - 1;
   }
   else {
-    for (register int i = start + 1; i; i--)
+    for (int i = start + 1; i; i--)
       if ((*this)-- == value)
   return this->_itIndex + 1;
   }
@@ -957,19 +957,15 @@ SimpleArray<Type>::common(const SimpleArray<Type>& array) const
   return common;
 }
 
-// #if HAVE_FINITE
-// #ifndef finite
-// extern "C" int finite(double);
-// #endif /* finite() not defined (as macro) */
+#if HAVE_FINITE
 #define FINITE(x) finite(x)
-// #elif HAVE_ISFINITE
-// #ifndef isfinite
-// extern "C" int isfinite(double);
-// #endif /* isfinite() not defined (as macro) */
-// #define FINITE(x) isfinite(x)
-// #else
-// #error "Neither finite() nor isfinite() is defined on your system"
-// #endif /* HAVE_ISFINITE */
+#elif HAVE_ISFINITE
+#define FINITE(x) isfinite(x)
+#elif defined(isfinite)
+#define FINITE(x) isfinite(x)
+#else
+#error "Need isfinite or finite"
+#endif
 
 
 template <class Type>
@@ -1342,7 +1338,7 @@ void
 SimpleArray<Type>::ceil(Type ceil)
 {
   this->resetIterator();
-  for (register unsigned i = 0; i < this->_size; i++)
+  for (unsigned i = 0; i < this->_size; i++)
     if ((*this)++ > ceil)
       this->setEl(i, ceil);
 }
@@ -1352,7 +1348,7 @@ void
 SimpleArray<Type>::floor(Type floor)
 {
   this->resetIterator();
-  for (register unsigned i = 0; i < this->_size; i++)
+  for (unsigned i = 0; i < this->_size; i++)
     if ((*this)++ < floor)
       this->setEl(i, floor);
 }
@@ -1389,7 +1385,7 @@ SimpleArray<Type>::operator && (const SimpleArray<Type>& array) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *value1ptr = this->_contents;
     Type    *value2ptr = array._contents;
-    for (register unsigned i = nElements; i; i--, value1ptr++, value2ptr++)
+    for (unsigned i = nElements; i; i--, value1ptr++, value2ptr++)
       *boolPtr++ = *value1ptr && *value2ptr;
   }
 
@@ -1407,7 +1403,7 @@ SimpleArray<Type>::operator || (const SimpleArray<Type>& array) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *value1ptr = this->_contents;
     Type    *value2ptr = array._contents;
-    for (register unsigned i = nElements; i; i--, value1ptr++, value2ptr++)
+    for (unsigned i = nElements; i; i--, value1ptr++, value2ptr++)
       *boolPtr++ = *value1ptr || *value2ptr;
   }
 
@@ -1423,7 +1419,7 @@ SimpleArray<Type>::operator == (double value) const
   if (this->_size) {
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
-    for (register unsigned i = this->_size; i; i--)
+    for (unsigned i = this->_size; i; i--)
       *boolPtr++ = *valuePtr++ == static_cast<Type>(value);
   }
 
@@ -1439,7 +1435,7 @@ SimpleArray<Type>::operator != (double value) const
   if (this->_size) {
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
-    for (register unsigned i = this->_size; i; i--)
+    for (unsigned i = this->_size; i; i--)
       *boolPtr++ = *valuePtr++ != static_cast<Type>(value);
   }
 
@@ -1455,7 +1451,7 @@ SimpleArray<Type>::operator >= (double value) const
   if (this->_size) {
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
-    for (register unsigned i = this->_size; i; i--)
+    for (unsigned i = this->_size; i; i--)
       *boolPtr++ = *valuePtr++ >= value;
   }
 
@@ -1471,7 +1467,7 @@ SimpleArray<Type>::operator > (double value) const
   if (this->_size) {
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
-    for (register unsigned i = this->_size; i; i--)
+    for (unsigned i = this->_size; i; i--)
       *boolPtr++ = *valuePtr++ > value;
   }
 
@@ -1487,7 +1483,7 @@ SimpleArray<Type>::operator <= (double value) const
   if (this->_size) {
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
-    for (register unsigned i = this->_size; i; i--)
+    for (unsigned i = this->_size; i; i--)
       *boolPtr++ = *valuePtr++ <= value;
   }
 
@@ -1503,7 +1499,7 @@ SimpleArray<Type>::operator < (double value) const
   if (this->_size) {
     Boolean *boolPtr  = boolArray.contents();
     Type    *valuePtr = this->_contents;
-    for (register unsigned i = this->_size; i; i--)
+    for (unsigned i = this->_size; i; i--)
       *boolPtr++ = *valuePtr++ < value;
   }
 
@@ -1521,7 +1517,7 @@ SimpleArray<Type>::operator >= (const SimpleArray<Type>& array) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *value1ptr = this->_contents;
     Type    *value2ptr = array._contents;
-    for (register unsigned i = nElements; i; i--)
+    for (unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ >= *value2ptr++;
   }
 
@@ -1539,7 +1535,7 @@ SimpleArray<Type>::operator > (const SimpleArray<Type>& array) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *value1ptr = this->_contents;
     Type    *value2ptr = array._contents;
-    for (register unsigned i = nElements; i; i--)
+    for (unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ > *value2ptr++;
   }
 
@@ -1557,7 +1553,7 @@ SimpleArray<Type>::operator <= (const SimpleArray<Type>& array) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *value1ptr = this->_contents;
     Type    *value2ptr = array._contents;
-    for (register unsigned i = nElements; i; i--)
+    for (unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ <= *value2ptr++;
   }
 
@@ -1575,7 +1571,7 @@ SimpleArray<Type>::operator < (const SimpleArray<Type>& array) const
     Boolean *boolPtr  = boolArray.contents();
     Type    *value1ptr = this->_contents;
     Type    *value2ptr = array._contents;
-    for (register unsigned i = nElements; i; i--)
+    for (unsigned i = nElements; i; i--)
       *boolPtr++ = *value1ptr++ < *value2ptr++;
   }
 
@@ -1867,7 +1863,7 @@ asIntArray(const SimpleArray<Type>& array)
   const Type *contentsPtr = array.contents();
   int  *castPtr     = cast.contents();
 
-  for (register unsigned i = array.size(); i; i--)
+  for (unsigned i = array.size(); i; i--)
     *castPtr++ = (int) *contentsPtr++;
 
   return cast;
@@ -1882,7 +1878,7 @@ asFloatArray(const SimpleArray<Type>& array)
   const Type *contentsPtr = array.contents();
   float *castPtr = cast.contents();
 
-  for (register unsigned i = array.size(); i; i--)
+  for (unsigned i = array.size(); i; i--)
     *castPtr++ = (float) *contentsPtr++;
 
   return cast;
@@ -1897,7 +1893,7 @@ asDblArray(const SimpleArray<Type>& array)
   const Type *contentsPtr = array.contents();
   double     *castPtr     = cast.contents();
 
-  for (register unsigned i = array.size(); i; i--)
+  for (unsigned i = array.size(); i; i--)
     *castPtr++ = asDouble(*contentsPtr++);
 
   return cast;
