@@ -396,7 +396,7 @@ BP_ANN::evaluate(const double *input, double *output)
 
   _forward(input);
 
-  for (register unsigned i = _nOutputNodes; i; i--)
+  for (unsigned i = _nOutputNodes; i; i--)
     *output++ = (nodePtr++)->out;
 }
 
@@ -410,7 +410,7 @@ BP_ANN::classify(const double *input, double *output)
   double   maxVal   = -MAXDOUBLE;
   unsigned node     = 0;
 
-  for (register unsigned i = 0; i < _nOutputNodes; i++, nodePtr++) {
+  for (unsigned i = 0; i < _nOutputNodes; i++, nodePtr++) {
     if (nodePtr->out > maxVal) {
       maxVal = nodePtr->out;
       node   = i;
@@ -694,12 +694,12 @@ BP_ANN::_calculateDeltas(const double *target)
     weightLayerPtr = _weight[layerCtr + 1];
     nNodes         = _nNodesInLayer[layerCtr];
 
-    for (register unsigned i = nNodes; i != 0; i--) {
+    for (unsigned i = nNodes; i != 0; i--) {
       weightPtr        = weightLayerPtr++;
       nextLayerNodePtr = nextLayerPtr;
 
       sum = 0.0;
-      for (register unsigned j = nNodesInNextLayer; j != 0; j--) {
+      for (unsigned j = nNodesInNextLayer; j != 0; j--) {
 	sum += weightPtr->value * nextLayerNodePtr->delta;
 
 	nextLayerNodePtr++;
@@ -806,7 +806,7 @@ BP_ANN::_createLut(double T)
   _lut.newSize(_LUT_LENGTH);
 
   _lutStep = 10.0/(_LUT_LENGTH - 1);
-  for (register unsigned i = 0; i < _LUT_LENGTH; i++)
+  for (unsigned i = 0; i < _LUT_LENGTH; i++)
     _lut[i] = 1.0/(1.0 + exp(-(_lutStep*i - 5.0)/T));
 
   _temperature = T;

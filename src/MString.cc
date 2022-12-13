@@ -347,7 +347,7 @@ MString::operator () (unsigned index) const
     return MString(0);
 
   MString newString(length() - index);
-  for (register int i = index, j = 0; i < _size; i++, j++)
+  for (int i = index, j = 0; i < _size; i++, j++)
     newString._contents[j] = _contents[i];
 
   return newString;
@@ -363,7 +363,7 @@ MString::operator () (unsigned index, unsigned nChar) const
     nChar = _size - index + 1;
 
   MString newString(nChar);
-  for (register int i = index, j = 0; j < nChar; i++, j++)
+  for (int i = index, j = 0; j < nChar; i++, j++)
     newString._contents[j] = _contents[i];
   newString._contents[nChar] = '\0';
 

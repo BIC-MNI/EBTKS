@@ -136,7 +136,7 @@ void OrderedCltn::reSize (unsigned uNewCap) {
 int
 OrderedCltn::indexOf (const void* Ptr) const 
 {
-  for (register unsigned i = 0; i < uEndIndex; i++)
+  for (unsigned i = 0; i < uEndIndex; i++)
     if (Contents[i] == Ptr)
       return (int) i;
 
@@ -150,8 +150,8 @@ OrderedCltn::indexOf (const void* Ptr) const
 
 unsigned OrderedCltn::occurrencesOf (const void* Ptr) const  {
      ocIterator i_OC ( *this );
-     register unsigned u = 0;
-     register void* p;
+     unsigned u = 0;
+     void* p;
      while ( p = i_OC++ )
      if ( Ptr == p ) 
              u++;
@@ -167,7 +167,7 @@ unsigned OrderedCltn::add ( const void* Newptr, unsigned uIndex )  {
             range_err (uIndex);
      if ( uEndIndex == uCapacity ) 
             reSize (uCapacity + EXPANSION_INCREMENT);
-     for ( register unsigned u = uEndIndex; u > uIndex; u-- )
+     for (  unsigned u = uEndIndex; u > uIndex; u-- )
             Contents[u] = Contents[u-1];
 
      Contents[uIndex] = (void*)Newptr;
@@ -180,7 +180,7 @@ unsigned OrderedCltn::add ( const void* Newptr, unsigned uIndex )  {
  */
 
 unsigned OrderedCltn::addAfter (const void* Ptr, const void *Newptr)  {
-   register unsigned uIndex;
+   unsigned uIndex;
    if ((uIndex = indexOf (Ptr)) >= uEndIndex)
       return ~0;
    return add (Newptr, uIndex+1);
@@ -221,7 +221,7 @@ OrderedCltn::addAllFirst (const OrderedCltn& cltn)  {
 const OrderedCltn& OrderedCltn::addAllLast (const OrderedCltn& cltn)  {
         if ( uEndIndex+cltn.size() >= uCapacity )
                 reSize(uEndIndex+cltn.size()+EXPANSION_INCREMENT);
-        for (register int i=0; i<cltn.size(); i++) 
+        for (int i=0; i<cltn.size(); i++) 
 	  Contents[uEndIndex++] = cltn.Contents[i];
         return cltn;
 }
@@ -229,7 +229,7 @@ const OrderedCltn& OrderedCltn::addAllLast (const OrderedCltn& cltn)  {
 // add a new pointer before the specified pointer
 unsigned OrderedCltn::addBefore (const void* Ptr, const void *Newptr)
 {
-   register unsigned uIndex;
+   unsigned uIndex;
    if ((uIndex = indexOf (Ptr)) >= uEndIndex)
       return ~0;
    return add (Newptr, uIndex);
@@ -243,7 +243,7 @@ void* OrderedCltn::remove (unsigned uIndex) {
       range_err (uIndex);
    void* Delptr = Contents[uIndex];
    uEndIndex--;
-   for (register unsigned u = uIndex; u < uEndIndex; u++)
+   for (unsigned u = uIndex; u < uEndIndex; u++)
       Contents[u] = Contents[u+1];
    return (Delptr);
 }
@@ -259,7 +259,7 @@ OrderedCltn::remove()
 // remove the specified pointer if it exists
 
 unsigned OrderedCltn::remove (const void* Ptr) {
-   register unsigned uIndex;
+   unsigned uIndex;
    if ((uIndex = indexOf (Ptr)) >= uEndIndex)
      return 0;
    remove (uIndex);
@@ -288,7 +288,7 @@ int OrderedCltn::operator ==(const OrderedCltn& OC) const {
       return 0;
    ocIterator itThis (*this), 
                      itOC (OC);
-   register void* pv;
+   void* pv;
    while (pv = itThis++)
       if (pv != itOC++) 
             return 0;
@@ -297,7 +297,7 @@ int OrderedCltn::operator ==(const OrderedCltn& OC) const {
 
 
 OrderedCltn& OrderedCltn::operator &=(const OrderedCltn& OC) {
-   register unsigned uIndex = uEndIndex;
+   unsigned uIndex = uEndIndex;
    while (uIndex--)
       if (!OC.indexOf ((const void*)Contents[uIndex])) 
 	 remove (uIndex);  // ... remove it from this collection

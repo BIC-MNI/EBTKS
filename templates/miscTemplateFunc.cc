@@ -17,6 +17,10 @@ $Author: bert $
 $Date: 2003-04-16 17:56:57 $
 $State: Exp $
 --------------------------------------------------------------------------*/
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "EBTKS/miscTemplateFunc.h"
 #include "EBTKS/Histogram.h"
 #include "EBTKS/dcomplex.h"

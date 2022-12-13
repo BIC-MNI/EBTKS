@@ -436,9 +436,9 @@ jacobi(double **a, unsigned n, double *d, double **v)
 void fft_basic(dcomplex *cbuffer,double *sintab, int buflog, int direct)
 {
    int     bufflen,halflen,quadlen;
-   register int blknum,blkctr,offset,sinarg;
+   int blknum,blkctr,offset,sinarg;
    double   wsin,wcos,remult,immult;
-   register dcomplex *bufpt0,*bufpt1;
+   dcomplex *bufpt0,*bufpt1;
    
    bufflen = 1 << buflog;
    halflen = bufflen >> 1;
@@ -498,9 +498,9 @@ void fft_basic(dcomplex *cbuffer,double *sintab, int buflog, int direct)
 void fft_basic_float(fcomplex *cbuffer,float *sintab, int buflog, int direct)
 {
    int     bufflen,halflen,quadlen;
-   register int blknum,blkctr,offset,sinarg;
+   int blknum,blkctr,offset,sinarg;
    float   wsin,wcos,remult,immult;
-   register fcomplex *bufpt0,*bufpt1;
+   fcomplex *bufpt0,*bufpt1;
    
    bufflen = 1 << buflog;
    halflen = bufflen >> 1;

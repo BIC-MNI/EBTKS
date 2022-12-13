@@ -3989,8 +3989,8 @@ Mat<Type>::erode(const Mat<double>& strel) const
       Type   *padMatrixPtr2 = padMatrixPtr1;
       double  minimum = MAXDOUBLE;
       const double *strelPtr = strelStart;
-      for (register unsigned j = strelHeight; j != 0; j--) {
-	for (register unsigned i = strelWidth; i != 0; i--) {
+      for (unsigned j = strelHeight; j != 0; j--) {
+	for (unsigned i = strelWidth; i != 0; i--) {
 	  if (*strelPtr >= 0)
 	    minimum = MIN(minimum, (double) *padMatrixPtr2 - *strelPtr);
 	  strelPtr++;
@@ -4050,8 +4050,8 @@ Mat<Type>::dilate(const Mat<double>& strel) const
 	 Type   *padMatrixPtr2 = padMatrixPtr1;
 	 double  maximum = -MAXDOUBLE;
 	 const double *strelPtr = strelStart;
-	 for (register unsigned j = strelHeight; j != 0; j--) {
-	    for (register unsigned i = strelWidth; i != 0; i--) {
+	 for (unsigned j = strelHeight; j != 0; j--) {
+	    for (unsigned i = strelWidth; i != 0; i--) {
 	       if (*strelPtr >= 0)
 		  maximum = MAX(maximum, (double) *padMatrixPtr2 + *strelPtr);
 	       strelPtr++;
