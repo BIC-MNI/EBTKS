@@ -1421,7 +1421,7 @@ public:
   // Reset to first element
   Type& first() { return reset(); }
   // Reset to last element
-  Type& last()  { return reset(this->_rows - 1, this->_cols - 1); } 
+  Type& last()  { return reset(this->_mat->_rows - 1, this->_mat->_cols - 1); } 
   // Reset to element (r, c)
   Type& reset(unsigned r=0, unsigned c=0) { return *(_elPtr = (_mat._el)[r] + c); } 
 
@@ -1442,7 +1442,7 @@ public:
   // Reset to first element
   const Type& first() { return reset(); }
   // Reset to last element
-  const Type& last()  { return reset(this->_rows - 1, this->_cols - 1); } 
+  const Type& last()  { return reset(this->_mat->_rows - 1, this->_mat->_cols - 1); } 
   // Reset to element (r, c)
   const Type& reset(unsigned r=0, unsigned c=0) { return *(_elPtr = (_mat._el)[r] + c); }
 
