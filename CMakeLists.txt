@@ -60,7 +60,7 @@ INCLUDE(CheckFunctionExists)
 INCLUDE(CheckIncludeFiles)
 INCLUDE(CheckSymbolExists)
 
-
+set(CMAKE_REQUIRED_LIBRARIES "m")
 
 CHECK_SYMBOL_EXISTS(finite      "math.h" HAVE_FINITE)
 CHECK_SYMBOL_EXISTS(isfinite    "math.h" HAVE_ISFINITE)
