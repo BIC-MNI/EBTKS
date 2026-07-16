@@ -1,0 +1,242 @@
+name: ci
+
+# Standalone build + test on every push and pull request. BIC-MNI
+# dependencies are built from source from their develop-1.9.18 branches
+# (falling back to the default branch), matching what the minc-toolkit-v2
+# superbuild tracks.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  # BIC-MNI dependencies built from source, in order.
+  DEPS: "libminc"
+  DEPS_PREFIX: /opt/bic-mni
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    container: 'ubuntu:24.04'
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      CCACHE_DIR: /root/.ccache
+      CCACHE_MAXSIZE: 1G
+    steps:
+      - name: Install build deps
+        run: |
+          apt-get update
+          apt-get install -y build-essential cmake git ccache \
+            zlib1g-dev libhdf5-dev libnetcdf-dev
+      - name: Allow git to read the workspace owned by the runner user
+        run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
+        with:
+          path: /root/.ccache
+          key: ccache-ci-ubuntu2404-${{ github.sha }}
+          restore-keys: |
+            ccache-ci-ubuntu2404-
+      - name: Build BIC-MNI deps
+        run: |
+          set -euxo pipefail
+          DEP_DIR_FLAGS=""
+          for dep in $DEPS; do
+            git clone --depth 1 -b develop-1.9.18 "https://github.com/BIC-MNI/$dep.git" "dep-$dep" \
+              || git clone --depth 1 "https://github.com/BIC-MNI/$dep.git" "dep-$dep"
+            # shellcheck disable=SC2086 # DEP_DIR_FLAGS is a list of -D flags
+            cmake -B "dep-$dep/build" -S "dep-$dep" \
+              -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX="$DEPS_PREFIX" \
+              -DCMAKE_PREFIX_PATH="$DEPS_PREFIX" \
+              -DCMAKE_INSTALL_LIBDIR=lib \
+              -DBUILD_TESTING=OFF \
+              -DLIBMINC_MINC1_SUPPORT=ON \
+              $DEP_DIR_FLAGS
+            cmake --build "dep-$dep/build" -j"$(nproc)"
+            cmake --install "dep-$dep/build"
+            # These projects install <NAME>Config.cmake outside CMake's
+            # standard <prefix>/lib/cmake/<name>/ search dirs; point
+            # <NAME>_DIR at it explicitly for the consumer configure.
+            name=$(echo "$dep" | tr '[:lower:]-' '[:upper:]_')
+            cfg=$(find "$DEPS_PREFIX" -name "${name}Config.cmake" -print -quit)
+            if [ -n "$cfg" ]; then
+              DEP_DIR_FLAGS="${DEP_DIR_FLAGS} -D${name}_DIR=$(dirname "$cfg")"
+            fi
+          done
+          echo "DEP_DIR_FLAGS=$DEP_DIR_FLAGS" >> "$GITHUB_ENV"
+          # Test scripts of some projects invoke installed dep binaries
+          echo "$DEPS_PREFIX/bin" >> "$GITHUB_PATH"
+      - name: Configure + build
+        run: |
+          set -euxo pipefail
+          # shellcheck disable=SC2086 # DEP_DIR_FLAGS is a list of -D flags
+          cmake -B build \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install" \
+            -DCMAKE_PREFIX_PATH="$DEPS_PREFIX" \
+            -DBUILD_TESTING=ON \
+            $DEP_DIR_FLAGS
+          cmake --build build -j"$(nproc)"
+          cmake --install build
+      - name: Run test suite
+        run: |
+          set -euxo pipefail
+          cd build
+          ctest --output-on-failure -j"$(nproc)"
+
+  fedora:
+    runs-on: ubuntu-latest
+    container: 'fedora:44'
+    env:
+      CCACHE_DIR: /root/.ccache
+      CCACHE_MAXSIZE: 1G
+      QA_RPATHS: '0x000f'
+    steps:
+      - name: Install build deps
+        run: |
+          dnf install -y gcc gcc-c++ cmake make git ccache which file \
+            zlib-devel hdf5-devel netcdf-devel
+      - name: Allow git to read the workspace owned by the runner user
+        run: git config --global --add safe.directory '*'
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
+        with:
+          path: /root/.ccache
+          key: ccache-ci-fedora44-${{ github.sha }}
+          restore-keys: |
+            ccache-ci-fedora44-
+      - name: Build BIC-MNI deps
+        run: |
+          set -euxo pipefail
+          DEP_DIR_FLAGS=""
+          for dep in $DEPS; do
+            git clone --depth 1 -b develop-1.9.18 "https://github.com/BIC-MNI/$dep.git" "dep-$dep" \
+              || git clone --depth 1 "https://github.com/BIC-MNI/$dep.git" "dep-$dep"
+            # shellcheck disable=SC2086 # DEP_DIR_FLAGS is a list of -D flags
+            cmake -B "dep-$dep/build" -S "dep-$dep" \
+              -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX="$DEPS_PREFIX" \
+              -DCMAKE_PREFIX_PATH="$DEPS_PREFIX" \
+              -DCMAKE_INSTALL_LIBDIR=lib \
+              -DBUILD_TESTING=OFF \
+              -DLIBMINC_MINC1_SUPPORT=ON \
+              $DEP_DIR_FLAGS
+            cmake --build "dep-$dep/build" -j"$(nproc)"
+            cmake --install "dep-$dep/build"
+            # These projects install <NAME>Config.cmake outside CMake's
+            # standard <prefix>/lib/cmake/<name>/ search dirs; point
+            # <NAME>_DIR at it explicitly for the consumer configure.
+            name=$(echo "$dep" | tr '[:lower:]-' '[:upper:]_')
+            cfg=$(find "$DEPS_PREFIX" -name "${name}Config.cmake" -print -quit)
+            if [ -n "$cfg" ]; then
+              DEP_DIR_FLAGS="${DEP_DIR_FLAGS} -D${name}_DIR=$(dirname "$cfg")"
+            fi
+          done
+          echo "DEP_DIR_FLAGS=$DEP_DIR_FLAGS" >> "$GITHUB_ENV"
+          # Test scripts of some projects invoke installed dep binaries
+          echo "$DEPS_PREFIX/bin" >> "$GITHUB_PATH"
+      - name: Configure + build
+        run: |
+          set -euxo pipefail
+          # shellcheck disable=SC2086 # DEP_DIR_FLAGS is a list of -D flags
+          cmake -B build \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install" \
+            -DCMAKE_PREFIX_PATH="$DEPS_PREFIX" \
+            -DBUILD_TESTING=ON \
+            $DEP_DIR_FLAGS
+          cmake --build build -j"$(nproc)"
+          cmake --install build
+      - name: Run test suite
+        run: |
+          set -euxo pipefail
+          cd build
+          ctest --output-on-failure -j"$(nproc)"
+
+  macos:
+    runs-on: macos-latest
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 1G
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install build deps
+        run: HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache hdf5 netcdf
+      - uses: actions/cache@v6
+        with:
+          path: ${{ github.workspace }}/.ccache
+          key: ccache-ci-macos-${{ github.sha }}
+          restore-keys: |
+            ccache-ci-macos-
+      - name: Build BIC-MNI deps
+        run: |
+          set -euxo pipefail
+          DEP_DIR_FLAGS=""
+          for dep in $DEPS; do
+            git clone --depth 1 -b develop-1.9.18 "https://github.com/BIC-MNI/$dep.git" "dep-$dep" \
+              || git clone --depth 1 "https://github.com/BIC-MNI/$dep.git" "dep-$dep"
+            # shellcheck disable=SC2086 # DEP_DIR_FLAGS is a list of -D flags
+            cmake -B "dep-$dep/build" -S "dep-$dep" \
+              -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX="$DEPS_PREFIX" \
+              -DCMAKE_PREFIX_PATH="$DEPS_PREFIX" \
+              -DCMAKE_INSTALL_LIBDIR=lib \
+              -DBUILD_TESTING=OFF \
+              -DLIBMINC_MINC1_SUPPORT=ON \
+              $DEP_DIR_FLAGS
+            cmake --build "dep-$dep/build" -j"$(sysctl -n hw.ncpu)"
+            sudo cmake --install "dep-$dep/build"
+            # These projects install <NAME>Config.cmake outside CMake's
+            # standard <prefix>/lib/cmake/<name>/ search dirs; point
+            # <NAME>_DIR at it explicitly for the consumer configure.
+            name=$(echo "$dep" | tr '[:lower:]-' '[:upper:]_')
+            cfg=$(find "$DEPS_PREFIX" -name "${name}Config.cmake" -print -quit)
+            if [ -n "$cfg" ]; then
+              DEP_DIR_FLAGS="${DEP_DIR_FLAGS} -D${name}_DIR=$(dirname "$cfg")"
+            fi
+          done
+          echo "DEP_DIR_FLAGS=$DEP_DIR_FLAGS" >> "$GITHUB_ENV"
+          # Test scripts of some projects invoke installed dep binaries
+          echo "$DEPS_PREFIX/bin" >> "$GITHUB_PATH"
+      - name: Configure + build
+        run: |
+          set -euxo pipefail
+          # shellcheck disable=SC2086 # DEP_DIR_FLAGS is a list of -D flags
+          cmake -B build \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install" \
+            -DCMAKE_PREFIX_PATH="$DEPS_PREFIX" \
+            -DBUILD_TESTING=ON \
+            $DEP_DIR_FLAGS
+          cmake --build build -j"$(sysctl -n hw.ncpu)"
+          cmake --install build
+      - name: Run test suite
+        run: |
+          set -euxo pipefail
+          cd build
+          ctest --output-on-failure -j"$(sysctl -n hw.ncpu)"
+
