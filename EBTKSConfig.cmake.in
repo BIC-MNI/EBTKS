@@ -2,3 +2,8 @@ set(EBTKS_INCLUDE_DIRS "@EBTKS_INCLUDE_DIRS_CONFIG@")
 set(EBTKS_LIBRARY_DIRS "@EBTKS_LIBRARY_DIRS_CONFIG@")
 set(EBTKS_USE_FILE     "@EBTKS_USE_FILE_CONFIG@")
 set(EBTKS_LIBRARIES    "@EBTKS_LIBRARIES_CONFIG@")
+# Empty unless EBTKS_BLAS_BACKEND != bundled: legacy/N3 links dsysv_ independently of
+# EBTKS's own C++, since EBTKSConfig.cmake is plain variables, not an exported CMake target,
+# and nothing here propagates transitively (/app/PLAN.md §10).
+set(EBTKS_LAPACK_LIBRARIES    "@EBTKS_LAPACK_LIBRARIES_CONFIG@")
+set(EBTKS_LAPACK_LIBRARY_DIRS "@EBTKS_LAPACK_LIBRARY_DIRS_CONFIG@")
