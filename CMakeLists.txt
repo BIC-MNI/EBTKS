@@ -172,19 +172,58 @@ SET(EBTKS_LIB_SRCS
 # Which BLAS/LAPACK legacy/EBTKS and legacy/N3 link. The choice is explicit and never
 # inferred: nothing here is searched for, and a named backend that cannot be satisfied is a
 # configure-time error, not a fallback to bundled. See /app/PLAN.md §10, /app/TODO_BLAS.md.
-SET(EBTKS_BLAS_BACKEND "bundled" CACHE STRING
+#
+# Under a superbuild (MINC_TOOLKIT_BUILD, set by the top-level CMakeLists.txt before
+# add_subdirectory(EBTKS)) these are superbuild-computed plumbing, not something to
+# hand-tune -- the superbuild's own BLAS-detection block already picks and forwards them
+# (see its "Point EBTKS/N3's own BLAS backend..." comment), so declare them CACHE INTERNAL
+# here to keep them out of ccmake/cmake-gui/cmake -L regardless of whether that block
+# actually had a LAPACKE-capable BLAS to forward on this particular configure pass.
+# Standalone (non-superbuild) EBTKS keeps the normal, user-editable CACHE STRING.
+#
+# CACHE INTERNAL entries are always overwritten on every configure, FORCE or not (unlike
+# STRING/BOOL/etc, which a plain SET(...CACHE...) only initialises once). So a bare
+# SET(EBTKS_BLAS_BACKEND "bundled" CACHE INTERNAL ...) here would stomp right back over a
+# value the superbuild already forwarded before add_subdirectory(EBTKS) ran. Read the
+# variable's current value first (already forwarded, user -D override, or truly unset) and
+# write that back -- this only ever changes the CACHE *type* to match this context, never
+# silently resets the value.
+IF(MINC_TOOLKIT_BUILD)
+  SET(_ebtks_blas_cache_type INTERNAL)
+ELSE()
+  SET(_ebtks_blas_cache_type STRING)
+ENDIF()
+
+IF(NOT DEFINED EBTKS_BLAS_BACKEND)
+  SET(EBTKS_BLAS_BACKEND "bundled")
+ENDIF()
+SET(EBTKS_BLAS_BACKEND "${EBTKS_BLAS_BACKEND}" CACHE ${_ebtks_blas_cache_type}
     "Which LAPACK/BLAS legacy/EBTKS and legacy/N3 link: bundled (default, compiles \
 clapack/), lapack (link a named Fortran-ABI library directly, no shim), lapacke (link via \
-a LAPACKE C shim), or cblas (bundled LAPACK over a named CBLAS shim).")
-SET_PROPERTY(CACHE EBTKS_BLAS_BACKEND PROPERTY STRINGS bundled lapack lapacke cblas)
+a LAPACKE C shim), or cblas (bundled LAPACK over a named CBLAS shim)." FORCE)
+IF(NOT MINC_TOOLKIT_BUILD)
+  SET_PROPERTY(CACHE EBTKS_BLAS_BACKEND PROPERTY STRINGS bundled lapack lapacke cblas)
+ENDIF()
 
-SET(EBTKS_LAPACK_LIBRARIES "" CACHE STRING
+IF(NOT DEFINED EBTKS_LAPACK_LIBRARIES)
+  SET(EBTKS_LAPACK_LIBRARIES "")
+ENDIF()
+SET(EBTKS_LAPACK_LIBRARIES "${EBTKS_LAPACK_LIBRARIES}" CACHE ${_ebtks_blas_cache_type}
     "External LAPACK/BLAS to link when EBTKS_BLAS_BACKEND != bundled, e.g. 'openblas' or \
-an absolute path to libmkl_rt.so. Absolute paths under a superbuild.")
-SET(EBTKS_LAPACK_LIBRARY_DIRS "" CACHE STRING
-    "Extra -L directories for EBTKS_LAPACK_LIBRARIES, when its entries are bare names.")
-SET(EBTKS_LAPACK_INCLUDE_DIRS "" CACHE STRING
-    "Extra -I directories for lapacke.h/cblas.h, needed by the lapacke and cblas backends.")
+an absolute path to libmkl_rt.so. Absolute paths under a superbuild." FORCE)
+
+IF(NOT DEFINED EBTKS_LAPACK_LIBRARY_DIRS)
+  SET(EBTKS_LAPACK_LIBRARY_DIRS "")
+ENDIF()
+SET(EBTKS_LAPACK_LIBRARY_DIRS "${EBTKS_LAPACK_LIBRARY_DIRS}" CACHE ${_ebtks_blas_cache_type}
+    "Extra -L directories for EBTKS_LAPACK_LIBRARIES, when its entries are bare names." FORCE)
+
+IF(NOT DEFINED EBTKS_LAPACK_INCLUDE_DIRS)
+  SET(EBTKS_LAPACK_INCLUDE_DIRS "")
+ENDIF()
+SET(EBTKS_LAPACK_INCLUDE_DIRS "${EBTKS_LAPACK_INCLUDE_DIRS}" CACHE ${_ebtks_blas_cache_type}
+    "Extra -I directories for lapacke.h/cblas.h, needed by the lapacke and cblas backends." FORCE)
+UNSET(_ebtks_blas_cache_type)
 
 IF(NOT EBTKS_BLAS_BACKEND MATCHES "^(bundled|lapack|lapacke|cblas)$")
   MESSAGE(FATAL_ERROR "EBTKS_BLAS_BACKEND=${EBTKS_BLAS_BACKEND} is not one of: bundled, lapack, lapacke, cblas")
