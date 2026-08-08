@@ -1,9 +1,9 @@
 /* Backend "lapacke": dsysv_ implemented over LAPACKE, for a system LAPACK that ships the C
  * interface but whose Fortran-mangled symbols this shim prefers not to depend on directly.
  *
- * Signature matches legacy/N3/src/Splines/TBSpline.cc:70 exactly -- no header there changes.
- * That call site passes lwork = 1 with a one-element work array, not a workspace query
- * (:642-648), so LAPACKE_dsysv_work is used deliberately: LAPACKE_dsysv (no _work suffix)
+ * Signature matches legacy/N3/src/Splines/TBSpline.cc's dsysv_ declaration exactly -- no
+ * header there changes. That call site passes lwork = 1 with a one-element work array, not a
+ * workspace query, so LAPACKE_dsysv_work is used deliberately: LAPACKE_dsysv (no _work suffix)
  * ignores the caller's lwork and allocates its own optimal workspace internally, taking the
  * blocked path instead of the small unblocked one TBSpline.cc actually asks for.
  *
@@ -16,6 +16,15 @@
  * unsupported) and copied back into the caller's long int[n]. TBSpline.cc never reads
  * ipiv after the call, but the copy costs nothing and removes the dependency on that
  * observation. info is likewise narrowed/widened through the long int* the caller passed.
+ *
+ * This function is named EBTKS_dsysv, not dsysv_: a dsysv_ symbol defined here would be
+ * exported into the executable's dynamic symbol table, and libopenblas.so's own
+ * LAPACKE_dsysv_work calls dsysv_ *internally* to do the actual factorization -- ELF symbol
+ * interposition would then make the executable's dsysv_ win over libopenblas.so's own
+ * internal one process-wide, so LAPACKE_dsysv_work's internal call would resolve back into
+ * this function, calling LAPACKE_dsysv_work again: infinite recursion, stack overflow,
+ * SIGSEGV. EBTKS_dsysv has no such standard-library name to collide with. TBSpline.cc calls
+ * it under #ifdef EBTKS_DSYSV_LAPACKE_SHIM, set only for this backend by N3/CMakeLists.txt.
  */
 
 #include <lapacke.h>
@@ -24,7 +33,7 @@
 typedef long int ebtks_integer;
 typedef double   ebtks_doublereal;
 
-int dsysv_(char *uplo, ebtks_integer *n, ebtks_integer *nrhs, ebtks_doublereal *a,
+int EBTKS_dsysv(char *uplo, ebtks_integer *n, ebtks_integer *nrhs, ebtks_doublereal *a,
            ebtks_integer *lda, ebtks_integer *ipiv, ebtks_doublereal *b,
            ebtks_integer *ldb, ebtks_doublereal *work, ebtks_integer *lwork,
            ebtks_integer *info)

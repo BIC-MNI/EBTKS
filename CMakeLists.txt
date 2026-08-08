@@ -338,7 +338,10 @@ ELSEIF(EBTKS_BLAS_BACKEND STREQUAL "cblas")
   # clapack/*.c BLAS sources.
   LIST(APPEND EBTKS_LIB_SRCS ${EBTKS_CLAPACK_LAPACK_SRCS} shim/blas_cblas.c)
 ELSEIF(EBTKS_BLAS_BACKEND STREQUAL "lapacke")
-  # dsysv_ resolved from shim/dsysv_lapacke.c, which calls LAPACKE_dsysv_work.
+  # dsysv_ itself is never defined here -- see EBTKS_dsysv in dsysv_lapacke.c.
+  # legacy/N3/src/Splines/TBSpline.cc selects between calling the real dsysv_
+  # (bundled/lapack/cblas) and this EBTKS_dsysv shim (lapacke only) via #ifdef
+  # EBTKS_DSYSV_LAPACKE_SHIM, set below in N3/CMakeLists.txt for this backend.
   LIST(APPEND EBTKS_LIB_SRCS shim/dsysv_lapacke.c)
 ENDIF()
 # lapack: nothing appended -- dsysv_ resolved directly from EBTKS_LAPACK_LIBRARIES.
