@@ -382,6 +382,10 @@ ELSEIF(EBTKS_BLAS_BACKEND STREQUAL "lapacke")
   # (bundled/lapack/cblas) and this EBTKS_dsysv shim (lapacke only) via #ifdef
   # EBTKS_DSYSV_LAPACKE_SHIM, set below in N3/CMakeLists.txt for this backend.
   LIST(APPEND EBTKS_LIB_SRCS shim/dsysv_lapacke.c)
+  # Cholesky alternative to the Bunch-Kaufman solve, selected at compile time
+  # by N3_SPLINE_MODERN_SOLVE (set in N3/CMakeLists.txt for n3pipeline_core
+  # only). See EBTKS_dposv in shim/dposv_lapacke.c.
+  LIST(APPEND EBTKS_LIB_SRCS shim/dposv_lapacke.c)
 ENDIF()
 # lapack: nothing appended -- dsysv_ resolved directly from EBTKS_LAPACK_LIBRARIES.
 
