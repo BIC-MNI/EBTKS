@@ -416,6 +416,38 @@ IF(NOT EBTKS_BLAS_BACKEND STREQUAL "bundled")
 ENDIF()
 SET(EBTKS_LIBRARIES EBTKS)
 
+# *** APPLE WARNING: -ffp-contract=off on clapack/dger.c and clapack/dsyr.c ***
+#
+# These are the rank-1 (dger_) and symmetric rank-1 (dsyr_) outer-product
+# update kernels dlasyf_'s blocked Bunch-Kaufman factorization calls
+# repeatedly -- the dominant O(n^2)-per-call accumulation in dsysv_'s solve,
+# which legacy/N3's TBSpline::solveSymmetricSystem runs on a normal-equation
+# matrix with condition number ~1.5e13 (see N3/CMakeLists.txt). At that
+# conditioning, a last-bit difference from AppleClang's default FMA
+# contraction in just these two files is enough to fail N3/testing's
+# nu_reference_1 test (Linux-generated golden reference, 1e-4 relative-RMS
+# tolerance) on both x86_64 (AVX2) and arm64 (NEON) Macs.
+#
+# This is not a guess: isolated by a file-by-file bisection across all 19
+# EBTKS/clapack/*.c sources plus every N3 legacy binary (correct_field,
+# evaluate_field, sharpen_hist, spline_smooth, volume_hist, volume_stats).
+# dger.c and dsyr.c were the only two files where removing the flag caused
+# nu_reference_1 to fail again; the other 17 clapack files, all "always
+# compiled" EBTKS sources, and 5 of the 6 N3 legacy binaries are numerically
+# inert for this specific test and do not need it (see N3/CMakeLists.txt for
+# the one N3-side file that does: spline_smooth's own copy of TBSpline.cc/
+# Spline.cc). Only meaningful together with EBTKS_BLAS_BACKEND=bundled being
+# forced on APPLE (top-level CMakeLists.txt) -- these two files aren't even
+# compiled under any other backend.
+IF(APPLE AND EBTKS_BLAS_BACKEND STREQUAL "bundled")
+  MESSAGE(WARNING "macOS: disabling floating-point contraction "
+    "(-ffp-contract=off) on EBTKS/clapack/dger.c and dsyr.c -- the two "
+    "dsysv_ kernels a file-by-file bisection found necessary to keep "
+    "N3's nu_reference_1 passing against its Linux-generated reference.")
+  SET_SOURCE_FILES_PROPERTIES(clapack/dger.c clapack/dsyr.c PROPERTIES
+    COMPILE_OPTIONS "-ffp-contract=off")
+ENDIF()
+
 MESSAGE(STATUS "EBTKS_BLAS_BACKEND: ${EBTKS_BLAS_BACKEND}")
 IF(NOT EBTKS_BLAS_BACKEND STREQUAL "bundled")
   MESSAGE(STATUS "EBTKS_LAPACK_LIBRARIES: ${EBTKS_LAPACK_LIBRARIES}")
