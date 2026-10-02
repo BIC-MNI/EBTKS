@@ -1,0 +1,57 @@
+# Citation metadata for EBTKS (Citation File Format, https://citation-file-format.github.io/).
+# The author list comes from the commit history and from the history comments in the files.
+
+cff-version: 1.2.0
+title: EBTKS
+message: >-
+  If you use this software, please cite it using the metadata from this file.
+type: software
+authors:
+  - given-names: Alex P.
+    family-names: Zijdenbos
+  - given-names: Jason
+    family-names: Lerch
+    orcid: "https://orcid.org/0000-0001-6164-2881"
+  - given-names: Robert D.
+    family-names: Vincent
+  - given-names: Vladimir
+    family-names: Fonov
+    email: vladimir.fonov@gmail.com
+    affiliation: McGill University
+    orcid: "https://orcid.org/0000-0003-3402-7749"
+  - given-names: Steve M.
+    family-names: Robbins
+  - given-names: John G.
+    family-names: Sled
+    orcid: "https://orcid.org/0000-0002-4461-283X"
+  - given-names: Andrew L.
+    family-names: Janke
+    orcid: "https://orcid.org/0000-0003-0547-5171"
+  - given-names: David
+    family-names: MacDonald
+  - given-names: Vivek
+    family-names: Singh
+  - given-names: Haz-Edine
+    family-names: Assemlal
+  - given-names: Claude
+    family-names: Lepage
+  - given-names: Georges
+    family-names: Aboutanos
+  - given-names: Ben
+    family-names: Darwin
+  - alias: "raph-rc"
+  - given-names: Jon
+    family-names: Stutters
+    orcid: "https://orcid.org/0000-0002-9151-0844"
+  - given-names: Dave
+    family-names: MacFarlane
+repository-code: "https://github.com/BIC-MNI/EBTKS"
+abstract: >-
+  EBTKS, the Everything But The Kitchen Sink library: a higher-level C++
+  library for image manipulation that other MINC tools use.
+keywords:
+  - MINC
+  - medical imaging
+  - C++
+  - library
+license-url: "https://github.com/BIC-MNI/EBTKS/blob/master/COPYING"
